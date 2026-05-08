@@ -1,7 +1,9 @@
-/* global React */
-const { useState } = React;
+"use client";
 
-function AboutSection() {
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export function AboutSection() {
   return (
     <section id="about" data-screen-label="03 About">
       <div className="container">
@@ -12,16 +14,17 @@ function AboutSection() {
           </div>
           <div className="meta-block">
             <strong>Manifesto</strong>
-            We are a small studio building games we&apos;d want to play —<br />
+            We are a small studio building games we&apos;d want to play —
+            <br />
             slowly, on purpose, with care.
           </div>
         </div>
 
         <div className="manifesto-grid">
           <div className="manifesto-statement">
-            Ghostline draws the thin line between <em>player and world</em>.
-            We build mobile games that respect your attention, your wallet, and your time —
-            and reward it with worlds that feel alive long after you put the phone down.
+            Ghostline draws the thin line between <em>player and world</em>. We build mobile games that respect your
+            attention, your wallet, and your time — and reward it with worlds that feel alive long after you put the
+            phone down.
           </div>
           <div className="manifesto-pillars">
             <div className="pillar">
@@ -32,7 +35,10 @@ function AboutSection() {
             <div className="pillar">
               <div className="num">PILLAR · 02</div>
               <h4>Mobile, taken seriously</h4>
-              <p>The phone is not a lesser screen. It&apos;s a more intimate one. We design for thumbs, attention, and quiet moments.</p>
+              <p>
+                The phone is not a lesser screen. It&apos;s a more intimate one. We design for thumbs, attention, and
+                quiet moments.
+              </p>
             </div>
             <div className="pillar">
               <div className="num">PILLAR · 03</div>
@@ -60,7 +66,7 @@ const NEWS = [
   { date: "FEB · 2026", tag: "STUDIO", tagClass: "studio", title: "Why we&apos;re a remote-first, async-first, slack-last studio." },
 ];
 
-function NewsSection() {
+export function NewsSection() {
   return (
     <section id="news" data-screen-label="04 News">
       <div className="container">
@@ -71,7 +77,9 @@ function NewsSection() {
           </div>
           <div className="meta-block">
             <strong>Updated weekly</strong>
-            Build notes, design rambling, occasional<br />screenshots, no hype cycles.
+            Build notes, design rambling, occasional
+            <br />
+            screenshots, no hype cycles.
           </div>
         </div>
         <div className="devlog-list">
@@ -97,7 +105,7 @@ const ROLES = [
   { title: "Open application", team: "Studio", location: "Remote · Anywhere", type: "Tell us why" },
 ];
 
-function CareersSection() {
+export function CareersSection() {
   return (
     <section id="careers" data-screen-label="05 Careers">
       <div className="container">
@@ -108,15 +116,23 @@ function CareersSection() {
           </div>
           <div className="meta-block">
             <strong>Currently 7 aboard</strong>
-            Small studio. Senior people.<br />Async-first. Calendars protected.
+            Small studio. Senior people.
+            <br />
+            Async-first. Calendars protected.
           </div>
         </div>
         <div className="careers-wrap">
           <div className="careers-intro">
             <h3>We hire slowly. We treat people well. We make the work the thing.</h3>
-            <p>If you&apos;ve shipped before, if you care about the small details no-one notices, if you can read a build log without flinching — there&apos;s probably a chair here for you.</p>
+            <p>
+              If you&apos;ve shipped before, if you care about the small details no-one notices, if you can read a build
+              log without flinching — there&apos;s probably a chair here for you.
+            </p>
             <div style={{ marginTop: 28 }}>
-              <a className="btn primary" href="#contact"><span>Open Application</span><span className="arrow">↗</span></a>
+              <a className="btn primary" href="#contact">
+                <span>Open Application</span>
+                <span className="arrow">↗</span>
+              </a>
             </div>
           </div>
           <div className="role-list">
@@ -142,7 +158,7 @@ function CareersSection() {
   );
 }
 
-function PressContactSection() {
+export function PressContactSection() {
   return (
     <section id="press" data-screen-label="06 Press & Contact">
       <div className="container">
@@ -152,8 +168,14 @@ function PressContactSection() {
             <h2>Press &amp; contact.</h2>
           </div>
           <div className="meta-block">
-            <strong>For press, partners,<br />and friendly humans</strong>
-            press@ghostline.studio<br />hello@ghostline.studio
+            <strong>
+              For press, partners,
+              <br />
+              and friendly humans
+            </strong>
+            press@ghostline.studio
+            <br />
+            hello@ghostline.studio
           </div>
         </div>
 
@@ -163,10 +185,22 @@ function PressContactSection() {
             <h3>Logos, screenshots, fact sheets, b-roll.</h3>
             <p>Everything you need to write about Ghostline or either game. Updated whenever something interesting ships.</p>
             <div className="links">
-              <a className="link-row" href="#"><span>Studio Press Kit</span><span className="size">ZIP · 184 MB</span></a>
-              <a className="link-row" href="#"><span>Scraplings — Press Kit</span><span className="size">ZIP · 92 MB</span></a>
-              <a className="link-row" href="#"><span>Spectral Sabre — Press Kit</span><span className="size">ZIP · 156 MB</span></a>
-              <a className="link-row" href="#"><span>Brand Guidelines</span><span className="size">PDF · 6 MB</span></a>
+              <a className="link-row" href="#">
+                <span>Studio Press Kit</span>
+                <span className="size">ZIP · 184 MB</span>
+              </a>
+              <a className="link-row" href="#">
+                <span>Scraplings — Press Kit</span>
+                <span className="size">ZIP · 92 MB</span>
+              </a>
+              <a className="link-row" href="#">
+                <span>Spectral Sabre — Press Kit</span>
+                <span className="size">ZIP · 156 MB</span>
+              </a>
+              <a className="link-row" href="#">
+                <span>Brand Guidelines</span>
+                <span className="size">PDF · 6 MB</span>
+              </a>
             </div>
           </div>
 
@@ -174,16 +208,42 @@ function PressContactSection() {
             <div className="num">— 06.2 / Stay in the loop</div>
             <h3>One letter, every now and then.</h3>
             <p>No marketing. No countdown timers. Build notes, occasional screenshots, the rare announcement when we have something real to say.</p>
-            <form className="signup" onSubmit={(e) => { e.preventDefault(); alert("Subscribed — keep an eye on your inbox."); }}>
+            <form
+              className="signup"
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("Subscribed — keep an eye on your inbox.");
+              }}
+            >
               <input type="email" placeholder="you@somewhere.net" required />
               <button type="submit">Join →</button>
             </form>
             <div style={{ marginTop: 28 }}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.3em", color: "var(--wraith-soft)", textTransform: "uppercase", marginBottom: 12 }}>— Or find us</div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  letterSpacing: "0.3em",
+                  color: "var(--wraith-soft)",
+                  textTransform: "uppercase",
+                  marginBottom: 12,
+                }}
+              >
+                — Or find us
+              </div>
               <div className="links">
-                <a className="link-row" href="#"><span>Discord — Ghostline Crew</span><span className="size">3,402 members</span></a>
-                <a className="link-row" href="#"><span>Bluesky — @ghostline.studio</span><span className="size">@ghostline</span></a>
-                <a className="link-row" href="#"><span>YouTube — Devlog channel</span><span className="size">/ghostlinestudios</span></a>
+                <a className="link-row" href="#">
+                  <span>Discord — Ghostline Crew</span>
+                  <span className="size">3,402 members</span>
+                </a>
+                <a className="link-row" href="#">
+                  <span>Bluesky — @ghostline.studio</span>
+                  <span className="size">@ghostline</span>
+                </a>
+                <a className="link-row" href="#">
+                  <span>YouTube — Devlog channel</span>
+                  <span className="size">/ghostlinestudios</span>
+                </a>
               </div>
             </div>
           </div>
@@ -193,7 +253,7 @@ function PressContactSection() {
   );
 }
 
-function SiteFooter() {
+export function SiteFooter() {
   return (
     <footer>
       <div className="container">
@@ -203,34 +263,65 @@ function SiteFooter() {
             <p style={{ fontSize: 14, color: "var(--wraith)", lineHeight: 1.6, fontWeight: 300, maxWidth: "36ch" }}>
               A small studio drawing thin lines between players and worlds. Mobile games made with thought, intention, and time.
             </p>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.24em", color: "var(--wraith-faint)", textTransform: "uppercase", marginTop: 24 }}>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                letterSpacing: "0.24em",
+                color: "var(--wraith-faint)",
+                textTransform: "uppercase",
+                marginTop: 24,
+              }}
+            >
               Est. 2026 · Remote · Anywhere with a quiet morning.
             </p>
           </div>
           <div className="col">
             <h5>Worlds</h5>
             <ul>
-              <li><a href="#games">Scraplings</a></li>
-              <li><a href="#games">Spectral Sabre</a></li>
-              <li><a href="#games">Future projects</a></li>
+              <li>
+                <Link href="/scraplings">Scraplings</Link>
+              </li>
+              <li>
+                <Link href="/spectral-sabre">Spectral Sabre</Link>
+              </li>
+              <li>
+                <Link href="/#games">Future projects</Link>
+              </li>
             </ul>
           </div>
           <div className="col">
             <h5>Studio</h5>
             <ul>
-              <li><a href="#about">Manifesto</a></li>
-              <li><a href="#news">Devlog</a></li>
-              <li><a href="#careers">Careers</a></li>
-              <li><a href="#press">Press kit</a></li>
+              <li>
+                <Link href="/#about">Manifesto</Link>
+              </li>
+              <li>
+                <Link href="/#news">Devlog</Link>
+              </li>
+              <li>
+                <Link href="/#careers">Careers</Link>
+              </li>
+              <li>
+                <Link href="/#press">Press kit</Link>
+              </li>
             </ul>
           </div>
           <div className="col">
             <h5>Contact</h5>
             <ul>
-              <li><a href="mailto:hello@ghostline.studio">hello@ghostline.studio</a></li>
-              <li><a href="mailto:press@ghostline.studio">press@ghostline.studio</a></li>
-              <li><a href="#">Discord</a></li>
-              <li><a href="#">Bluesky</a></li>
+              <li>
+                <a href="mailto:hello@ghostline.studio">hello@ghostline.studio</a>
+              </li>
+              <li>
+                <a href="mailto:press@ghostline.studio">press@ghostline.studio</a>
+              </li>
+              <li>
+                <a href="#">Discord</a>
+              </li>
+              <li>
+                <a href="#">Bluesky</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -243,9 +334,9 @@ function SiteFooter() {
   );
 }
 
-function TopNav() {
+export function TopNav() {
   const [active, setActive] = useState("home");
-  React.useEffect(() => {
+  useEffect(() => {
     const ids = ["home", "games", "about", "news", "careers", "press"];
     const onScroll = () => {
       const y = window.scrollY + 200;
@@ -260,18 +351,22 @@ function TopNav() {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const link = (id, label) => (
-    <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>{label}</a>
+  const link = (id: string, label: string) => (
+    <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>
+      {label}
+    </a>
   );
   return (
     <header className="topnav">
-      <a href="#home" className="brand">
+      <Link href="/" className="brand">
         <div className="brand-mark" />
         <span>Ghostline / Studios</span>
-      </a>
+      </Link>
       <nav>
-        <a href="#home" className={active === "home" ? "active" : ""}>01 Home</a>
-        <a href="projects.html">02 Projects</a>
+        <a href="#home" className={active === "home" ? "active" : ""}>
+          01 Home
+        </a>
+        <Link href="/projects">02 Projects</Link>
         {link("about", "03 Studio")}
         {link("news", "04 Devlog")}
         {link("careers", "05 Careers")}
@@ -285,4 +380,27 @@ function TopNav() {
   );
 }
 
-Object.assign(window, { AboutSection, NewsSection, CareersSection, PressContactSection, SiteFooter, TopNav });
+export function ProjectsIndexNav() {
+  return (
+    <header className="topnav">
+      <Link href="/" className="brand">
+        <div className="brand-mark" />
+        <span>Ghostline / Studios</span>
+      </Link>
+      <nav>
+        <Link href="/">01 Home</Link>
+        <Link href="/projects" className="active">
+          02 Projects
+        </Link>
+        <Link href="/#about">03 Studio</Link>
+        <Link href="/#news">04 Devlog</Link>
+        <Link href="/#careers">05 Careers</Link>
+        <Link href="/#press">06 Press</Link>
+      </nav>
+      <div className="meta">
+        <span className="live-dot" />
+        <span>Live · 2026.05.08</span>
+      </div>
+    </header>
+  );
+}
