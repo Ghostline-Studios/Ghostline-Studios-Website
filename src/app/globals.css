@@ -1696,23 +1696,41 @@ footer {
   /* Container */
   .container { padding: 0 20px; }
 
-  /* Hero */
-  .hero { padding: 100px 0 80px; }
-  .hero-eclipse-wrap { width: min(300px, 76vw); }
-  .hero-hud { display: none; }
-  .hero-pitch {
-    top: 14%;
-    font-size: 14px;
-    width: 88vw;
-  }
-  .hero-bottom { bottom: 6%; }
-  .hero-title { font-size: clamp(40px, 13vw, 80px); }
-  .hero-cta-row {
+  /* Hero — switch from absolute-positioned layers to flex column */
+  .hero {
+    display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    padding: 90px 24px 64px;
+    gap: 28px;
+    min-height: 100svh;
+  }
+  .hero-eclipse-wrap { width: min(260px, 68vw); flex-shrink: 0; }
+  .hero-hud { display: none; }
+  /* un-absolute everything so it flows in the column */
+  .hero-pitch {
+    position: static;
+    transform: none;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .hero-bottom {
+    position: static;
+    text-align: center;
+    width: 100%;
+  }
+  .hero-title { font-size: clamp(38px, 12vw, 72px); }
+  .hero-subtitle { font-size: 11px; }
+  .hero-cta-row {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
     gap: 12px;
-    width: 88vw;
-    bottom: 1%;
   }
   .hero-cta-row .btn { width: 100%; justify-content: center; }
 
