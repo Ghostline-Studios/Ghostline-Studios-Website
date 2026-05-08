@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export function AboutSection() {
   return (
@@ -334,8 +334,70 @@ export function SiteFooter() {
   );
 }
 
+/* ─── Mobile drawer ─────────────────────────────────────────────── */
+function MobileDrawer({
+  open,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    if (open) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  return (
+    <>
+      {/* backdrop */}
+      <div
+        className={"mobile-drawer-backdrop" + (open ? " open" : "")}
+        onClick={onClose}
+        aria-hidden
+      />
+      {/* drawer panel */}
+      <div className={"mobile-drawer" + (open ? " open" : "")} aria-label="Navigation menu">
+        <div className="mobile-drawer-header">
+          <Link href="/" className="brand" onClick={onClose}>
+            <div className="brand-mark" />
+            <span>Ghostline / Studios</span>
+          </Link>
+          <button type="button" className="mobile-drawer-close" onClick={onClose} aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+        <nav className="mobile-drawer-nav" onClick={onClose}>
+          {children}
+        </nav>
+        <div className="mobile-drawer-footer">
+          <span className="live-dot" />
+          <span>Live · 2026.05.08</span>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─── Hamburger button ───────────────────────────────────────────── */
+function Hamburger({ onClick }: { onClick: () => void }) {
+  return (
+    <button type="button" className="mobile-hamburger" onClick={onClick} aria-label="Open menu">
+      <span /><span /><span />
+    </button>
+  );
+}
+
+/* ─── TopNav (home page) ─────────────────────────────────────────── */
 export function TopNav() {
   const [active, setActive] = useState("home");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   useEffect(() => {
     const ids = ["home", "games", "about", "news", "careers", "press"];
     const onScroll = () => {
@@ -351,56 +413,82 @@ export function TopNav() {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   const link = (id: string, label: string) => (
     <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>
       {label}
     </a>
   );
+
   return (
-    <header className="topnav">
-      <Link href="/" className="brand">
-        <div className="brand-mark" />
-        <span>Ghostline / Studios</span>
-      </Link>
-      <nav>
-        <a href="#home" className={active === "home" ? "active" : ""}>
-          01 Home
-        </a>
+    <>
+      <header className="topnav">
+        <Link href="/" className="brand">
+          <div className="brand-mark" />
+          <span>Ghostline / Studios</span>
+        </Link>
+        {/* desktop nav */}
+        <nav className="topnav-desktop-nav">
+          <a href="#home" className={active === "home" ? "active" : ""}>01 Home</a>
+          <Link href="/projects">02 Projects</Link>
+          {link("about", "03 Studio")}
+          {link("news", "04 Devlog")}
+          {link("careers", "05 Careers")}
+          {link("press", "06 Press")}
+        </nav>
+        <div className="meta">
+          <span className="live-dot" />
+          <span>Live · 2026.05.08</span>
+        </div>
+        <Hamburger onClick={() => setDrawerOpen(true)} />
+      </header>
+
+      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <a href="#home">01 Home</a>
         <Link href="/projects">02 Projects</Link>
-        {link("about", "03 Studio")}
-        {link("news", "04 Devlog")}
-        {link("careers", "05 Careers")}
-        {link("press", "06 Press")}
-      </nav>
-      <div className="meta">
-        <span className="live-dot" />
-        <span>Live · 2026.05.08</span>
-      </div>
-    </header>
+        <a href="#about">03 Studio</a>
+        <a href="#news">04 Devlog</a>
+        <a href="#careers">05 Careers</a>
+        <a href="#press">06 Press</a>
+      </MobileDrawer>
+    </>
   );
 }
 
+/* ─── ProjectsIndexNav (project pages) ──────────────────────────── */
 export function ProjectsIndexNav() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
   return (
-    <header className="topnav">
-      <Link href="/" className="brand">
-        <div className="brand-mark" />
-        <span>Ghostline / Studios</span>
-      </Link>
-      <nav>
-        <Link href="/">01 Home</Link>
-        <Link href="/projects" className="active">
-          02 Projects
+    <>
+      <header className="topnav">
+        <Link href="/" className="brand">
+          <div className="brand-mark" />
+          <span>Ghostline / Studios</span>
         </Link>
+        <nav className="topnav-desktop-nav">
+          <Link href="/">01 Home</Link>
+          <Link href="/projects" className="active">02 Projects</Link>
+          <Link href="/#about">03 Studio</Link>
+          <Link href="/#news">04 Devlog</Link>
+          <Link href="/#careers">05 Careers</Link>
+          <Link href="/#press">06 Press</Link>
+        </nav>
+        <div className="meta">
+          <span className="live-dot" />
+          <span>Live · 2026.05.08</span>
+        </div>
+        <Hamburger onClick={() => setDrawerOpen(true)} />
+      </header>
+
+      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <Link href="/">01 Home</Link>
+        <Link href="/projects">02 Projects</Link>
         <Link href="/#about">03 Studio</Link>
         <Link href="/#news">04 Devlog</Link>
         <Link href="/#careers">05 Careers</Link>
         <Link href="/#press">06 Press</Link>
-      </nav>
-      <div className="meta">
-        <span className="live-dot" />
-        <span>Live · 2026.05.08</span>
-      </div>
-    </header>
+      </MobileDrawer>
+    </>
   );
 }

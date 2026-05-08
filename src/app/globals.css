@@ -210,7 +210,8 @@ section { position: relative; }
 @keyframes brandSpin {
   to { transform: rotate(360deg); }
 }
-.topnav nav {
+/* desktop nav — shown above 768 px, hidden below */
+.topnav-desktop-nav {
   display: flex; gap: 36px;
   font-family: var(--font-mono);
   font-size: 11px;
@@ -225,27 +226,52 @@ section { position: relative; }
   padding: 4px 0;
   mask-image: linear-gradient(90deg, transparent 0, black 20px, black calc(100% - 20px), transparent 100%);
 }
-.topnav nav::-webkit-scrollbar { display: none; }
-.topnav nav a { flex-shrink: 0; }
-@media (max-width: 720px) {
-  .topnav { gap: 20px; padding: 20px clamp(16px, 4vw, 28px); }
-  .topnav .meta { display: none; }
-  .topnav .brand span { display: none; }
-  .topnav nav { gap: 24px; }
-}
-.topnav nav a {
+.topnav-desktop-nav::-webkit-scrollbar { display: none; }
+.topnav-desktop-nav a { flex-shrink: 0; }
+.topnav-desktop-nav a {
   position: relative;
   color: var(--wraith);
   transition: color 0.3s;
   padding: 8px 4px;
 }
-.topnav nav a:hover { color: white; }
-.topnav nav a.active { color: white; }
-.topnav nav a.active::after {
+.topnav-desktop-nav a:hover { color: white; }
+.topnav-desktop-nav a.active { color: white; }
+.topnav-desktop-nav a.active::after {
   content: ""; position: absolute; bottom: 0; left: 0; right: 0;
   height: 1px;
   background: var(--grad-energy);
   box-shadow: 0 0 8px var(--phantom);
+}
+
+/* hamburger — hidden on desktop */
+.mobile-hamburger { display: none; }
+
+@media (max-width: 768px) {
+  .topnav { gap: 0; padding: 18px 20px; }
+  .topnav .meta { display: none; }
+  .topnav .brand span { display: none; }
+  .topnav-desktop-nav { display: none; }
+  .mobile-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px; height: 36px;
+    padding: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .mobile-hamburger span {
+    display: block;
+    width: 100%; height: 1px;
+    background: var(--wraith);
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .mobile-hamburger:hover span { background: white; }
 }
 .topnav .meta {
   font-family: var(--font-mono);
@@ -1560,5 +1586,209 @@ footer {
 .reveal.in {
   opacity: 1;
   transform: none;
+}
+
+/* ================================================================
+   MOBILE — drawer, cursor, layout
+   ================================================================ */
+
+/* ── Mobile nav drawer ── */
+.mobile-drawer-backdrop {
+  position: fixed; inset: 0; z-index: 199;
+  background: rgba(5, 5, 7, 0.7);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-cinema);
+}
+.mobile-drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-drawer {
+  position: fixed; top: 0; left: 0; bottom: 0; z-index: 200;
+  width: min(300px, 80vw);
+  background: linear-gradient(160deg, rgba(14,14,20,0.98), rgba(8,8,13,0.99));
+  border-right: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  transform: translateX(-100%);
+  transition: transform 0.35s var(--ease-cinema);
+  overflow-y: auto;
+}
+.mobile-drawer.open {
+  transform: translateX(0);
+}
+
+.mobile-drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 20px 20px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mobile-drawer-header .brand {
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-display);
+  letter-spacing: 0.28em;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.mobile-drawer-close {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: var(--wraith);
+  transition: color 0.2s, background 0.2s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.mobile-drawer-close:hover { color: white; background: rgba(255,255,255,0.1); }
+
+.mobile-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  flex: 1;
+}
+.mobile-drawer-nav a {
+  display: block;
+  padding: 16px 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wraith);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: color 0.2s, padding-left 0.2s;
+}
+.mobile-drawer-nav a:hover {
+  color: white;
+  padding-left: 32px;
+}
+
+.mobile-drawer-footer {
+  display: flex; align-items: center; gap: 10px;
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wraith-faint);
+}
+
+/* ── Hide custom cursor on touch/pointer:coarse devices ── */
+@media (hover: none), (pointer: coarse) {
+  body { cursor: auto; }
+  button { cursor: pointer; }
+  a { cursor: pointer; }
+  .cursor-ring, .cursor-dot { display: none; }
+  .game-card, .teaser-card { cursor: pointer; }
+}
+
+/* ── Mobile layout fixes ── */
+@media (max-width: 768px) {
+
+  /* Container */
+  .container { padding: 0 20px; }
+
+  /* Hero */
+  .hero { padding: 100px 0 80px; }
+  .hero-eclipse-wrap { width: min(300px, 76vw); }
+  .hero-hud { display: none; }
+  .hero-pitch {
+    top: 14%;
+    font-size: 14px;
+    width: 88vw;
+  }
+  .hero-bottom { bottom: 6%; }
+  .hero-title { font-size: clamp(40px, 13vw, 80px); }
+  .hero-cta-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 88vw;
+    bottom: 1%;
+  }
+  .hero-cta-row .btn { width: 100%; justify-content: center; }
+
+  /* Section heads — stack vertically */
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding: clamp(80px, 18vw, 140px) 0 clamp(40px, 6vw, 64px);
+  }
+  .section-head .meta-block {
+    text-align: left;
+    max-width: 100%;
+  }
+  .section-head h2 { font-size: clamp(34px, 9vw, 56px); }
+
+  /* Game cards */
+  .game-card { aspect-ratio: 3 / 4; }
+  .game-card-stats { gap: 24px; flex-wrap: wrap; }
+  .game-card-content { padding: 24px; }
+
+  /* Expanded game card */
+  .game-card-expanded { min-height: unset; }
+  .game-card-expanded .left { padding: 28px 20px; min-height: unset; }
+  .game-card-expanded .right { padding: 28px 20px; border-left: none; border-top: 1px solid rgba(255,255,255,0.06); }
+
+  /* Project hero */
+  .project-hero { padding: 120px 0 48px; }
+  .project-title { font-size: clamp(40px, 12vw, 80px); }
+  .project-stats { grid-template-columns: repeat(2, 1fr); }
+  .project-key-art { display: none; }
+
+  /* Project section head */
+  .project-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  /* Feature grid */
+  .feature-grid { grid-template-columns: 1fr !important; }
+
+  /* Teaser cards */
+  .teaser-meta { padding: 20px; }
+  .teaser-title { font-size: clamp(28px, 8vw, 48px); }
+
+  /* Manifesto */
+  .manifesto-pillars { grid-template-columns: 1fr; }
+
+  /* Devlog list */
+  .devlog-item {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+  }
+  .devlog-item .date { grid-column: 1; grid-row: 1; }
+  .devlog-item .tag  { grid-column: 2; grid-row: 1; }
+  .devlog-item h4    { grid-column: 1 / -1; grid-row: 2; }
+  .devlog-item .arrow-cell { display: none; }
+
+  /* Careers */
+  .role-item { flex-direction: column; gap: 8px; }
+  .role-meta { flex-wrap: wrap; }
+
+  /* Press */
+  .press-card { padding: 28px 20px; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+  /* Squad grid */
+  .squad-grid { grid-template-columns: 1fr !important; }
+
+  /* Intro overlay text */
+  .intro-text { font-size: clamp(22px, 7vw, 40px); bottom: 15%; }
 }
 
