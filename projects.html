@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Ghostline Studios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="background.jsx"></script>
+  <script type="text/babel" src="games.jsx"></script>
+  <script type="text/babel" src="sections.jsx"></script>
+
+  <script type="text/babel">
+    function ProjectsNav() {
+      return (
+        <header className="topnav">
+          <a href="index.html" className="brand">
+            <div className="brand-mark" />
+            <span>Ghostline / Studios</span>
+          </a>
+          <nav>
+            <a href="index.html">01 Home</a>
+            <a href="projects.html" className="active">02 Projects</a>
+            <a href="index.html#about">03 Studio</a>
+            <a href="index.html#news">04 Devlog</a>
+            <a href="index.html#careers">05 Careers</a>
+            <a href="index.html#press">06 Press</a>
+          </nav>
+          <div className="meta">
+            <span className="live-dot" />
+            <span>Live · 2026.05.08</span>
+          </div>
+        </header>
+      );
+    }
+
+    function ProjectsPage() {
+      return (
+        <>
+          <CustomCursor />
+          <EnergyField />
+          <div className="bg-noise" />
+          <div className="bg-vignette" />
+          <div className="app">
+            <ProjectsNav />
+            <section data-screen-label="Projects Index">
+              <div className="container">
+                <div className="section-head">
+                  <div>
+                    <div className="index">— Index / Active Projects</div>
+                    <h2>Two worlds, in motion.</h2>
+                  </div>
+                  <div className="meta-block">
+                    <strong>Currently in production</strong>
+                    Mobile-first · Player-respecting<br />Hand-built · No dark patterns
+                  </div>
+                </div>
+
+                <div className="projects-teaser">
+                  <a href="scraplings.html" className="teaser-card scraplings">
+                    <div className="teaser-art"><ScraplingsArt big /></div>
+                    <div className="teaser-meta">
+                      <div className="teaser-tag">In Production · iOS · Android</div>
+                      <h3 className="teaser-title">Scraplings</h3>
+                      <p className="teaser-line">A cosy collector. Salvage the forgotten — give it a soul.</p>
+                      <span className="teaser-cta">Open project <span className="arrow">↗</span></span>
+                    </div>
+                  </a>
+                  <a href="spectral-sabre.html" className="teaser-card spectral-sabre">
+                    <div className="teaser-art"><SpectralSabreArt big /></div>
+                    <div className="teaser-meta">
+                      <div className="teaser-tag">Pre-Alpha · Android first</div>
+                      <h3 className="teaser-title">Spectral Sabre</h3>
+                      <p className="teaser-line">Lead Sabre Unit. Bend light. Vanish before the alarm.</p>
+                      <span className="teaser-cta">Open project <span className="arrow">↗</span></span>
+                    </div>
+                  </a>
+                </div>
+
+                <div style={{ padding: "60px 0 120px", textAlign: "center", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--wraith-faint)" }}>
+                  — More worlds awaiting their first ghostline —
+                </div>
+              </div>
+            </section>
+            <SiteFooter />
+          </div>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<ProjectsPage />);
+  </script>
+</body>
+</html>

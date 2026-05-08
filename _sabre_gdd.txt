@@ -1,0 +1,1288 @@
+
+
+-- 1 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 1
+SPECTRAL SABRE
+Game Design Document
+Mobile third-person tactical stealth shooter | First-pass concept document
+Core Fantasy Lead a four-person stealth-tech squad using hyperspectral camouflage, drone
+recon, synchronized strikes, and KIP's digital infiltration support.
+Primary Platform Android first, with iOS later if viable.
+Design Focus Short, replayable, mobile-first tactical missions with console-style mood.
+Signature Features Hyperspectral camouflage, four-operator squad, KIP companion robot, drone
+tagging, sync shots, cover movement, and hacking-enabled stealth routes.
+
+-- 2 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 2
+Document Contents
+1. Executive Summary 23. World and Story
+2. Design Pillars 24. Narrative Structure
+3. High Concept 25. Visual Direction
+4. Target Audience 26. Audio Direction
+5. Platform Philosophy 27. User Interface
+6. Core Gameplay Loop 28. Progression Systems
+7. Player Experience Goals 29. Weapon System
+8. Core Controls 30. Gadgets
+9. Camera Design 31. Mission Environments
+10. Companion Robot - KIP 32. Example Vertical Slice Mission
+11. The Squad 33. KIP Example Mission Moment
+12. Squad Command System 34. KIP Example Failure Moment
+13. Hyperspectral Camouflage 35. Monetisation Philosophy
+14. Stealth System 36. Technical Design Notes
+15. Combat System 37. MVP Scope
+16. Cover System 38. Development Roadmap
+17. Drone and Recon System 39. Risks and Solutions
+18. Sync Shot System 40. Unique Selling Points
+19. Enemy Design 41. One-Sentence Pitch
+20. Enemy AI Behaviour 42. Next Design Tasks
+21. Mission Types 43. Initial Build Target
+22. Mission Scoring
+
+-- 3 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 3
+Working title: Spectral Sabre
+Genre: Mobile third-person tactical stealth shooter
+Platform: Android first, iOS later if viable
+Perspective: Third-person over-the-shoulder
+Mode focus: Single-player tactical missions first, optional co-op later
+Tone: Near-future military thriller, stealth-tech fantasy, cinematic squad operations
+Core fantasy: Lead an elite four-person squad equipped with hyperspectral camouflage and
+advanced battlefield systems to execute surgical operations behind enemy lines.
+1. Executive Summary
+Spectral Sabre is a mobile-first third-person tactical stealth shooter where the player commands a
+four-person special operations unit using advanced camouflage, drone reconnaissance,
+synchronized takedowns, adaptive weapons, squad-based tactics, and a lovable digital
+companion robot.
+The game is an original IP built around the fantasy of elite futuristic operators. It should capture
+the feeling of a deliberate near-future tactical shooter without copying any existing franchise,
+story, iconography, user interface, faction, weapon names, or mission structure.
+The player leads Sabre Unit, a deniable black-ops squad using hyperspectral camouflage, an
+experimental stealth system that bends visibility across visible light, infrared, thermal, low-light,
+drone optics, and conventional camera feeds. The technology is powerful but not magic. It has
+tactical rules, weaknesses, heat buildup, battery drain, environmental interference, and enemy
+countermeasures.
+KIP, the squad's compact digital infiltration robot, adds a warmer emotional core to the game. KIP
+hacks anything digital in the field, provides intel, turns enemy technology into opportunity, and
+gives the squad a strange but lovable companion to protect.
+The player scouts the compound from the shadows, tags threats with a
+drone, sends KIP to embarrass a security door, moves the squad into
+position, activates camo, eliminates four guards at once, slips through
+the perimeter, disables the alarm, extracts the target, and vanishes
+before the enemy understands what happened.
+2. Design Pillars
+2.1 Tactical First, Shooter Second
+The player should feel powerful because they planned well, not because they sprinted into a room
+and outgunned everyone. Shooting should be satisfying, but the best outcomes come from
+observation, positioning, timing, stealth, and squad coordination.
+2.2 Stealth Tech With Rules
+Hyperspectral camouflage is the signature fantasy, but it must remain readable and balanced. It
+should create tense moments, not remove tension. Camo works best when the player is slow,
+crouched, in shadow, or outside direct sensor range. It becomes unstable when sprinting, firing
+unsuppressed weapons, taking damage, passing through water, standing near heat sources, or
+entering anti-camo scan fields.
+
+-- 4 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 4
+2.3 Mobile Missions, Console Mood
+The game should feel cinematic and tactical, but mission lengths must respect mobile play. Core
+missions should last around 3 to 8 minutes, with optional secondary objectives for deeper play.
+Dense replayable tactical sandboxes are preferred over huge open worlds at launch.
+2.4 Four Operators, One Mind
+The player leads a squad of four. The squad should feel present, useful, and intelligent without
+requiring heavy micromanagement. Commands should be quick and mobile-friendly: mark target,
+suppress, breach, flank, hold, sync shot, drone scan, and extract.
+2.5 KIP Gives The Game Its Heart
+The squad is professional, disciplined, and lethal. KIP is brilliant, odd, emotional, and funny. KIP
+prevents the tone from becoming too cold while also serving a real tactical function.
+2.6 Readable Complexity
+The game can include deep systems, but the UI must stay clean. Tactical information should
+appear as augmented-reality overlays: threat outlines, patrol paths, sound radius, camo strength,
+detection arcs, objective markers, digital hack points, and squad status.
+3. High Concept
+Spectral Sabre is set in a near-future world where military surveillance has advanced faster than
+conventional stealth. Drones, thermal networks, biometric scanners, satellite arrays, motion grids,
+and AI-controlled security systems dominate the battlefield. Traditional stealth is dead.
+In response, a covert military research program creates Hyperspectral Adaptive Refraction,
+nicknamed Spectral Skin. This technology allows operators to distort their signature across
+multiple detection bands. They do not simply turn invisible; they become difficult to resolve.
+Cameras see shimmer. Thermal sensors see ghost heat. Drones lose lock. Human eyes struggle to
+track motion in low light.
+The player commands Sabre Unit, a four-person deniable squad deployed where official military
+action is impossible. Their missions include rescuing hostages, destroying prototype weapons,
+disabling surveillance infrastructure, eliminating rogue commanders, stealing intelligence, and
+stopping private military groups from weaponising spectral technology.
+4. Target Audience
+Primary Audience
+Players who like:
+• Tactical shooters
+• Stealth games
+• Military sci-fi
+• Squad command systems
+• Weapon customisation
+• Short but replayable missions
+• Mobile games with console-style presentation
+• Emotional companion characters who become part of the team
+
+-- 5 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 5
+Secondary Audience
+Players who like:
+• Extraction-lite gameplay
+• Upgrade systems
+• Tactical planning
+• Special forces fiction
+• Co-op PvE potential
+• Cinematic military aesthetics
+• Drones, gadgets, hacking, and stealth tech
+5. Platform Philosophy
+This is not a console game squeezed onto a phone. It is a mobile tactical shooter designed around
+touch input, short sessions, clear UI, and performance constraints.
+Mobile Design Rules
+• Missions should be completable in short sessions.
+• Stealth and squad commands should reduce the need for twitch aiming.
+• Touch controls must be forgiving.
+• Aim assist should be intelligent but not play the game for the user.
+• UI buttons should be large enough for thumbs.
+• Tactical planning should be fast, visual, and satisfying.
+• The player should not need ten fingers to play well.
+• Auto-cover and contextual actions are preferred over complex manual inputs.
+• KIP's suggestions should help the player understand tactical options without opening complex
+menus.
+6. Core Gameplay Loop
+Mission Loop
+1. Briefing - View objective, enemy type, weather, map conditions, bonus targets, and
+recommended loadout.
+2. Loadout - Choose operator gear, weapons, attachments, camo modules, drone abilities, squad
+perks, and KIP modules.
+3. Insertion - Start at a concealed entry point and receive the initial tactical objective.
+4. Recon - Use drone, optics, squad sensors, and KIP to tag enemies, cameras, alarms, doors,
+scanners, and patrol paths.
+5. Infiltration - Move through patrols, disable sensors, avoid detection, set up squad positions, and
+exploit digital systems.
+6. Execution - Sync shots, stealth takedowns, hacked distractions, breaching, suppression, or cover
+combat.
+7. Objective Completion - Hack terminal, rescue target, plant charge, steal intel, destroy asset,
+capture HVT, or extract data.
+
+-- 6 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 6
+8. Extraction - Reach evac, survive alarm phase, or leave undetected.
+9. Debrief - Score stealth, accuracy, time, squad survival, KIP usage, optional objectives, and loot
+recovered.
+10. Progression - Earn currency, XP, attachments, operator upgrades, camo modules, drone
+modules, KIP upgrades, and mission intel.
+7. Player Experience Goals
+The player should regularly experience moments like:
+• Watching enemy patrols from a rooftop through drone vision.
+• Seeing squadmates appear as faint ghost silhouettes through camo shimmer.
+• Timing a four-target sync shot before a guard turns around.
+• Crawling under a scanning drone while camo battery drains.
+• Choosing whether to quietly disable the generator or go loud.
+• Sending KIP under a gate to loop the security camera.
+• Laughing when KIP says something oddly sincere during a tense hack.
+• Using smoke, EMP, camo, and KIP spoofing to escape after an alarm.
+• Customising a suppressed rifle for recoil, range, and stealth.
+• Feeling like the squad is elite, but not invincible.
+8. Core Controls
+Default Touch Layout
+Left thumb: Virtual movement stick, sprint modifier by dragging further, crouch/stance toggle
+near the movement zone.
+Right thumb: Camera look, aim/fire buttons, cover button, reload, gadget wheel, squad command
+button, and KIP command prompt when contextual.
+Contextual Actions
+The game should minimise button clutter by using contextual prompts:
+• Enter cover
+• Vault
+• Climb
+• Breach
+• Hack
+• Disable alarm
+• Revive squadmate
+• Pick up intel
+• Extract
+• Send KIP
+• Loop camera
+• Unlock door
+
+-- 7 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 7
+• Spoof scanner
+Optional Control Features
+• Gyro aiming
+• Controller support
+• Left-handed layout
+• Adjustable button size and opacity
+• Tap-to-aim option
+• Auto-fire accessibility option
+• Reduced camera shake option
+• Simplified command mode
+9. Camera Design
+The camera should be close enough to feel cinematic but pulled back enough for tactical
+awareness.
+Camera States
+Exploration Camera: Slightly pulled back to show the player, squad spacing, and environment.
+Aim Camera: Over-the-shoulder zoom. Weapon reticle tightens. Tagged enemy outlines remain
+visible.
+Cover Camera: Camera shifts to cover side. Allows shoulder swap, peeking, blind fire, and
+cover-to-cover movement.
+Drone Camera: Elevated tactical view. Highlights enemies, alarms, cameras, digital hack points,
+route options, and KIP opportunities.
+KIP View: Low-to-the-ground digital infiltration camera when directly controlling KIP for special
+hacks. The view should feel small, fast, and slightly comic without breaking immersion.
+Cinematic Execution Camera: Very brief slow-motion for perfect sync shots or breach executions.
+This should be optional or rare to avoid interrupting mobile flow.
+10. Companion Robot - KIP
+10.1 Working Name
+KIP stands for Kinetic Intelligence Platform.
+Alternative names considered: Pip, Kilo, Bishop, Glint, Tinker, Coda, Mote, and Chirp. This
+document uses KIP as the current working name.
+10.2 Core Concept
+KIP is a compact field-support robot assigned to Sabre Unit. It is not a weapon platform first. It is a
+digital infiltration companion: part hacker, part scout, part translator, part emotional support
+gremlin.
+KIP's gameplay role is to help the squad exploit anything digital in the environment. Cameras,
+doors, drones, alarms, turrets, lights, comms arrays, biometric locks, vehicle systems, enemy
+tablets, anti-camo towers, sensor grids, and security networks all become potential tools when KIP
+is nearby.
+
+-- 8 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 8
+KIP should feel like a beloved squad member, not just a menu with legs.
+10.3 Personality Direction
+KIP is inspired by the broad archetype of a strange but lovable non-human companion: brilliant,
+loyal, literal-minded, enthusiastic, brave, and emotionally sincere. KIP should not copy any
+existing character's exact speech patterns, catchphrases, species traits, or mannerisms. The goal
+is to make Spectral Sabre's own iconic companion.
+KIP should be:
+• Extremely helpful
+• Oddly wholesome
+• Socially unusual
+• Technically brilliant
+• Curious about human behaviour
+• Overly literal at funny moments
+• Brave despite being physically small
+• Emotionally attached to the squad
+• Proud when hacks succeed
+• Mildly offended when treated as equipment
+• Excited by elegant solutions
+10.4 Emotional Role
+KIP adds warmth to the cold tactical world of Spectral Sabre. The soldiers are calm, professional,
+and mission-focused. KIP is the little spark of weirdness that makes the squad feel alive.
+KIP can celebrate clean stealth, panic politely when plans go wrong, misunderstand sarcasm,
+quietly encourage the player, refer to the squad as "my humans" or "the soft team," and make
+failure less frustrating through humour.
+Example KIP lines:
+• "Door is locked. Door is now embarrassed."
+• "Camera loop active. It is watching yesterday."
+• "Enemy drone sees heat. I made your heat boring."
+• "Bad news: alarm is awake. Good news: I am smarter than alarm."
+• "I have opened the vent. Humans love vents, yes?"
+• "Stealth rating excellent. I feel proud in my circuits."
+• "This plan has many bullets in it. I suggest fewer bullets."
+• "Gate is open enough for heroic crouching."
+• "I have defeated human curiosity."
+10.5 Visual Design
+KIP should be small enough to follow the squad through vents, under vehicles, along walls, and
+across ceilings, but visually expressive enough to become memorable.
+Possible design:
+• Compact multi-limbed robot
+
+-- 9 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 9
+• Roughly the size of a backpack or small dog
+• Magnetic feet for walls and ceilings
+• Soft teal/purple spectral light core
+• Fold-out antenna fins
+• Small articulated tool arms
+• No human face, but expressive light patterns
+• Body panels with scratches, field repairs, and squad stickers
+• Can perch on Wraith's back during movement
+• Can detach and scuttle toward digital devices
+KIP should not look like a generic drone. It should feel like a strange little field creature made of
+military-grade hardware.
+10.6 Silhouette Options
+Five-Limbed Field Crawler: A compact, asymmetric robot with five articulated limbs. Three are
+used for stable crawling, two can become tool arms. This gives KIP an unusual, creature-like
+movement style.
+Backpack Percher: A folded robotic unit that sits on Wraith's back like a tactical pack, then unfolds
+into a small crawling companion when deployed.
+Wall Gecko Robot: A low-profile robot with magnetic pads, able to cling to ceilings, vents, and
+server racks.
+Tool-Shell Creature: A tough rounded shell with several delicate arms tucked underneath. It looks
+cute until it unfolds into a precise hacking machine.
+10.7 Movement and Mannerisms
+KIP's personality should be visible through animation:
+• Tilts its body when confused
+• Taps surfaces before hacking them
+• Freezes dramatically when spotted
+• Wiggles antennae when excited
+• Clings to cover during gunfire
+• Climbs onto terminals like a tiny mechanic
+• Projects little holographic diagrams while explaining
+• Hides behind Rook when explosions happen
+• Rides on the player's backpack during traversal
+• Does a tiny celebratory spin after a perfect hack
+• Knocks twice on a locked door before breaking into it digitally
+• Emits happy diagnostic chirps after a successful intrusion
+10.8 Field Role
+KIP can interact with cameras, alarm panels, turrets, enemy drones, door locks, security gates,
+server racks, biometric scanners, power grids, vehicle systems, motion sensors, anti-camo
+towers, comms relays, smart mines, patrol tablets, digital keypads, electronic safes, automated
+floodlights, and enemy bodycams.
+
+-- 10 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 10
+10.9 Core Abilities
+Camera Loop: Makes a camera replay old footage, allowing the squad to pass through its view
+cone safely.
+Door Whisper: Silently opens electronic locks. Higher-security locks take longer.
+Drone Hijack: Temporarily takes over an enemy drone. The player can use it to scout, distract
+enemies, or crash it.
+Alarm Suppression: Delays or cancels alarm activation. Useful when a guard reaches a panic
+button or when a security network detects intrusion.
+Turret Confusion: Makes a turret ignore Sabre Unit or target enemies briefly.
+Blackout Pulse: Disables lights in a small area. This improves camo effectiveness but may
+increase enemy suspicion.
+Sensor Spoof: Creates false readings for thermal, motion, or anti-camo systems.
+Data Bite: Extracts intel from devices. Rewards bonus currency, mission lore, enemy route data,
+hidden objectives, or upgrade fragments.
+Ghost Route: Highlights a low-detection route based on hacked security data.
+Signal Mimic: Imitates an authorised device, ID badge, or maintenance signal to bypass digital
+checkpoints.
+Panic Patch: Emergency ability. If the squad is about to be detected by a digital system, KIP can
+burn a cooldown to delay detection for a few seconds.
+10.10 Gameplay Balance
+KIP should be powerful but not unlimited.
+Limits:
+• Hacking takes time
+• KIP can be detected by advanced systems
+• Some hacks require line of sight or physical access
+• Enemy technicians can reverse hacks
+• Signal jammers reduce KIP's range
+• Heavy combat makes KIP retreat to safety
+• KIP cannot hack purely mechanical systems
+• KIP has cooldowns and battery constraints
+• High-risk hacks may trigger suspicion if failed
+• Some devices require Echo and KIP working together
+10.11 Relationship With Echo
+Echo is the human systems specialist. KIP is the field robot that physically interfaces with devices.
+Echo handles strategic hacking, signal analysis, and mission-wide electronic warfare. KIP handles
+close-range intrusion, device manipulation, and live field improvisation.
+Their dynamic could include Echo treating KIP like a colleague, KIP arguing about inefficient
+human code, Echo translating KIP's rapid technical chatter, KIP occasionally solving things Echo
+thought were impossible, and Echo pretending not to be emotionally attached.
+
+-- 11 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 11
+10.12 Tactical Integration
+KIP can be commanded through the same squad command system.
+Examples:
+• Tap camera -> KIP: Loop, Blind, Trace Network
+• Tap door -> KIP: Unlock, Peek Sensor, Jam Alarm
+• Tap turret -> KIP: Disable, Hijack, Overload
+• Tap drone -> KIP: Jam, Hijack, Crash
+• Tap terminal -> KIP: Extract Data, Map Network, Kill Power
+• Tap scanner -> KIP: Spoof, Disrupt, Mark Safe Window
+KIP can also suggest actions contextually:
+• "I can open that gate quietly."
+• "Camera has old firmware. Delicious."
+• "Alarm panel is nervous. I can calm it."
+• "Scanner field ahead. I can make fake you."
+• "Turret is angry but lonely. I can redirect anger."
+10.13 KIP Upgrade Tree
+Infiltration Upgrades: Faster door hacks, reduced hack noise, higher-security locks, and unlocks
+while moving slowly.
+Drone Warfare Upgrades: Longer drone hijack duration, temporary friendly drones, drone
+self-destruct, and hijacked drones tagging enemies for sync shots.
+Sensor Warfare Upgrades: Better anti-camo tower disruption, improved thermal spoofing, reduced
+automated detection, and decoy movement signatures.
+Data Extraction Upgrades: More bonus intel, hidden objectives, loot caches, and alternate mission
+routes.
+Survivability Upgrades: Better stealth while moving, emergency retreat dash, one
+detection-survival event, and self-repair once per mission.
+Personality Modules: Cosmetic-only idle behaviours, chirps, light reactions, and small dialogue
+variations. These should not be pay-to-win.
+10.14 KIP Story Function
+KIP may have been built from a fragment of Project Prism's autonomous infiltration research.
+Unlike most military AI, KIP has developed unusual emotional modelling and attachment
+behaviour.
+Possible hooks:
+• KIP knows more about Project Prism than it can initially access
+• Meridian wants KIP because it contains a rare intrusion model
+• KIP becomes afraid of being wiped or reset
+• The squad slowly stops calling KIP "equipment"
+• KIP's loyalty becomes important when command orders a memory purge
+• KIP may be the only system able to understand enemy spectral code
+• KIP discovers that some Meridian systems recognise it
+
+-- 12 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 12
+• KIP may have been copied from something Project Prism found, not something they invented
+11. The Squad
+The player leads four operators. The squad should be distinct enough to support tactical roles
+without becoming overwhelming.
+11.1 Operator 1 - Wraith
+Role: Adaptive commander
+Speciality: Player-selected loadout
+Core Function: Direct control, command issuing, mission decisions
+Wraith is the player avatar and squad leader. The character can be customised visually and
+mechanically over time.
+11.2 Operator 2 - Vantage
+Role: Long-range overwatch
+Speciality: Precision shots, drone-assisted targeting, thermal optics
+Vantage excels at sync shots, overwatch support, and disabling exposed targets. Vantage can be
+ordered to hold a sightline, cover an area, or silently eliminate a marked guard.
+11.3 Operator 3 - Rook
+Role: Close-quarters assault
+Speciality: Door breaching, shield module, flash charges, heavy armour
+Rook handles high-risk room entries and can draw fire when stealth fails. Rook should be the most
+durable squadmate but the least subtle.
+11.4 Operator 4 - Echo
+Role: Drone, hacking, electronic warfare
+Speciality: EMP pulses, camera loops, turret hijacking, sensor spoofing
+Echo gives the team its tactical advantage against modern security networks. Echo can disable
+alarms, jam drones, mark enemies through walls for a limited duration, and reduce anti-camo
+pressure.
+12. Squad Command System
+The squad command system must be fast and readable on mobile.
+Basic Commands
+• Move - Send squadmate or whole squad to a cover point
+• Hold - Squad stays hidden and does not engage unless detected
+• Suppress - Squadmate fires at an enemy position to pin enemies
+• Flank - Squadmate moves to an alternate angle if path is safe
+• Breach - Squad stacks on door and prepares entry
+• Sync Shot - Queue marked targets for coordinated elimination
+• Revive - Squadmate attempts to revive a downed operator
+
+-- 13 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 13
+• Regroup - Squad returns to player formation
+• Send KIP - Dispatch KIP to a digital device or route
+Mobile Input Concept
+Tap command button, then tap an enemy, location, door, camera, or object. A radial mini-menu
+appears.
+Examples:
+• Tap enemy -> Mark, Sync, Suppress, Flank
+• Tap door -> Breach, Peek, Stack, KIP Unlock
+• Tap cover -> Move, Hold, Overwatch
+• Tap camera -> KIP Loop, Echo Jam, Destroy
+Squad Autonomy
+Squadmates should automatically take nearby cover, avoid standing in enemy sight where
+possible, use suppressed weapons unless ordered loud, call out threats, revive each other when
+safe, avoid breaking stealth unless compromised, and follow the player in believable formation.
+13. Hyperspectral Camouflage
+Hyperspectral camouflage is the defining mechanic.
+13.1 Fiction
+The camo system uses layered adaptive refraction panels, thermal masking gel, micro-projector
+fibre, and AI-driven spectral prediction. It attempts to match the operator's visible, thermal,
+infrared, and low-light profile to the environment.
+It is not true invisibility. It is battlefield deception.
+13.2 Gameplay Function
+Camo reduces detection speed rather than making the player fully undetectable. Enemies still
+notice suspicious movement, sound, shimmer, footprints, muzzle flash, bodies, doors opening,
+and environmental disturbance.
+13.3 Camo States
+Offline: No stealth benefit. Full visibility. Used when battery is depleted or disabled.
+Passive Masking: Always-on minor signature reduction. Helps at long range and in shadows.
+Active Camo: Player becomes highly difficult to see. Strong battery drain. Best while crouched or
+walking slowly.
+Overburn: Emergency near-invisibility for a few seconds. Heavy heat buildup and cooldown
+afterwards.
+Disrupted: Camo flickers due to EMP, water, damage, scanner field, or overheating. Enemy
+detection accelerates.
+13.4 Camo Meter
+The HUD should display battery charge, heat buildup, visibility risk, scanner interference, and
+squad camo status.
+Simple UI language:
+
+-- 14 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 14
+• Blue/teal shimmer = stable
+• White flicker = strained
+• Red pulse = compromised
+• Static distortion = disrupted
+13.5 Detection Rules
+Enemies detect based on distance, line of sight, light level, player stance, movement speed,
+noise, camo state, enemy alertness, enemy equipment, and environmental disruption.
+13.6 Camo Weaknesses
+• Sprinting causes visible distortion
+• Firing creates muzzle flash and sound
+• Taking damage destabilises the camo field
+• Water, rain, sparks, smoke, dust, and snow can reveal outlines
+• Thermal scanners can partially detect heat bleed
+• Anti-camo towers create scan zones
+• Elite enemies can use pulse scans
+• Dead bodies and open doors still raise suspicion
+13.7 Camo Upgrades
+• Battery Efficiency - Longer active duration
+• Thermal Suppression - Reduced detection by drones and thermal optics
+• Motion Smoothing - Less shimmer while walking
+• Overburn Capacity - Longer emergency invisibility
+• EMP Hardening - Less disruption from electronic attacks
+• Squad Sync Field - Squadmates close to player gain improved camo stability
+14. Stealth System
+Enemy Awareness States
+Unaware: Normal patrol behaviour and no suspicion.
+Suspicious: Enemy noticed movement, sound, opened door, missing guard, or sensor glitch.
+Investigates location.
+Searching: Enemy believes a threat exists. Patrol routes change. Flashlights, drones, and scan
+pulses increase.
+Alerted: Enemy has confirmed contact. Alarms may trigger. Reinforcements move in.
+Combat: Full engagement. Enemies use cover, grenades, flanking, and suppression.
+Lockdown: Doors lock, drones deploy, anti-camo scanners activate, and extraction becomes
+harder.
+
+-- 15 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 15
+Stealth Failures Should Be Recoverable
+Being spotted should not always mean mission failure. The player should be able to kill the
+spotter before they radio, jam the alarm, use smoke and camo to break line of sight, disable base
+power, relocate and re-enter stealth, or extract early with reduced rewards.
+15. Combat System
+Combat should feel weighty and dangerous, but manageable on mobile.
+Weapon Handling
+Each weapon has damage, range, recoil, stability, noise, handling, armour penetration, magazine
+size, reload speed, and suppression value.
+Shooting Modes
+• Hip fire
+• Aim down sights
+• Shoulder swap
+• Blind fire from cover
+• Suppressed fire
+• Burst fire
+• Semi-auto precision fire
+Hit Feedback
+Enemies should react clearly: armour hit spark, helmet deflection, suppressed body hit, stagger,
+knockdown, silent takedown, or drone-disrupted stun.
+Damage Philosophy
+The player should not be a bullet sponge. Armour and squad support help, but poor positioning
+should be punished.
+Possible model:
+• Armour Plate - Absorbs initial damage
+• Health - Limited and dangerous to lose
+• Downed State - Squadmate can revive if safe
+• Permanent Mission Penalty - Downed operators reduce mission score
+16. Cover System
+Cover is essential to the game's identity.
+Cover Types
+Low Cover: Player crouches. Can vault. Vulnerable to grenades and flanks.
+High Cover: Player stands against wall or barrier. Can lean and peek. Safer but restricts
+movement.
+Soft Cover: Bushes, smoke, curtains, darkness. Helps stealth but does not stop bullets.
+
+-- 16 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 16
+Destructible Cover: Wood panels, glass, thin walls. Degrades under gunfire.
+Technical Cover: Jamming fields, darkness zones, EMP shadows. Helps against drones and
+sensors.
+Cover Actions
+• Snap to cover
+• Leave cover
+• Move along cover
+• Cover-to-cover dash
+• Peek left/right
+• Blind fire
+• Vault
+• Corner takedown
+• Drag body into cover
+17. Drone and Recon System
+The drone should be one of the most important tools.
+Drone Functions
+• Tag enemies
+• Identify patrol routes
+• Detect alarms and cameras
+• Scan objectives
+• Mark loot/intel
+• Reveal weak points
+• Create sound distractions
+• Emit short EMP pulse
+• Hack simple devices
+Drone Limitations
+• Battery limited
+• Can be spotted by guards
+• Can be jammed
+• Cannot enter shielded rooms without upgrades
+• Vulnerable to anti-drone turrets
+• Makes quiet electronic noise nearby
+Drone Modes
+Scout Mode: Manual control and best for recon.
+Orbit Mode: Circles player or target area and automatically tags visible enemies.
+Perch Mode: Lands on wall or ceiling and acts as temporary camera.
+
+-- 17 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 17
+Pulse Mode: Sends scan wave to reveal nearby enemies with a high cooldown.
+18. Sync Shot System
+The sync shot is a core tactical power moment.
+Basic Function
+The player marks up to four targets. Each operator lines up a shot. When all lines are ready, the
+player taps execute. Targets are eliminated simultaneously if conditions are valid.
+Requirements
+• Target must be visible to assigned operator
+• Operator must have line of sight
+• Weapon must be appropriate
+• Enemy armour may require headshot or armour-piercing ammo
+• Moving targets increase preparation time
+• Alert enemies reduce success chance
+• Communication jamming may block coordination
+Mobile Interaction
+• Tap enemy to mark
+• Long-press to assign sync shot
+• HUD shows Ready indicators over each target
+• Execute button appears when at least two shots are queued
+Balance
+Sync shot should be powerful but limited by cooldown, ammo, line of sight, squad positioning,
+camo stability, enemy helmets/armour, and communication jamming.
+19. Enemy Design
+Enemies should push the player to use the full tactical kit.
+Basic Enemy Types
+Patrol Guard: Lightly armed, basic detection, vulnerable to stealth.
+Rifleman: Standard combat enemy, uses cover and suppressive fire.
+Shotgun Breacher: Aggressive close-range enemy, pushes player out of cover.
+Sniper: Long-range overwatch, can detect shimmer at distance if alerted.
+Drone Operator: Deploys small recon drones and should be prioritised in stealth.
+Heavy Trooper: Armoured enemy, resists body shots and some sync shots.
+Technician: Can repair alarms, reactivate cameras, reverse KIP hacks, and trigger lockdown.
+Officer: Coordinates patrols. Killing or capturing may disrupt enemy response.
+
+-- 18 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 18
+Advanced Enemy Types
+Spectral Hunter: Equipped with anti-camo optics and pulse scans.
+Signal Warden: Carries jammer backpack and disrupts drone, sync shot, KIP, and squad
+communication.
+Thermal Hound Drone: Ground drone tracking heat traces and recent camo movement.
+Aegis Shield Unit: Uses directional shield and requires flanking or EMP.
+Counter-Sniper: Hunts Vantage's overwatch positions.
+20. Enemy AI Behaviour
+Patrol Behaviour
+Enemies follow routes, pause at observation points, talk with other guards, inspect
+doors/cameras/generators, and react to missing allies.
+Suspicion Behaviour
+Enemies look toward sound, walk to last known position, use flashlights, call nearby guards, check
+bodies, and report suspicious digital errors.
+Combat Behaviour
+Enemies take cover, suppress the player, flank, throw grenades, retreat when injured, call
+reinforcements, use drones, or activate scanners.
+Squad-Aware AI
+Enemies should not only target the player. They should react to squadmates, split attention, and
+punish bad squad placement.
+21. Mission Types
+21.1 Intel Extraction
+Infiltrate a facility, hack a server, retrieve data, and extract.
+21.2 Hostage Rescue
+Locate hostage, neutralise guards quietly, escort hostage to extraction.
+21.3 HVT Capture
+Find and capture a high-value target alive.
+21.4 Sabotage
+Plant charges on vehicles, radar dishes, fuel depots, or prototype weapons.
+21.5 Blackout
+Disable power grid, communications, or sensor network.
+21.6 Assassination
+Eliminate a target without raising alarm.
+
+-- 19 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 19
+21.7 Defensive Extraction
+Hold position while evac arrives after objective completion.
+21.8 Convoy Ambush
+Set traps, disable vehicles, capture cargo or target.
+21.9 Ghost Run
+Complete mission without being detected.
+21.10 Lockdown Escape
+Begin compromised and fight or stealth through a hostile zone to extraction.
+22. Mission Scoring
+Each mission can grade the player to encourage replayability.
+Score Categories
+• Detection level
+• Time taken
+• Accuracy
+• Headshots
+• Non-lethal takedowns
+• Squad damage taken
+• Civilian safety
+• Optional objectives
+• Intel recovered
+• Alarm status
+• Bodies discovered
+• Camo efficiency
+• KIP hacks used
+• KIP detected or safe
+Example Ratings
+Ghost: No detection, no alarms, clean extraction.
+Spectral: Minor suspicion, no full alert.
+Sabre: Objective complete with controlled engagement.
+Compromised: Alarm triggered but mission successful.
+Burned: Heavy combat, casualties, low reward.
+
+-- 20 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 20
+23. World and Story
+Setting
+The world is in a state of cold technological conflict. Nation-states, private military corporations,
+intelligence agencies, and rogue research groups compete over the future of battlefield
+invisibility.
+Traditional military presence is politically impossible in many zones. Instead, governments deploy
+deniable squads using experimental technologies.
+Main Conflict
+A private military network known as The Meridian Directorate has acquired fragments of
+hyperspectral camouflage research. They are using it to create invisible kill teams, destabilise
+regions, and sell stealth warfare to the highest bidder.
+Sabre Unit is activated to stop Meridian before they complete a deployable mass-production
+version of the technology.
+Key Factions
+Sabre Unit: Player squad. Elite, deniable, experimental.
+The Meridian Directorate: Private military and intelligence cartel. Main antagonist. Highly
+equipped and morally detached.
+Civic Shield Authority: Local security forces in unstable regions. Sometimes allies, sometimes
+obstacles.
+Black Lantern Syndicate: Arms smugglers and data brokers. Sell tech to both sides.
+Project Prism: Secret research program behind hyperspectral camouflage. Not fully trustworthy.
+The Pale Choir: Mysterious rogue unit using early spectral prototypes. Possible late-game elite
+enemy.
+24. Narrative Structure
+Act 1 - Ghost Protocol
+Sabre Unit deploys to investigate Meridian activity. Missions teach recon, stealth, drone tagging,
+sync shot, KIP hacking, and camo use.
+Major beat: The squad discovers Meridian has anti-camo scanning technology that should not
+exist.
+Act 2 - Broken Spectrum
+The conflict expands. Meridian begins deploying spectral counter-units. Sabre Unit questions
+whether Project Prism is hiding the true origin of the tech.
+Major beat: An operation goes wrong when the squad's camo signatures are remotely exposed,
+and KIP discovers that Meridian systems recognise its architecture.
+Act 3 - Sabre Burn
+Sabre Unit goes off-book to stop Meridian from launching a global stealth warfare auction. The
+player faces enemies who can hunt camouflaged operators.
+
+-- 21 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 21
+Major beat: The squad must decide whether to destroy, expose, or preserve the technology. KIP's
+memory and loyalty become central to the final choice.
+25. Visual Direction
+Overall Style
+Near-future tactical realism with subtle sci-fi. The game should look grounded, not superhero-like.
+Visual Keywords
+• Matte black tactical armour
+• Teal/blue spectral shimmer
+• Subtle purple refraction edges
+• Rain, mist, dust, smoke
+• Low-light environments
+• Augmented reality HUD overlays
+• Suppressed muzzle flashes
+• Reflective visors
+• Drone scan lines
+• High contrast night operations
+• Small robot companion with glowing core
+Camo Visual Effect
+Hyperspectral camo should look like heat-haze distortion, faint glass-like outlines, light bending
+around the operator, refraction shimmer during movement, teal/purple edge highlights when
+strained, and static glitch when disrupted.
+It should not look like magical invisibility. It should look like advanced military tech fighting
+against physics.
+26. Audio Direction
+Tone
+Quiet, tense, tactical, high-tech, with moments of strange warmth from KIP.
+Audio Layers
+• Low electronic ambience during stealth
+• Muffled radio chatter
+• Distant machinery
+• Rain on armour
+• Drone hum
+• KIP servo ticks and happy diagnostic chirps
+• Camo activation shimmer
+• Suppressed weapon thuds
+• Scanner pulses
+
+-- 22 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 22
+• Alarm klaxons when compromised
+• Heavy percussion during combat escalation
+Squad Voice Lines
+Short and useful:
+• "Two guards, left catwalk."
+• "Camo stable."
+• "Scanner field ahead."
+• "Shot lined up."
+• "Target moving."
+• "Alarm tech spotted."
+• "We're burned."
+• "Breaking line of sight."
+KIP Voice Lines
+KIP's lines should be helpful first and funny second:
+• "I can open that gate quietly."
+• "Camera is lying for us now."
+• "Scanner field ahead. I can make fake you."
+• "Door is stubborn. I am more stubborn."
+• "Enemy drone is mine for seven seconds. Please use seven seconds wisely."
+Avoid constant chatter. Silence is part of the fantasy.
+27. User Interface
+HUD Elements
+• Health/armour
+• Camo battery
+• Camo stability
+• Heat level
+• Ammo
+• Current weapon
+• Squad status
+• KIP status
+• Objective marker
+• Detection indicator
+• Enemy markers
+• Drone availability
+• Gadget cooldowns
+
+-- 23 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 23
+Tactical Overlay
+The tactical overlay appears during drone use, aiming, command mode, or KIP hacking.
+It can show enemy outlines, patrol direction, vision cones, camera arcs, alarm links, sound radius,
+objective path, cover points, squad command lines, sync shot readiness, digital device states, and
+KIP hack options.
+UI Style
+• Clean military AR interface
+• Teal/white primary information
+• Red/orange threat information
+• Purple/blue digital spectral accents
+• Minimal clutter outside command mode
+• Strong readability on small screens
+28. Progression Systems
+Player Level
+The player earns XP from missions and unlocks new weapons, attachments, camo upgrades,
+drone modules, squad perks, mission modifiers, cosmetic armour pieces, and KIP modules.
+Operator Progression
+Vantage Upgrades: Faster sync lock, better armour-piercing shots, longer overwatch range,
+thermal target priority.
+Rook Upgrades: Faster breach, better armour, flash charge efficiency, shield module.
+Echo Upgrades: Longer drone battery, faster hacks, stronger EMP, camera loop duration, better
+KIP coordination.
+Wraith Upgrades: Better command cooldowns, camo stability aura, faster gadget swap, improved
+extraction rewards.
+KIP Upgrades: Faster hacks, better spoofing, longer hijacks, emergency panic patch, safer
+traversal, additional idle personality.
+29. Weapon System
+Weapon Categories
+• Assault rifles
+• Carbines
+• Designated marksman rifles
+• SMGs
+• Shotguns
+• Pistols
+• Machine pistols
+• Light machine guns
+• Sniper rifles
+
+-- 24 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 24
+Attachment Slots
+• Optic
+• Barrel
+• Muzzle
+• Underbarrel
+• Magazine
+• Stock
+• Ammo type
+• Side module
+Attachment Examples
+Optics: Reflex sight, holographic sight, hybrid scope, thermal optic, low-light optic.
+Muzzles: Suppressor, compensator, flash hider, breach muzzle.
+Underbarrel: Grip, laser module, EMP dart launcher, micro grenade launcher.
+Ammo Types: Subsonic, armour-piercing, frangible, EMP rounds, tracker rounds.
+Gunsmith Philosophy
+The weapon system should be meaningful but not overwhelming. Every attachment should have a
+clear trade-off.
+Examples:
+• Suppressor reduces noise but lowers damage range
+• Thermal optic sees through smoke but reveals glint to scanners
+• Armour-piercing ammo beats helmets but increases recoil
+• Extended magazine improves combat but hurts handling
+30. Gadgets
+Core Gadgets
+Recon Drone: Scout, tag, pulse, distract.
+EMP Charge: Disables cameras, drones, turrets, scanners.
+Smoke Projector: Creates visual cover and breaks line of sight.
+Holo-Decoy: Projects false movement signature.
+Breach Charge: Opens locked doors violently.
+Signal Spike: Temporarily hacks devices in radius.
+Thermal Knife: Silent takedown tool that bypasses some armour.
+Micro Sensor: Stick to wall to reveal movement nearby.
+Camo Overdrive Cell: Emergency boost to camo battery.
+KIP Relay Spike: Extends KIP's hacking range through a local network node.
+
+-- 25 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 25
+31. Mission Environments
+Launch Biomes
+Rain-Soaked Industrial Yard: Pipes, catwalks, floodlights, containers. Rain reveals camo shimmer.
+Mountain Listening Post: Snow, radar dishes, cliffs, long sightlines. Cold helps thermal masking
+but snow tracks movement.
+Urban Blacksite: Rooftops, alleys, neon, CCTV networks. Civilians and cameras complicate stealth.
+Desert Relay Station: Heat haze, drones, open terrain. Thermal distortion affects both player and
+enemies.
+Offshore Platform: Tight corridors, helipads, water hazards. Water and reflective surfaces disrupt
+camo.
+Underground Data Vault: Cameras, scanners, automated turrets. Echo and KIP-focused electronic
+warfare mission.
+32. Example Vertical Slice Mission
+Mission Name
+Operation: Glass Dagger
+Location
+Rain-soaked Meridian logistics compound on the edge of a coastal industrial zone.
+Objective
+Infiltrate the compound, retrieve stolen Prism research data, destroy the backup relay, and
+extract without allowing Meridian to transmit the data offsite.
+Mission Length
+5 to 8 minutes.
+Player Loadout
+• Suppressed carbine
+• Sidearm
+• Recon drone
+• EMP charge
+• Hyperspectral camo
+• Two sync shot charges
+• KIP with Camera Loop and Door Whisper
+Squad
+• Vantage - overwatch
+• Rook - breach support
+• Echo - hacking/drone support
+• KIP - digital infiltration companion
+
+-- 26 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 26
+Mission Flow
+1. Start outside perimeter in drainage ditch.
+2. Player launches drone and tags six guards, two cameras, one alarm tower.
+3. KIP identifies a low-security maintenance door.
+4. Player uses camo to cross exposed yard.
+5. Squad sync shot clears three guards near loading bay.
+6. Echo and KIP loop the camera network.
+7. Player enters server office through roof hatch or breached side door.
+8. KIP extracts data while the player holds the room.
+9. Data download triggers a suspicion timer.
+10. Player chooses stealth extraction or relay sabotage first.
+11. Meridian reinforcements arrive if alarm triggers.
+12. Squad extracts through storm drain or rooftop rope point.
+Optional Objectives
+• No alarms
+• Recover prototype camo cell
+• Capture officer alive
+• Destroy anti-camo scanner
+• Complete under 7 minutes
+• Keep KIP undetected
+• Extract hidden data cache
+Teaching Goals
+This mission teaches drone recon, enemy tagging, camo meter, cover movement, sync shot, KIP
+hacking, camera looping, objective interaction, and extraction under pressure.
+33. KIP Example Mission Moment
+The squad reaches a locked security gate watched by two cameras and a thermal scanner. The
+player sends KIP forward while camouflaged. KIP climbs under a control box, loops both cameras,
+spoofs the scanner with a fake heat signature, then opens the gate six inches.
+"Gate is open enough for heroic crouching."
+The squad slips through. A guard notices the gate moving. KIP panics, briefly projects a false
+maintenance warning, and the guard walks away annoyed.
+"I have defeated human curiosity."
+34. KIP Example Failure Moment
+The player rushes a hack while an enemy technician is nearby. KIP starts opening a door, but the
+technician notices the intrusion.
+"Door is arguing. Technician is helping door. I dislike this friendship."
+
+-- 27 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 27
+The player can eliminate the technician, order Echo to jam the signal, abort the hack, trigger
+Blackout Pulse, or go loud and breach. This turns hacking into a tactical decision rather than a
+passive progress bar.
+35. Monetisation Philosophy
+The game should avoid pay-to-win, especially if aiming for long-term trust.
+Acceptable Monetisation
+• Cosmetic armour skins
+• Weapon skins
+• Operator outfits
+• Camo visual effects
+• KIP shell skins
+• KIP light-core colours
+• Cosmetic KIP personality modules
+• Battle pass with cosmetics and resources
+• Optional ad reward for extra non-premium currency
+• Paid campaign expansions
+• Founder pack
+Risky Monetisation
+Avoid selling direct combat superiority in competitive modes. If co-op or PvP arrives later, paid
+power will damage the game's reputation.
+Recommended Model
+For the first version, use either free-to-play with cosmetic monetisation or a low-cost premium
+game with optional cosmetic DLC. Free-to-play is more realistic commercially, but it requires
+careful economy design.
+36. Technical Design Notes
+Recommended Engine
+Unity is likely the best first choice for a mobile tactical shooter because of mobile tooling, asset
+ecosystem, UI workflow, and broad Android support.
+Key Systems Needed
+• Third-person character controller
+• Mobile camera controller
+• Weapon firing system
+• Cover detection and cover movement
+• Enemy AI state machine
+• Squad AI and command system
+• Drone controller
+
+-- 28 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 28
+• Detection/suspicion system
+• Camo meter and visibility modifier
+• KIP AI and hacking interface
+• Mission objective system
+• Loadout/inventory system
+• Save progression
+• Touch UI
+• Performance profiler setup
+Mobile Performance Rules
+• Prioritise baked lighting
+• Use limited real-time shadows
+• Use LODs for characters and props
+• Use object pooling for bullets, casings, VFX, drones, and enemies
+• Keep enemy counts controlled
+• Use compact mission spaces
+• Avoid large open-world streaming at MVP stage
+• Optimise transparent camo shaders carefully
+• Test on real mid-range Android hardware early
+• Keep KIP animation expressive but cheap enough for mobile
+37. MVP Scope
+The first playable MVP should include one complete mission, not the whole game.
+MVP Must Include
+• One playable operator under player control
+• Three squadmates with basic following and sync shot support
+• KIP with basic follow, send, and hack behaviour
+• Third-person movement
+• Camera and aim controls
+• Basic shooting
+• One suppressed rifle and one pistol
+• Cover system
+• Basic enemy patrols
+• Detection/suspicion system
+• Hyperspectral camo meter
+• Drone tagging
+• Sync shot
+• One mission with objective and extraction
+• Debrief screen
+
+-- 29 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 29
+MVP Should Not Include Yet
+• Multiplayer
+• Full campaign
+• Full gunsmith
+• Huge open maps
+• Complex cosmetics
+• Voice acting
+• PvP
+• Clans
+• Live events
+• Battle pass
+• Multiple biomes
+38. Development Roadmap
+Phase 1 - Feel Prototype
+Goal: Make movement, camera, shooting, and cover feel good.
+Deliverables:
+• Greybox test level
+• Player movement
+• Camera
+• Aim/fire/reload
+• Basic cover snap
+• One enemy dummy
+• Touch controls
+Phase 2 - Stealth Prototype
+Goal: Prove the tactical stealth loop.
+Deliverables:
+• Enemy patrol AI
+• Detection meter
+• Crouch/sound model
+• Camo activation
+• Suspicion states
+• Simple alarm
+Phase 3 - Squad Prototype
+Goal: Make the four-person squad useful.
+Deliverables:
+• Squad follow
+
+-- 30 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 30
+• Move command
+• Hold command
+• Sync shot
+• Revive basic
+• Squad status UI
+Phase 4 - KIP and Digital Systems
+Goal: Add the signature companion and digital infiltration layer.
+Deliverables:
+• KIP follow/perch behaviour
+• Send KIP command
+• Door hack
+• Camera loop
+• Alarm delay
+• KIP UI prompts
+• KIP personality barks
+Phase 5 - Drone and Gadgets
+Goal: Add the wider recon layer.
+Deliverables:
+• Drone controls
+• Enemy tagging
+• Camera tagging
+• EMP gadget
+• Sensor pulse
+• Tactical overlay
+Phase 6 - Vertical Slice
+Goal: Build Operation: Glass Dagger as a complete mission.
+Deliverables:
+• Full mission flow
+• Objective system
+• Enemy placements
+• Alarm response
+• Extraction
+• Debrief screen
+• Basic progression reward
+Phase 7 - Content Expansion
+Goal: Add replayability.
+Deliverables:
+
+-- 31 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 31
+• More weapons
+• More attachments
+• More enemy types
+• 3 to 5 missions
+• Operator upgrades
+• KIP upgrades
+• Mission scoring
+39. Risks and Solutions
+Risk: Scope Creep
+Trying to build a full console-style tactical shooter immediately will likely stall the project.
+Solution: Build one polished mission first.
+Risk: Mobile Controls Feel Bad
+Third-person shooters can feel clumsy on touchscreens.
+Solution: Use assisted aiming, auto-cover, contextual commands, and tactical mechanics that
+reward planning over twitch reactions.
+Risk: Camo Makes Game Too Easy
+If invisibility is too strong, stealth loses tension.
+Solution: Use battery, heat, shimmer, scanners, sound, environmental disruption, and enemies
+designed to counter it.
+Risk: Squad AI Becomes Too Complex
+Full tactical AI is difficult.
+Solution: Start with limited commands and strong illusion of intelligence: cover selection, sync
+shots, follow, revive, suppression, and clear voice feedback.
+Risk: KIP Becomes Annoying
+A talkative companion can become irritating if overused.
+Solution: Make KIP context-aware, helpful first, funny second, and provide chatter frequency
+settings.
+Risk: Performance Problems
+Camo shaders, drones, AI, effects, and KIP animation can hurt mobile performance.
+Solution: Profile early, use simple shader variants, keep missions compact, limit enemy counts,
+and build for mid-range Android hardware.
+Risk: Too Similar to Existing Franchises
+A homage can accidentally become derivative.
+Solution: Use original terminology, factions, UI, characters, mission themes, and technology rules.
+Build the identity around hyperspectral warfare, Sabre Unit, and KIP.
+
+-- 32 of 33 --
+
+SPECTRAL SABRE Game Design Document
+Page 32
+40. Unique Selling Points
+• Mobile-first tactical stealth shooter
+• Four-person squad command without heavy micromanagement
+• Hyperspectral camouflage as a tactical resource
+• KIP, a lovable digital infiltration robot companion
+• Drone recon and sync shot built into core loop
+• Short cinematic missions with replayable scoring
+• Near-future military sci-fi without becoming fantasy
+• Tactical planning that feels good on touch controls
+• A cold tactical world with a warm emotional anchor
+41. One-Sentence Pitch
+Spectral Sabre is a mobile tactical stealth shooter where you command a
+four-person black-ops squad and a lovable hacking robot, using
+hyperspectral camouflage, drone recon, and synchronized strikes to
+dismantle a private military conspiracy from the shadows.
+42. Next Design Tasks
+1. Define the four main operators visually and mechanically.
+2. Finalise KIP's silhouette and animation language.
+3. Create the first mission map layout for Operation: Glass Dagger.
+4. Design the mobile HUD wireframe.
+5. Write the first Cursor prompt for the Unity prototype.
+6. Define the detection/camo formula in simple implementation terms.
+7. Create a list of launch weapons and attachments.
+8. Create enemy AI behaviour tables.
+9. Create the first 10-mission campaign outline.
+10. Create KIP's first 100 context-aware voice lines.
+43. Initial Build Target
+The first build should not try to prove the whole game. It should prove this moment:
+The player crouches behind a rain-soaked barrier, activates
+hyperspectral camo, sends the drone over the compound wall, marks
+three guards, sends Vantage to overwatch, commands Echo to loop the
+camera, sends KIP under a security panel, lines up a sync shot, executes
+silently, slips through the gate, and reaches the objective without being
+seen.
+If that moment feels good, Spectral Sabre has a foundation.
+
+-- 33 of 33 --
+
