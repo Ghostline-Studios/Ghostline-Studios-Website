@@ -17,7 +17,6 @@ export function AuthModal() {
     if (authOpen) {
       setEmail("");
       setPassword("");
-      setUsername("");
       setMsg(null);
     }
   }, [authOpen]);
