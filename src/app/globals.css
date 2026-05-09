@@ -1837,3 +1837,309 @@ footer {
   .intro-text { font-size: clamp(22px, 7vw, 40px); bottom: 15%; }
 }
 
+/* ================================================================
+   GHOSTLINE ID — Auth, Account & Admin
+   ================================================================ */
+
+/* ── Auth backdrop + slide-in panel ───────────────────────────── */
+.auth-backdrop {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  transition: background 0.4s, backdrop-filter 0.4s;
+  pointer-events: none;
+}
+.auth-backdrop.open {
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+
+.auth-panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 91;
+  width: min(440px, 100vw);
+  background: var(--ash);
+  border-left: 1px solid var(--rim);
+  padding: 48px 36px 40px;
+  display: flex; flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.45s var(--ease-cinema);
+  overflow-y: auto;
+}
+.auth-panel.open { transform: translateX(0); }
+
+.auth-close {
+  position: absolute; top: 20px; right: 24px;
+  color: var(--wraith); width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; transition: color 0.2s, background 0.2s;
+}
+.auth-close:hover { color: white; background: rgba(255,255,255,0.06); }
+
+/* ── Auth header ──────────────────────────────────────────────── */
+.auth-header { margin-bottom: 36px; }
+.auth-mark {
+  width: 44px; height: 44px;
+  background: url("/assets/ghostline-mark.png") center/contain no-repeat;
+  margin-bottom: 18px; opacity: 0.9;
+}
+.auth-title { font-size: 26px; font-weight: 300; letter-spacing: 0.04em; color: white; margin-bottom: 6px; }
+.auth-subtitle { font-size: 13px; color: var(--wraith); line-height: 1.5; }
+
+/* ── Tabs ─────────────────────────────────────────────────────── */
+.auth-tabs { display: flex; border-bottom: 1px solid var(--rim); margin-bottom: 28px; gap: 4px; }
+.auth-tab {
+  flex: 1; padding: 10px 0;
+  font-size: 11px; font-family: var(--font-mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--wraith-soft);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.auth-tab.active { color: white; border-color: var(--spectral); }
+
+/* ── Form ─────────────────────────────────────────────────────── */
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.auth-label {
+  display: flex; flex-direction: column; gap: 7px;
+  font-size: 10px; font-family: var(--font-mono);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--wraith-soft);
+}
+.auth-input {
+  background: var(--mist); border: 1px solid var(--rim);
+  border-radius: 10px; padding: 12px 14px;
+  font-size: 14px; color: white;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: none; width: 100%;
+}
+.auth-input:focus {
+  outline: none; border-color: rgba(77,208,225,0.45);
+  box-shadow: 0 0 0 3px rgba(77,208,225,0.08);
+}
+.auth-textarea { resize: vertical; min-height: 84px; font-family: inherit; }
+.auth-msg {
+  padding: 10px 14px; border-radius: 8px;
+  font-size: 13px; line-height: 1.5;
+  background: rgba(255,80,80,0.09); border: 1px solid rgba(255,80,80,0.22);
+  color: #ff8080;
+}
+.auth-msg.ok {
+  background: rgba(77,208,225,0.07); border-color: rgba(77,208,225,0.22);
+  color: var(--spectral);
+}
+.auth-submit {
+  padding: 13px 20px; border-radius: 10px;
+  background: var(--spectral); color: var(--void);
+  font-size: 14px; font-weight: 500; letter-spacing: 0.04em;
+  transition: opacity 0.2s, transform 0.15s; margin-top: 4px;
+}
+.auth-submit:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.auth-submit:disabled { opacity: 0.4; }
+.auth-forgot {
+  font-size: 12px; color: var(--wraith-soft); text-align: right;
+  transition: color 0.2s;
+}
+.auth-forgot:hover { color: var(--spectral); }
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.auth-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 24px 0;
+  color: var(--wraith-faint); font-size: 11px;
+  font-family: var(--font-mono); letter-spacing: 0.2em;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--rim);
+}
+
+/* ── OAuth buttons ───────────────────────────────────────────── */
+.auth-oauth { display: flex; flex-direction: column; gap: 10px; }
+.auth-oauth-btn {
+  display: flex; align-items: center; gap: 12px; justify-content: center;
+  padding: 12px 20px; border-radius: 10px;
+  border: 1px solid var(--rim); background: var(--mist);
+  font-size: 14px; color: white;
+  transition: background 0.2s, border-color 0.2s;
+}
+.auth-oauth-btn:hover { background: var(--fog); border-color: var(--rim-bright); }
+
+/* ── Legal ───────────────────────────────────────────────────── */
+.auth-legal {
+  margin-top: 20px; font-size: 11px; color: var(--wraith-faint);
+  text-align: center; line-height: 1.7;
+}
+.auth-legal a { color: var(--wraith-soft); text-decoration: underline; }
+
+/* ── GhostlineID button ──────────────────────────────────────── */
+.gid-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid rgba(77,208,225,0.32);
+  background: rgba(77,208,225,0.06);
+  font-size: 11px; font-family: var(--font-mono);
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--spectral); white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+.gid-btn:hover { background: rgba(77,208,225,0.12); border-color: rgba(77,208,225,0.52); }
+.gid-skeleton {
+  width: 108px; height: 30px;
+  background: var(--mist); border: none; border-radius: 20px;
+  animation: glowBreathe 2s ease-in-out infinite;
+}
+.gid-mark {
+  width: 14px; height: 14px;
+  background: url("/assets/ghostline-mark.png") center/contain no-repeat;
+  opacity: 0.8; flex-shrink: 0;
+}
+.gid-signed-in { position: relative; }
+.gid-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--spectral), var(--phantom));
+  font-size: 11px; font-weight: 600; color: var(--void);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.2s; flex-shrink: 0;
+}
+.gid-avatar:hover { opacity: 0.82; }
+.gid-dropdown {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  min-width: 188px; background: var(--ash);
+  border: 1px solid var(--rim); border-radius: 14px;
+  overflow: hidden; z-index: 200;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+}
+.gid-dropdown-user {
+  padding: 12px 16px; font-size: 11px;
+  color: var(--wraith-soft); border-bottom: 1px solid var(--rim);
+  font-family: var(--font-mono); letter-spacing: 0.1em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.gid-dropdown-item {
+  display: block; width: 100%; padding: 10px 16px;
+  font-size: 13px; color: var(--wraith); text-align: left;
+  transition: background 0.15s, color 0.15s; cursor: none;
+}
+.gid-dropdown-item:hover { background: var(--mist); color: white; }
+.gid-signout { color: rgba(255,120,120,0.85); }
+.gid-signout:hover { background: rgba(255,60,60,0.08); color: #ff8080; }
+
+/* ── Account page ────────────────────────────────────────────── */
+.account-page { padding: 120px 0 100px; min-height: 100vh; }
+.account-header {
+  display: flex; align-items: center; gap: 24px; margin-bottom: 48px;
+}
+.account-avatar {
+  width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--spectral), var(--phantom));
+  font-size: 22px; font-weight: 600; color: var(--void);
+  display: flex; align-items: center; justify-content: center;
+}
+.account-name { font-size: clamp(26px, 4vw, 40px); font-weight: 300; margin-bottom: 4px; }
+.account-id {
+  font-size: 12px; color: var(--wraith);
+  font-family: var(--font-mono); letter-spacing: 0.1em;
+}
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.account-card {
+  border-radius: 20px; padding: 32px;
+  border: 1px solid var(--rim);
+}
+.account-card h3 { font-size: 18px; font-weight: 300; margin-bottom: 22px; }
+.account-fields { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+.account-wishlist { display: flex; flex-direction: column; gap: 10px; }
+.account-wish-btn {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border-radius: 12px;
+  border: 1px solid var(--rim); background: var(--mist);
+  font-size: 14px; color: var(--wraith);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.account-wish-btn.active {
+  border-color: var(--wish-color, var(--spectral));
+  color: white; background: rgba(77,208,225,0.04);
+}
+.wish-check { font-size: 15px; width: 20px; text-align: center; }
+.account-toggles { display: flex; flex-direction: column; }
+.account-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--rim);
+  font-size: 14px; color: var(--wraith); gap: 16px;
+}
+.account-toggle:last-child { border-bottom: none; }
+.account-toggle input[type="checkbox"] { display: none; }
+.toggle-track {
+  width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0;
+  background: var(--mist); border: 1px solid var(--rim);
+  position: relative; transition: background 0.2s, border-color 0.2s;
+}
+.toggle-track::after {
+  content: ""; position: absolute; top: 4px; left: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--wraith-soft); transition: transform 0.2s, background 0.2s;
+}
+.account-toggle input:checked + .toggle-track {
+  background: rgba(77,208,225,0.18); border-color: var(--spectral);
+}
+.account-toggle input:checked + .toggle-track::after {
+  transform: translateX(18px); background: var(--spectral);
+}
+
+/* ── Admin page ──────────────────────────────────────────────── */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px; margin-bottom: 8px;
+}
+.admin-stat {
+  border-radius: 16px; padding: 24px 28px;
+  border: 1px solid var(--rim);
+}
+.admin-stat-num {
+  font-size: 40px; font-weight: 300; color: white;
+  letter-spacing: -0.02em; line-height: 1;
+}
+.admin-stat-label {
+  font-size: 11px; font-family: var(--font-mono);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--wraith); margin-top: 8px;
+}
+.admin-table-wrap { overflow-x: auto; margin-top: 4px; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.admin-table th {
+  text-align: left; padding: 10px 16px;
+  font-size: 10px; font-family: var(--font-mono);
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--wraith-soft); border-bottom: 1px solid var(--rim);
+}
+.admin-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+.admin-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--spectral), var(--phantom));
+  font-size: 11px; font-weight: 600; color: var(--void);
+  display: flex; align-items: center; justify-content: center;
+}
+.admin-badge {
+  padding: 3px 10px; border-radius: 20px;
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.1em;
+  background: var(--mist); border: 1px solid var(--rim); color: var(--wraith);
+}
+.admin-badge.admin {
+  background: rgba(179,136,255,0.1); border-color: rgba(179,136,255,0.3);
+  color: var(--phantom-glow);
+}
+
+/* ── Mobile auth adjustments ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .auth-panel { padding: 40px 24px 32px; }
+  .gid-btn { display: none; }
+  .gid-signed-in { display: flex; }
+  .account-page { padding: 90px 0 60px; }
+  .account-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .account-grid { grid-template-columns: 1fr; }
+}
+

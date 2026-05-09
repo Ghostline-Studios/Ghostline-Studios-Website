@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
 
 export function AboutSection() {
   return (
@@ -429,6 +430,7 @@ export function TopNav() {
           <span className="live-dot" />
           <span>Live · 2026.05.08</span>
         </div>
+        <GhostlineIDButton />
         <Hamburger onClick={() => setDrawerOpen(true)} />
       </header>
 
@@ -467,6 +469,7 @@ export function ProjectsIndexNav() {
           <span className="live-dot" />
           <span>Live · 2026.05.08</span>
         </div>
+        <GhostlineIDButton />
         <Hamburger onClick={() => setDrawerOpen(true)} />
       </header>
 
