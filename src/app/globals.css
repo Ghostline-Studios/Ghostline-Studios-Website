@@ -2025,45 +2025,139 @@ footer {
 .gid-signout:hover { background: rgba(255,60,60,0.08); color: #ff8080; }
 
 /* ── Account page ────────────────────────────────────────────── */
+/* ── Account / Profile page ──────────────────────────────────── */
 .account-page { padding: 120px 0 100px; min-height: 100vh; }
-.account-header {
-  display: flex; align-items: center; gap: 24px; margin-bottom: 48px;
+
+/* Profile hero */
+.profile-hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 28px;
+  margin-bottom: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--rim);
 }
-.account-avatar {
-  width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
+.profile-avatar-wrap { padding-top: 4px; }
+.profile-avatar {
+  width: 80px; height: 80px; border-radius: 50%; flex-shrink: 0;
   background: linear-gradient(135deg, var(--spectral), var(--phantom));
-  font-size: 22px; font-weight: 600; color: var(--void);
+  font-size: 26px; font-weight: 600; color: var(--void);
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 32px rgba(77,208,225,0.25);
 }
-.account-name { font-size: clamp(26px, 4vw, 40px); font-weight: 300; margin-bottom: 4px; }
-.account-id {
-  font-size: 12px; color: var(--wraith);
-  font-family: var(--font-mono); letter-spacing: 0.1em;
+.profile-identity { display: flex; flex-direction: column; gap: 6px; }
+.profile-meta-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 4px;
 }
-.account-grid {
+.profile-gid-label {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--spectral); opacity: 0.8;
+}
+.profile-since {
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 0.12em; color: var(--wraith-soft);
+}
+.profile-display-name {
+  font-size: clamp(28px, 4vw, 44px); font-weight: 300;
+  letter-spacing: -0.02em; line-height: 1.1; margin: 0;
+}
+.profile-username {
+  font-size: 14px; color: var(--wraith);
+  font-family: var(--font-mono); letter-spacing: 0.06em;
+  margin: 0;
+}
+.profile-bio { font-size: 15px; color: var(--wraith); max-width: 480px; line-height: 1.6; margin: 4px 0 0; }
+.profile-bio-empty { opacity: 0.35; font-style: italic; }
+
+/* Edit controls (top right of hero) */
+.profile-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; padding-top: 4px; }
+.profile-edit-btn {
+  font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--wraith);
+  border: 1px solid var(--rim); border-radius: 8px;
+  padding: 8px 16px; background: transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+.profile-edit-btn:hover { color: white; border-color: rgba(255,255,255,0.25); }
+.profile-edit-controls { display: flex; gap: 8px; }
+.profile-cancel-btn {
+  font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--wraith);
+  border: 1px solid var(--rim); border-radius: 8px;
+  padding: 8px 14px; background: transparent;
+}
+.profile-save-btn {
+  font-size: 12px; font-family: var(--font-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--void);
+  border: none; border-radius: 8px;
+  padding: 8px 18px; background: var(--spectral);
+  transition: opacity 0.2s;
+}
+.profile-save-btn:disabled { opacity: 0.5; }
+.profile-saved-toast {
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--spectral);
+}
+.profile-save-error { font-size: 13px; color: var(--ember); margin-top: 10px; }
+
+/* Inline edit panel */
+.profile-edit-panel {
+  border-radius: 20px; padding: 28px 32px; margin-bottom: 32px;
+  border: 1px solid rgba(77,208,225,0.2);
+  animation: slideDown 0.2s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.profile-edit-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+
+/* Lower sections */
+.account-lower {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
-.account-card {
+.account-section {
   border-radius: 20px; padding: 32px;
   border: 1px solid var(--rim);
 }
-.account-card h3 { font-size: 18px; font-weight: 300; margin-bottom: 22px; }
-.account-fields { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
-.account-wishlist { display: flex; flex-direction: column; gap: 10px; }
-.account-wish-btn {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 18px; border-radius: 12px;
+.account-section-head { margin-bottom: 24px; }
+.account-section-head h3 { font-size: 18px; font-weight: 300; margin: 0 0 4px; }
+.account-section-sub { font-size: 12px; color: var(--wraith); font-family: var(--font-mono); letter-spacing: 0.06em; }
+
+/* Wishlist cards */
+.wishlist-grid { display: flex; flex-direction: column; gap: 10px; }
+.wishlist-card {
+  display: grid; grid-template-columns: 28px 1fr auto;
+  align-items: center; gap: 12px;
+  padding: 16px 18px; border-radius: 14px;
   border: 1px solid var(--rim); background: var(--mist);
-  font-size: 14px; color: var(--wraith);
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  text-align: left; transition: border-color 0.2s, background 0.2s;
 }
-.account-wish-btn.active {
+.wishlist-card.active {
   border-color: var(--wish-color, var(--spectral));
-  color: white; background: rgba(77,208,225,0.04);
+  background: rgba(77,208,225,0.04);
 }
-.wish-check { font-size: 15px; width: 20px; text-align: center; }
+.wishlist-card-check {
+  font-size: 16px; color: var(--wraith); text-align: center;
+  transition: color 0.2s;
+}
+.wishlist-card.active .wishlist-card-check { color: var(--wish-color, var(--spectral)); }
+.wishlist-card-name { font-size: 15px; color: white; }
+.wishlist-card-status {
+  font-size: 11px; font-family: var(--font-mono);
+  letter-spacing: 0.1em; color: var(--wraith);
+  text-transform: uppercase; white-space: nowrap;
+}
+.wishlist-card.active .wishlist-card-status { color: var(--wish-color, var(--spectral)); }
+
+/* Toggles */
 .account-toggles { display: flex; flex-direction: column; }
 .account-toggle {
   display: flex; align-items: center; justify-content: space-between;
@@ -2173,7 +2267,9 @@ footer {
   .gid-btn { display: none; }
   .gid-signed-in { display: flex; }
   .account-page { padding: 90px 0 60px; }
-  .account-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .account-grid { grid-template-columns: 1fr; }
+  .profile-hero { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+  .profile-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; }
+  .profile-edit-grid { grid-template-columns: 1fr; }
+  .account-lower { grid-template-columns: 1fr; }
 }
 

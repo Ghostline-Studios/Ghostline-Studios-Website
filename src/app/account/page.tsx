@@ -17,6 +17,7 @@ type Profile = {
   display_name: string;
   avatar_url: string | null;
   bio: string | null;
+  created_at?: string;
 };
 
 type NewsletterPrefs = {
@@ -26,16 +27,17 @@ type NewsletterPrefs = {
   devlog_spectral_sabre: boolean;
 };
 
-// Auth logic lives here — inside the SiteChrome/AuthProvider tree
 function AccountContent() {
   const { user, loading, openAuth, refreshProfile } = useAuth();
   const router = useRouter();
   const supabase = createClient();
 
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [editDraft, setEditDraft] = useState<Profile | null>(null);
   const [newsletter, setNewsletter] = useState<NewsletterPrefs | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState("");
@@ -48,7 +50,7 @@ function AccountContent() {
   }, [user, loading, openAuth, router]);
 
   useEffect(() => {
-    if (loading) return; // wait for auth to resolve
+    if (loading) return;
     if (!user) { setDataLoading(false); return; }
 
     const fallbackUsername = (user.email ?? "ghost").split("@")[0].replace(/[^a-z0-9_-]/gi, "_").toLowerCase();
@@ -62,7 +64,6 @@ function AccountContent() {
       supabase.from("newsletter_preferences").select("*").eq("user_id", user.id).single(),
       supabase.from("wishlists").select("game_id").eq("user_id", user.id),
     ]).then(async ([{ data: p }, { data: n }, { data: w }]) => {
-      // Auto-create profile if trigger didn't fire
       if (!p) {
         const { data: created } = await supabase
           .from("profiles")
@@ -74,7 +75,6 @@ function AccountContent() {
         setProfile(p as Profile);
       }
 
-      // Auto-create newsletter prefs if missing
       if (!n) {
         const { data: created } = await supabase
           .from("newsletter_preferences")
@@ -91,22 +91,37 @@ function AccountContent() {
     }).catch(() => setDataLoading(false));
   }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const startEdit = () => {
+    setEditDraft(profile ? { ...profile } : null);
+    setEditing(true);
+    setSaveError("");
+  };
+
+  const cancelEdit = () => {
+    setEditing(false);
+    setEditDraft(null);
+    setSaveError("");
+  };
+
   const saveProfile = async () => {
-    if (!user || !profile) return;
+    if (!user || !editDraft) return;
     setSaving(true);
     setSaveError("");
     const { error } = await supabase.from("profiles").upsert({
       id: user.id,
-      ...profile,
+      ...editDraft,
       updated_at: new Date().toISOString(),
     });
     setSaving(false);
     if (error) {
       setSaveError("Save failed — " + error.message);
     } else {
+      setProfile(editDraft);
+      setEditing(false);
+      setEditDraft(null);
       setSaved(true);
       await refreshProfile();
-      setTimeout(() => setSaved(false), 2000);
+      setTimeout(() => setSaved(false), 2500);
     }
   };
 
@@ -142,82 +157,126 @@ function AccountContent() {
   if (!user) return null;
 
   const p = profile ?? { username: "", display_name: "", avatar_url: null, bio: null };
+  const draft = editDraft ?? p;
+
+  const memberSince = p.created_at
+    ? new Date(p.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" })
+    : null;
 
   return (
     <main className="account-page">
       <div className="container">
-        <div className="account-header">
-          <div className="account-avatar">
-            {(p.display_name || user.email || "G").slice(0, 2).toUpperCase()}
+
+        {/* ── Profile hero ─────────────────────────────────────── */}
+        <div className="profile-hero">
+          <div className="profile-avatar-wrap">
+            <div className="profile-avatar">
+              {(p.display_name || user.email || "G").slice(0, 2).toUpperCase()}
+            </div>
           </div>
-          <div>
-            <h1 className="account-name">{p.display_name || "Ghostrunner"}</h1>
-            <p className="account-id">Ghostline ID · {user.email}</p>
+
+          <div className="profile-identity">
+            <div className="profile-meta-row">
+              <span className="profile-gid-label">Ghostline ID</span>
+              {memberSince && <span className="profile-since">Member since {memberSince}</span>}
+            </div>
+            <h1 className="profile-display-name">{p.display_name || "Ghostrunner"}</h1>
+            {p.username && <p className="profile-username">@{p.username}</p>}
+            {p.bio && <p className="profile-bio">{p.bio}</p>}
+            {!p.bio && !editing && (
+              <p className="profile-bio profile-bio-empty">No bio yet.</p>
+            )}
+          </div>
+
+          <div className="profile-actions">
+            {saved && <span className="profile-saved-toast">Saved</span>}
+            {!editing ? (
+              <button className="profile-edit-btn" onClick={startEdit}>
+                Edit profile
+              </button>
+            ) : (
+              <div className="profile-edit-controls">
+                <button className="profile-cancel-btn" onClick={cancelEdit} disabled={saving}>
+                  Cancel
+                </button>
+                <button className="profile-save-btn" onClick={saveProfile} disabled={saving}>
+                  {saving ? "Saving…" : "Save"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="account-grid">
-          <section className="account-card glass">
-            <h3>Profile</h3>
-            <div className="account-fields">
+        {/* ── Inline edit panel ────────────────────────────────── */}
+        {editing && (
+          <div className="profile-edit-panel glass">
+            <div className="profile-edit-grid">
               <label className="auth-label">
                 Display name
                 <input
                   className="auth-input"
-                  value={p.display_name || ""}
-                  onChange={e => setProfile(prev => prev ? { ...prev, display_name: e.target.value } : { ...p, display_name: e.target.value })}
+                  value={draft.display_name || ""}
+                  onChange={e => setEditDraft(d => d ? { ...d, display_name: e.target.value } : d)}
+                  autoFocus
                 />
               </label>
               <label className="auth-label">
                 Username
                 <input
                   className="auth-input"
-                  value={p.username || ""}
-                  onChange={e => setProfile(prev => prev ? { ...prev, username: e.target.value } : { ...p, username: e.target.value })}
+                  value={draft.username || ""}
+                  onChange={e => setEditDraft(d => d ? { ...d, username: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "") } : d)}
                 />
               </label>
-              <label className="auth-label">
+              <label className="auth-label" style={{ gridColumn: "1 / -1" }}>
                 Bio
                 <textarea
                   className="auth-input auth-textarea"
-                  value={p.bio || ""}
-                  onChange={e => setProfile(prev => prev ? { ...prev, bio: e.target.value } : { ...p, bio: e.target.value })}
+                  value={draft.bio || ""}
+                  onChange={e => setEditDraft(d => d ? { ...d, bio: e.target.value } : d)}
                   rows={3}
                   placeholder="A few words about you…"
                 />
               </label>
             </div>
-            <button className="auth-submit" onClick={saveProfile} disabled={saving}>
-              {saved ? "Saved" : saving ? "Saving…" : "Save profile"}
-            </button>
             {saveError && (
-              <p style={{ color: "var(--ember)", fontSize: 13, marginTop: 8 }}>{saveError}</p>
+              <p className="profile-save-error">{saveError}</p>
             )}
-          </section>
+          </div>
+        )}
 
-          <section className="account-card glass">
-            <h3>Game Wishlist</h3>
-            <p style={{ color: "var(--wraith)", fontSize: 14, marginBottom: 20 }}>
-              Get notified when these launch.
-            </p>
-            <div className="account-wishlist">
+        {/* ── Lower sections ───────────────────────────────────── */}
+        <div className="account-lower">
+
+          {/* Wishlist */}
+          <section className="account-section glass">
+            <div className="account-section-head">
+              <h3>Watchlist</h3>
+              <span className="account-section-sub">Get notified when these launch</span>
+            </div>
+            <div className="wishlist-grid">
               {GAMES.map(g => (
                 <button
                   key={g.id}
-                  className={"account-wish-btn" + (wishlist.includes(g.id) ? " active" : "")}
+                  className={"wishlist-card" + (wishlist.includes(g.id) ? " active" : "")}
                   style={{ "--wish-color": g.color } as React.CSSProperties}
                   onClick={() => toggleWishlist(g.id)}
                 >
-                  <span className="wish-check">{wishlist.includes(g.id) ? "✓" : "+"}</span>
-                  {g.name}
+                  <span className="wishlist-card-check">{wishlist.includes(g.id) ? "✓" : "+"}</span>
+                  <span className="wishlist-card-name">{g.name}</span>
+                  <span className="wishlist-card-status">{wishlist.includes(g.id) ? "On watchlist" : "Add to watchlist"}</span>
                 </button>
               ))}
             </div>
           </section>
 
+          {/* Newsletter */}
           {newsletter && (
-            <section className="account-card glass">
-              <h3>Newsletter</h3>
+            <section className="account-section glass">
+              <div className="account-section-head">
+                <h3>Newsletter</h3>
+                <span className="account-section-sub">Choose what lands in your inbox</span>
+              </div>
               <div className="account-toggles">
                 {(
                   [
@@ -240,6 +299,7 @@ function AccountContent() {
               </div>
             </section>
           )}
+
         </div>
       </div>
     </main>
