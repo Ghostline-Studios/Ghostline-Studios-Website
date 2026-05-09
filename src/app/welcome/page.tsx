@@ -13,7 +13,9 @@ function WelcomeContent() {
 
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
+  const [usernameEdited, setUsernameEdited] = useState(false);
   const [usernameError, setUsernameError] = useState("");
+  const [usernameOk, setUsernameOk] = useState(false);
   const [busy, setBusy] = useState(false);
 
   // Redirect if not authed
@@ -29,16 +31,62 @@ function WelcomeContent() {
     if (meta?.display_name) setDisplayName(meta.display_name);
   }, [user]);
 
+  const toSlug = (val: string) =>
+    val.toLowerCase().trim().replace(/\s+/g, "_").replace(/[^a-z0-9_-]/g, "");
+
+  // Auto-populate username from display name unless user has manually edited it
+  useEffect(() => {
+    if (usernameEdited) return;
+    setUsername(toSlug(displayName));
+    setUsernameError("");
+    setUsernameOk(false);
+  }, [displayName, usernameEdited]);
+
   const validateUsername = (val: string) => {
     if (val.length < 3) return "At least 3 characters";
     if (!/^[a-z0-9_-]+$/.test(val)) return "Lowercase letters, numbers, _ and - only";
     return "";
   };
 
+  // Check availability with a small debounce
+  useEffect(() => {
+    if (!username || validateUsername(username)) { setUsernameOk(false); return; }
+    const timer = setTimeout(async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", username)
+        .neq("id", user?.id ?? "")
+        .single();
+      if (data) {
+        // Taken — suggest variations
+        setUsernameOk(false);
+        setUsernameError(`@${username} is taken`);
+        // Auto-suggest first free variation
+        for (let i = 2; i <= 9; i++) {
+          const candidate = `${username}_${i}`;
+          const { data: taken } = await supabase
+            .from("profiles").select("id").eq("username", candidate).single();
+          if (!taken) {
+            setUsernameError(`@${username} is taken — how about @${candidate}?`);
+            break;
+          }
+        }
+      } else {
+        setUsernameError("");
+        setUsernameOk(true);
+      }
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [username, user]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleUsernameChange = (val: string) => {
     const clean = val.toLowerCase().replace(/[^a-z0-9_-]/g, "");
     setUsername(clean);
-    setUsernameError(validateUsername(clean));
+    setUsernameEdited(true);
+    setUsernameOk(false);
+    const err = validateUsername(clean);
+    setUsernameError(err);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -48,20 +96,6 @@ function WelcomeContent() {
     if (!user) return;
 
     setBusy(true);
-
-    // Check username is unique
-    const { data: existing } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("username", username)
-      .neq("id", user.id)
-      .single();
-
-    if (existing) {
-      setUsernameError("Username already taken");
-      setBusy(false);
-      return;
-    }
 
     await supabase.from("profiles").upsert({
       id: user.id,
@@ -131,12 +165,12 @@ function WelcomeContent() {
             {usernameError && (
               <span className="username-hint error">{usernameError}</span>
             )}
-            {!usernameError && username.length >= 3 && (
+            {usernameOk && (
               <span className="username-hint ok">@{username} is available</span>
             )}
           </label>
 
-          <button className="auth-submit" type="submit" disabled={busy || !!usernameError || username.length < 3}>
+          <button className="auth-submit" type="submit" disabled={busy || !!usernameError || !usernameOk}>
             {busy ? "Setting up…" : "Enter the Ghostline"}
           </button>
         </form>
