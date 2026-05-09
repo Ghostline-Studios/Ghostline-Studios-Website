@@ -42,7 +42,6 @@ export default function ScraplingsPage() {
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <a className="btn primary" href="#">
                   <span>Wishlist</span>
-                  <span className="arrow">↗</span>
                 </a>
                 <a className="btn" href="#">
                   <span>Press Kit</span>
@@ -68,7 +67,6 @@ export default function ScraplingsPage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 01 / What it is</div>
               <h2>The pillars of the loop.</h2>
             </div>
             <div className="meta-block">
@@ -92,7 +90,6 @@ export default function ScraplingsPage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 02 / Bestiary</div>
               <h2>The first nine.</h2>
             </div>
             <div className="meta-block">

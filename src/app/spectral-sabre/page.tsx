@@ -44,7 +44,6 @@ export default function SpectralSabrePage() {
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 <a className="btn primary" href="#">
                   <span>Wishlist</span>
-                  <span className="arrow">↗</span>
                 </a>
                 <a className="btn" href="#">
                   <span>Press Kit</span>
@@ -70,7 +69,6 @@ export default function SpectralSabrePage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 01 / Pillars</div>
               <h2>Five rules we follow.</h2>
             </div>
             <div className="meta-block">
@@ -103,7 +101,6 @@ export default function SpectralSabrePage() {
                     marginBottom: 14,
                   }}
                 >
-                  PILLAR · {p.num}
                 </div>
                 <div style={{ fontSize: 18, fontWeight: 400, color: "white", marginBottom: 10, letterSpacing: "0.02em" }}>
                   {p.title}
@@ -119,7 +116,6 @@ export default function SpectralSabrePage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 02 / Squad</div>
               <h2>Four operators &amp; a ghost.</h2>
             </div>
             <div className="meta-block">
@@ -149,7 +145,6 @@ export default function SpectralSabrePage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 03 / Systems</div>
               <h2>How an infil holds together.</h2>
             </div>
             <div className="meta-block">
@@ -198,7 +193,6 @@ export default function SpectralSabrePage() {
         <div className="container">
           <div className="project-section-head">
             <div>
-              <div className="index">— 04 / Comms</div>
               <h2>KIP, in their own words.</h2>
             </div>
             <div className="meta-block">
@@ -232,7 +226,7 @@ export default function SpectralSabrePage() {
                     textTransform: "uppercase",
                   }}
                 >
-                  KIP · {String(i + 1).padStart(2, "0")}
+                  KIP
                 </div>
                 <div style={{ fontSize: 16, color: "var(--wraith)", fontWeight: 300, lineHeight: 1.5, fontStyle: "italic" }}>
                   “{line}”

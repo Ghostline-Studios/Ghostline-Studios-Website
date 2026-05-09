@@ -9,7 +9,6 @@ export function AboutSection() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 03 / The Studio</div>
             <h2>Quiet craft. Loud intent.</h2>
           </div>
           <div className="meta-block">
@@ -28,12 +27,10 @@ export function AboutSection() {
           </div>
           <div className="manifesto-pillars">
             <div className="pillar">
-              <div className="num">PILLAR · 01</div>
               <h4>Story before system</h4>
               <p>Every loop, mechanic and menu starts with a question: what is this making the player feel?</p>
             </div>
             <div className="pillar">
-              <div className="num">PILLAR · 02</div>
               <h4>Mobile, taken seriously</h4>
               <p>
                 The phone is not a lesser screen. It&apos;s a more intimate one. We design for thumbs, attention, and
@@ -41,12 +38,10 @@ export function AboutSection() {
               </p>
             </div>
             <div className="pillar">
-              <div className="num">PILLAR · 03</div>
               <h4>No dark patterns</h4>
               <p>No timers that nag, no energy that runs out, no FOMO event drops. If a system needs guilt to function, we cut it.</p>
             </div>
             <div className="pillar">
-              <div className="num">PILLAR · 04</div>
               <h4>Ship the strange</h4>
               <p>If it has been done before, it has been done. We&apos;d rather be slightly wrong about something new.</p>
             </div>
@@ -72,7 +67,6 @@ export function NewsSection() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 04 / Field Notes</div>
             <h2>Devlog &amp; dispatches.</h2>
           </div>
           <div className="meta-block">
@@ -88,7 +82,7 @@ export function NewsSection() {
               <div className="date">{n.date}</div>
               <div className={"tag " + n.tagClass}>{n.tag}</div>
               <h4 dangerouslySetInnerHTML={{ __html: n.title }} />
-              <div className="arrow-cell">READ →</div>
+              <div className="arrow-cell">Read</div>
             </a>
           ))}
         </div>
@@ -111,7 +105,6 @@ export function CareersSection() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 05 / Crew</div>
             <h2>Join the line.</h2>
           </div>
           <div className="meta-block">
@@ -131,7 +124,6 @@ export function CareersSection() {
             <div style={{ marginTop: 28 }}>
               <a className="btn primary" href="#contact">
                 <span>Open Application</span>
-                <span className="arrow">↗</span>
               </a>
             </div>
           </div>
@@ -148,7 +140,7 @@ export function CareersSection() {
                     <span>{r.type}</span>
                   </div>
                 </div>
-                <div className="role-cta">View →</div>
+                <div className="role-cta">View</div>
               </a>
             ))}
           </div>
@@ -164,7 +156,6 @@ export function PressContactSection() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 06 / Materials</div>
             <h2>Press &amp; contact.</h2>
           </div>
           <div className="meta-block">
@@ -181,7 +172,6 @@ export function PressContactSection() {
 
         <div className="press-wrap">
           <div className="press-card glass">
-            <div className="num">— 06.1 / Press kit</div>
             <h3>Logos, screenshots, fact sheets, b-roll.</h3>
             <p>Everything you need to write about Ghostline or either game. Updated whenever something interesting ships.</p>
             <div className="links">
@@ -205,7 +195,6 @@ export function PressContactSection() {
           </div>
 
           <div className="press-card glass" id="contact">
-            <div className="num">— 06.2 / Stay in the loop</div>
             <h3>One letter, every now and then.</h3>
             <p>No marketing. No countdown timers. Build notes, occasional screenshots, the rare announcement when we have something real to say.</p>
             <form
@@ -216,7 +205,7 @@ export function PressContactSection() {
               }}
             >
               <input type="email" placeholder="you@somewhere.net" required />
-              <button type="submit">Join →</button>
+              <button type="submit">Join</button>
             </form>
             <div style={{ marginTop: 28 }}>
               <div
@@ -429,12 +418,12 @@ export function TopNav() {
         </Link>
         {/* desktop nav */}
         <nav className="topnav-desktop-nav">
-          <a href="#home" className={active === "home" ? "active" : ""}>01 Home</a>
-          <Link href="/projects">02 Projects</Link>
-          {link("about", "03 Studio")}
-          {link("news", "04 Devlog")}
-          {link("careers", "05 Careers")}
-          {link("press", "06 Press")}
+          <a href="#home" className={active === "home" ? "active" : ""}>Home</a>
+          <Link href="/projects">Projects</Link>
+          {link("about", "Studio")}
+          {link("news", "Devlog")}
+          {link("careers", "Careers")}
+          {link("press", "Press")}
         </nav>
         <div className="meta">
           <span className="live-dot" />
@@ -444,12 +433,12 @@ export function TopNav() {
       </header>
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <a href="#home">01 Home</a>
-        <Link href="/projects">02 Projects</Link>
-        <a href="#about">03 Studio</a>
-        <a href="#news">04 Devlog</a>
-        <a href="#careers">05 Careers</a>
-        <a href="#press">06 Press</a>
+        <a href="#home">Home</a>
+        <Link href="/projects">Projects</Link>
+        <a href="#about">Studio</a>
+        <a href="#news">Devlog</a>
+        <a href="#careers">Careers</a>
+        <a href="#press">Press</a>
       </MobileDrawer>
     </>
   );
@@ -467,12 +456,12 @@ export function ProjectsIndexNav() {
           <span>Ghostline / Studios</span>
         </Link>
         <nav className="topnav-desktop-nav">
-          <Link href="/">01 Home</Link>
-          <Link href="/projects" className="active">02 Projects</Link>
-          <Link href="/#about">03 Studio</Link>
-          <Link href="/#news">04 Devlog</Link>
-          <Link href="/#careers">05 Careers</Link>
-          <Link href="/#press">06 Press</Link>
+          <Link href="/">Home</Link>
+          <Link href="/projects" className="active">Projects</Link>
+          <Link href="/#about">Studio</Link>
+          <Link href="/#news">Devlog</Link>
+          <Link href="/#careers">Careers</Link>
+          <Link href="/#press">Press</Link>
         </nav>
         <div className="meta">
           <span className="live-dot" />
@@ -482,12 +471,12 @@ export function ProjectsIndexNav() {
       </header>
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <Link href="/">01 Home</Link>
-        <Link href="/projects">02 Projects</Link>
-        <Link href="/#about">03 Studio</Link>
-        <Link href="/#news">04 Devlog</Link>
-        <Link href="/#careers">05 Careers</Link>
-        <Link href="/#press">06 Press</Link>
+        <Link href="/">Home</Link>
+        <Link href="/projects">Projects</Link>
+        <Link href="/#about">Studio</Link>
+        <Link href="/#news">Devlog</Link>
+        <Link href="/#careers">Careers</Link>
+        <Link href="/#press">Press</Link>
       </MobileDrawer>
     </>
   );

@@ -58,7 +58,6 @@ export function Hero() {
       <div className="hero-cta-row">
         <a className="btn primary" href="#games">
           <span>Enter the Worlds</span>
-          <span className="arrow">→</span>
         </a>
         <a className="btn" href="#about">
           <span>The Studio</span>
@@ -117,7 +116,6 @@ function GameCard({
             }}
           >
             <span>Open Brief</span>
-            <span className="arrow">↗</span>
           </button>
         </div>
       </div>
@@ -167,7 +165,6 @@ function ExpandedGame({ game, onClose }: { game: GameUnion; onClose: () => void 
           <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
             <button type="button" className="btn primary">
               <span>Wishlist</span>
-              <span className="arrow">↗</span>
             </button>
             <button type="button" className="btn">
               <span>Press Kit</span>
@@ -398,7 +395,6 @@ export function GamesSection() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 02 / In Production</div>
             <h2>Worlds in motion.</h2>
           </div>
           <div className="meta-block">
@@ -432,7 +428,6 @@ export function ProjectsTeaser() {
       <div className="container">
         <div className="section-head">
           <div>
-            <div className="index">— 02 / Active Projects</div>
             <h2>Two worlds in motion.</h2>
           </div>
           <div className="meta-block">
@@ -451,9 +446,7 @@ export function ProjectsTeaser() {
               <div className="teaser-tag">In Production · iOS · Android</div>
               <h3 className="teaser-title">Scraplings</h3>
               <p className="teaser-line">A cosy collector. Salvage the forgotten — give it a soul.</p>
-              <span className="teaser-cta">
-                Open project <span className="arrow">↗</span>
-              </span>
+              <span className="teaser-cta">Open project</span>
             </div>
           </Link>
           <Link href="/spectral-sabre" className="teaser-card spectral-sabre">
@@ -464,16 +457,13 @@ export function ProjectsTeaser() {
               <div className="teaser-tag">Pre-Alpha · Android first</div>
               <h3 className="teaser-title">Spectral Sabre</h3>
               <p className="teaser-line">Lead Sabre Unit. Bend light. Vanish before the alarm.</p>
-              <span className="teaser-cta">
-                Open project <span className="arrow">↗</span>
-              </span>
+              <span className="teaser-cta">Open project</span>
             </div>
           </Link>
         </div>
         <div className="projects-link">
           <Link className="btn primary" href="/projects">
             <span>All Projects</span>
-            <span className="arrow">→</span>
           </Link>
         </div>
       </div>
