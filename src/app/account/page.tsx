@@ -47,13 +47,42 @@ function AccountContent() {
 
   useEffect(() => {
     if (!user) return;
+
+    const fallbackUsername = (user.email ?? "ghost").split("@")[0];
+    const fallbackDisplay =
+      user.user_metadata?.display_name ||
+      user.user_metadata?.full_name ||
+      fallbackUsername;
+
     Promise.all([
       supabase.from("profiles").select("*").eq("id", user.id).single(),
       supabase.from("newsletter_preferences").select("*").eq("user_id", user.id).single(),
       supabase.from("wishlists").select("game_id").eq("user_id", user.id),
-    ]).then(([{ data: p }, { data: n }, { data: w }]) => {
-      if (p) setProfile(p as Profile);
-      if (n) setNewsletter(n as NewsletterPrefs);
+    ]).then(async ([{ data: p }, { data: n }, { data: w }]) => {
+      // Auto-create profile if trigger didn't fire
+      if (!p) {
+        const { data: created } = await supabase
+          .from("profiles")
+          .upsert({ id: user.id, username: fallbackUsername, display_name: fallbackDisplay })
+          .select()
+          .single();
+        if (created) setProfile(created as Profile);
+      } else {
+        setProfile(p as Profile);
+      }
+
+      // Auto-create newsletter prefs if missing
+      if (!n) {
+        const { data: created } = await supabase
+          .from("newsletter_preferences")
+          .upsert({ user_id: user.id })
+          .select()
+          .single();
+        if (created) setNewsletter(created as NewsletterPrefs);
+      } else {
+        setNewsletter(n as NewsletterPrefs);
+      }
+
       if (w) setWishlist((w as { game_id: string }[]).map(r => r.game_id));
     });
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
