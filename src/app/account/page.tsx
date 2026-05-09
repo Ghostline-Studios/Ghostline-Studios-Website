@@ -28,7 +28,7 @@ type NewsletterPrefs = {
 
 // Auth logic lives here — inside the SiteChrome/AuthProvider tree
 function AccountContent() {
-  const { user, loading, openAuth } = useAuth();
+  const { user, loading, openAuth, refreshProfile } = useAuth();
   const router = useRouter();
   const supabase = createClient();
 
@@ -105,6 +105,7 @@ function AccountContent() {
       setSaveError("Save failed — " + error.message);
     } else {
       setSaved(true);
+      await refreshProfile();
       setTimeout(() => setSaved(false), 2000);
     }
   };

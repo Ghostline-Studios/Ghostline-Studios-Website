@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
 export function GhostlineIDButton() {
-  const { user, loading, openAuth, signOut } = useAuth();
+  const { user, profile, loading, openAuth, signOut } = useAuth();
   const [dropOpen, setDropOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -29,9 +29,8 @@ export function GhostlineIDButton() {
     );
   }
 
-  const initials = (user.user_metadata?.display_name || user.email || "G")
-    .slice(0, 2)
-    .toUpperCase();
+  const displayLabel = profile?.display_name || user.email || "G";
+  const initials = displayLabel.slice(0, 2).toUpperCase();
 
   return (
     <div className="gid-signed-in" ref={ref}>
@@ -46,7 +45,7 @@ export function GhostlineIDButton() {
       {dropOpen && (
         <div className="gid-dropdown">
           <div className="gid-dropdown-user">
-            {user.user_metadata?.display_name || user.email}
+            {profile?.display_name || user.email}
           </div>
           <Link
             href="/account"

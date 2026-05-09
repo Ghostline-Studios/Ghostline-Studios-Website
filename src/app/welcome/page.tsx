@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { SiteChrome } from "@/components/SiteChrome";
 
 function WelcomeContent() {
-  const { user, loading } = useAuth();
+  const { user, loading, refreshProfile } = useAuth();
   const router = useRouter();
   const supabase = createClient();
 
@@ -117,6 +117,7 @@ function WelcomeContent() {
       .upsert({ user_id: user.id })
       .select();
 
+    await refreshProfile();
     router.push("/account");
   };
 
