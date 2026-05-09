@@ -127,6 +127,30 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
+-- ── Devlogs ──────────────────────────────────────────────────────
+create table if not exists public.devlogs (
+  id           uuid default gen_random_uuid() primary key,
+  title        text not null,
+  slug         text unique not null,
+  excerpt      text,
+  content      text,
+  game_id      text, -- 'scraplings' | 'spectral-sabre' | null = studio update
+  author_id    uuid references auth.users on delete set null,
+  is_published boolean default false,
+  published_at timestamptz,
+  created_at   timestamptz default now(),
+  updated_at   timestamptz default now()
+);
+
+alter table public.devlogs enable row level security;
+
+create policy "Published devlogs are public"
+  on public.devlogs for select using (is_published = true);
+
+create policy "Admins can manage devlogs"
+  on public.devlogs for all
+  using (public.is_admin()) with check (public.is_admin());
+
 -- ── Make yourself an admin ───────────────────────────────────────
 -- After signing up, run this (replace with your actual email):
 -- update public.profiles

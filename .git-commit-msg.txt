@@ -1,7 +1,0 @@
-Add Ghostline ID — full auth system with Supabase
-
-Email + Google + Apple sign-in via slide-in auth modal. GhostlineID
-button in nav shows initials/dropdown when signed in. /account page
-with profile editing, game wishlist and newsletter prefs. /admin
-dashboard with account list and wishlist stats. Auth session kept
-alive via SSR middleware. SQL schema in supabase/schema.sql.
