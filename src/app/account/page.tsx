@@ -112,17 +112,25 @@ function AccountContent() {
       ...editDraft,
       updated_at: new Date().toISOString(),
     });
-    setSaving(false);
     if (error) {
+      setSaving(false);
       setSaveError("Save failed — " + error.message);
-    } else {
-      setProfile(editDraft);
-      setEditing(false);
-      setEditDraft(null);
-      setSaved(true);
-      await refreshProfile();
-      setTimeout(() => setSaved(false), 2500);
+      return;
     }
+    // Keep Supabase Auth metadata in sync so the Users dashboard shows the right display name
+    await supabase.auth.updateUser({
+      data: {
+        display_name: editDraft.display_name,
+        username: editDraft.username,
+      },
+    });
+    setSaving(false);
+    setProfile(editDraft);
+    setEditing(false);
+    setEditDraft(null);
+    setSaved(true);
+    await refreshProfile();
+    setTimeout(() => setSaved(false), 2500);
   };
 
   const saveNewsletter = async (prefs: NewsletterPrefs) => {

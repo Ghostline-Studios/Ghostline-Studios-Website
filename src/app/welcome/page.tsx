@@ -113,6 +113,11 @@ function WelcomeContent() {
       return;
     }
 
+    // Sync display name + username into Supabase Auth metadata
+    await supabase.auth.updateUser({
+      data: { display_name: displayName || username, username },
+    });
+
     await supabase.from("newsletter_preferences")
       .upsert({ user_id: user.id })
       .select();
