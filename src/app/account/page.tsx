@@ -38,6 +38,7 @@ function AccountContent() {
   const [dataLoading, setDataLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
     if (!loading && !user) {
@@ -93,14 +94,19 @@ function AccountContent() {
   const saveProfile = async () => {
     if (!user || !profile) return;
     setSaving(true);
-    await supabase.from("profiles").upsert({
+    setSaveError("");
+    const { error } = await supabase.from("profiles").upsert({
       id: user.id,
       ...profile,
       updated_at: new Date().toISOString(),
     });
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (error) {
+      setSaveError("Save failed — " + error.message);
+    } else {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    }
   };
 
   const saveNewsletter = async (prefs: NewsletterPrefs) => {
@@ -183,6 +189,9 @@ function AccountContent() {
             <button className="auth-submit" onClick={saveProfile} disabled={saving}>
               {saved ? "Saved" : saving ? "Saving…" : "Save profile"}
             </button>
+            {saveError && (
+              <p style={{ color: "var(--ember)", fontSize: 13, marginTop: 8 }}>{saveError}</p>
+            )}
           </section>
 
           <section className="account-card glass">

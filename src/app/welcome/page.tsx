@@ -97,12 +97,21 @@ function WelcomeContent() {
 
     setBusy(true);
 
-    await supabase.from("profiles").upsert({
+    // Refresh the session before writing — ensures cookie is set after email confirmation redirect
+    await supabase.auth.getSession();
+
+    const { error: profileError } = await supabase.from("profiles").upsert({
       id: user.id,
       username,
       display_name: displayName || username,
       updated_at: new Date().toISOString(),
     });
+
+    if (profileError) {
+      setUsernameError("Couldn't save — please try again.");
+      setBusy(false);
+      return;
+    }
 
     await supabase.from("newsletter_preferences")
       .upsert({ user_id: user.id })
