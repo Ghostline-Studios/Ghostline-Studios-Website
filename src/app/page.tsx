@@ -1,4 +1,4 @@
-import { GamesSection, Hero, ProjectsTeaser } from "@/components/Games";
+import { Hero, ProjectsTeaser } from "@/components/Games";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import {
   AboutSection,
@@ -17,7 +17,6 @@ export default function HomePage() {
       <TopNav />
       <Hero />
       <ProjectsTeaser />
-      <GamesSection />
       <AboutSection />
       <NewsSection />
       <CareersSection />
