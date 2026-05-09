@@ -54,13 +54,15 @@ export function GhostlineIDButton() {
           >
             Profile
           </Link>
-          <Link
-            href="/admin"
-            className="gid-dropdown-item"
-            onClick={() => setDropOpen(false)}
-          >
-            Admin
-          </Link>
+          {profile?.is_admin && (
+            <Link
+              href="/admin"
+              className="gid-dropdown-item"
+              onClick={() => setDropOpen(false)}
+            >
+              Admin
+            </Link>
+          )}
           <button
             className="gid-dropdown-item gid-signout"
             onClick={() => { signOut(); setDropOpen(false); }}

@@ -17,6 +17,7 @@ export interface UserProfile {
   display_name: string | null;
   username: string | null;
   avatar_url: string | null;
+  is_admin: boolean;
 }
 
 interface AuthContextType {
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = createClient();
     const { data } = await supabase
       .from("profiles")
-      .select("display_name, username, avatar_url")
+      .select("display_name, username, avatar_url, is_admin")
       .eq("id", uid)
       .single();
     if (data) setProfile(data as UserProfile);
