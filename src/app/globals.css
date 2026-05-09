@@ -45,6 +45,32 @@ input, select, textarea, label { cursor: none; }
 img { display: block; max-width: 100%; }
 ::selection { background: rgba(179, 136, 255, 0.35); color: white; }
 
+/* ===== Art panel animations ===== */
+@keyframes particleDrift {
+  0%   { transform: translateY(0)    scale(1);    opacity: 0.6; }
+  100% { transform: translateY(-16px) scale(1.2); opacity: 1; }
+}
+@keyframes glowBreathe {
+  0%, 100% { transform: scale(1);    opacity: 0.7; }
+  50%       { transform: scale(1.12); opacity: 1; }
+}
+@keyframes scanSweep {
+  0%   { transform: translateY(0);   opacity: 0; }
+  10%  { opacity: 0.45; }
+  90%  { opacity: 0.45; }
+  100% { transform: translateY(-260%); opacity: 0; }
+}
+@keyframes ringCW  { to { transform: rotate( 360deg); } }
+@keyframes ringCCW { to { transform: rotate(-360deg); } }
+
+.scrap-glow  { animation: glowBreathe  4s ease-in-out infinite; transform-origin: center; }
+.scrap-scan  { animation: scanSweep    7s ease-in-out infinite; }
+.scrap-particle { animation: particleDrift 3s ease-in-out infinite alternate; }
+
+.sabre-glow      { animation: glowBreathe 5s ease-in-out infinite; transform-origin: center; }
+.sabre-ring-outer { animation: ringCW  22s linear infinite; transform-origin: 50% 50%; }
+.sabre-ring-inner { animation: ringCCW 14s linear infinite; transform-origin: 50% 50%; }
+
 /* ===== Background layers ===== */
 .bg-canvas {
   position: fixed; inset: 0; z-index: 0;
@@ -986,7 +1012,9 @@ section { position: relative; }
   cursor: none;
   display: block;
 }
-.teaser-card:hover { transform: translateY(-6px); border-color: rgba(179, 136, 255, 0.4); }
+.teaser-card:hover { transform: translateY(-8px); }
+.scraplings.teaser-card:hover  { border-color: rgba(77, 208, 225, 0.55);  box-shadow: 0 28px 64px rgba(0,0,0,0.55), 0 0 48px rgba(77, 208, 225, 0.12); }
+.spectral-sabre.teaser-card:hover { border-color: rgba(179, 136, 255, 0.55); box-shadow: 0 28px 64px rgba(0,0,0,0.55), 0 0 48px rgba(124, 77, 255, 0.14); }
 .teaser-art { position: absolute; inset: 0; }
 .teaser-card::after {
   content: ""; position: absolute; inset: 0;

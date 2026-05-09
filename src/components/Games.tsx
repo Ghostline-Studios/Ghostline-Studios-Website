@@ -188,6 +188,7 @@ export function ScraplingsArt({ big }: { big?: boolean }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
       <div
+        className="scrap-glow"
         style={{
           width: big ? "70%" : "60%",
           aspectRatio: 1,
@@ -203,6 +204,7 @@ export function ScraplingsArt({ big }: { big?: boolean }) {
           return (
             <div
               key={i}
+              className="scrap-particle"
               style={{
                 position: "absolute",
                 left: `${left}%`,
@@ -213,12 +215,15 @@ export function ScraplingsArt({ big }: { big?: boolean }) {
                 borderRadius: i % 3 === 0 ? "50%" : "2px",
                 boxShadow: "0 0 8px var(--spectral)",
                 opacity: 0.6 + ((i * 7) % 4) * 0.1,
+                animationDuration: `${2.2 + (i % 5) * 0.45}s`,
+                animationDelay: `-${(i * 0.19).toFixed(2)}s`,
               }}
             />
           );
         })}
       </div>
       <div
+        className="scrap-scan"
         style={{
           position: "absolute",
           bottom: "8%",
@@ -237,6 +242,7 @@ export function SpectralSabreArt({ big }: { big?: boolean }) {
   return (
     <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
       <div
+        className="sabre-glow"
         style={{
           width: big ? "75%" : "65%",
           aspectRatio: 1,
@@ -245,19 +251,30 @@ export function SpectralSabreArt({ big }: { big?: boolean }) {
           filter: "blur(24px)",
         }}
       />
-      <svg
-        viewBox="0 0 200 200"
-        style={{ position: "absolute", width: big ? "60%" : "70%", aspectRatio: 1, opacity: 0.7 }}
+      {/* outer ring — slow clockwise spin */}
+      <div
+        className="sabre-ring-outer"
+        style={{ position: "absolute", width: big ? "60%" : "70%", aspectRatio: 1 }}
       >
-        <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(179, 136, 255, 0.5)" strokeWidth="1" strokeDasharray="2 4" />
-        <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(179, 136, 255, 0.3)" strokeWidth="0.5" />
-        <line x1="100" y1="20" x2="100" y2="40" stroke="rgba(179, 136, 255, 0.7)" />
-        <line x1="100" y1="160" x2="100" y2="180" stroke="rgba(179, 136, 255, 0.7)" />
-        <line x1="20" y1="100" x2="40" y2="100" stroke="rgba(179, 136, 255, 0.7)" />
-        <line x1="160" y1="100" x2="180" y2="100" stroke="rgba(179, 136, 255, 0.7)" />
-        <circle cx="100" cy="100" r="2" fill="var(--phantom-glow)" />
-        <circle cx="100" cy="100" r="6" fill="none" stroke="var(--phantom)" />
-      </svg>
+        <svg viewBox="0 0 200 200" style={{ width: "100%", height: "100%", opacity: 0.7 }}>
+          <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(179, 136, 255, 0.3)" strokeWidth="0.5" />
+          <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(179, 136, 255, 0.5)" strokeWidth="1" strokeDasharray="2 4" />
+        </svg>
+      </div>
+      {/* inner detail — counter-clockwise spin */}
+      <div
+        className="sabre-ring-inner"
+        style={{ position: "absolute", width: big ? "38%" : "44%", aspectRatio: 1 }}
+      >
+        <svg viewBox="0 0 200 200" style={{ width: "100%", height: "100%", opacity: 0.9 }}>
+          <line x1="100" y1="20" x2="100" y2="40" stroke="rgba(179, 136, 255, 0.7)" />
+          <line x1="100" y1="160" x2="100" y2="180" stroke="rgba(179, 136, 255, 0.7)" />
+          <line x1="20" y1="100" x2="40" y2="100" stroke="rgba(179, 136, 255, 0.7)" />
+          <line x1="160" y1="100" x2="180" y2="100" stroke="rgba(179, 136, 255, 0.7)" />
+          <circle cx="100" cy="100" r="2" fill="var(--phantom-glow)" />
+          <circle cx="100" cy="100" r="6" fill="none" stroke="var(--phantom)" />
+        </svg>
+      </div>
       <svg viewBox="0 0 400 400" style={{ position: "absolute", inset: 0, opacity: 0.5 }}>
         <path d="M 30 80 Q 200 100 380 60" stroke="rgba(124, 77, 255, 0.5)" fill="none" strokeWidth="0.5" strokeDasharray="1 4" />
         <path d="M 30 320 Q 200 290 380 340" stroke="rgba(77, 208, 225, 0.4)" fill="none" strokeWidth="0.5" strokeDasharray="1 4" />
