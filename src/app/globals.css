@@ -262,7 +262,6 @@ section { position: relative; }
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 8px;
-    cursor: pointer;
     margin-left: auto;
   }
   .mobile-hamburger span {
@@ -1644,7 +1643,6 @@ footer {
   border-radius: 8px;
   color: var(--wraith);
   transition: color 0.2s, background 0.2s;
-  cursor: pointer;
   flex-shrink: 0;
 }
 .mobile-drawer-close:hover { color: white; background: rgba(255,255,255,0.1); }
