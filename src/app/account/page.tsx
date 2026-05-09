@@ -35,6 +35,7 @@ function AccountContent() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [newsletter, setNewsletter] = useState<NewsletterPrefs | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -46,9 +47,10 @@ function AccountContent() {
   }, [user, loading, openAuth, router]);
 
   useEffect(() => {
-    if (!user) return;
+    if (loading) return; // wait for auth to resolve
+    if (!user) { setDataLoading(false); return; }
 
-    const fallbackUsername = (user.email ?? "ghost").split("@")[0];
+    const fallbackUsername = (user.email ?? "ghost").split("@")[0].replace(/[^a-z0-9_-]/gi, "_").toLowerCase();
     const fallbackDisplay =
       user.user_metadata?.display_name ||
       user.user_metadata?.full_name ||
@@ -66,7 +68,7 @@ function AccountContent() {
           .upsert({ id: user.id, username: fallbackUsername, display_name: fallbackDisplay })
           .select()
           .single();
-        if (created) setProfile(created as Profile);
+        setProfile((created as Profile) ?? { username: fallbackUsername, display_name: fallbackDisplay, avatar_url: null, bio: null });
       } else {
         setProfile(p as Profile);
       }
@@ -78,14 +80,15 @@ function AccountContent() {
           .upsert({ user_id: user.id })
           .select()
           .single();
-        if (created) setNewsletter(created as NewsletterPrefs);
+        setNewsletter((created as NewsletterPrefs) ?? { subscribed: false, studio_updates: false, devlog_scraplings: false, devlog_spectral_sabre: false });
       } else {
         setNewsletter(n as NewsletterPrefs);
       }
 
       if (w) setWishlist((w as { game_id: string }[]).map(r => r.game_id));
-    });
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+      setDataLoading(false);
+    }).catch(() => setDataLoading(false));
+  }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const saveProfile = async () => {
     if (!user || !profile) return;
@@ -121,7 +124,7 @@ function AccountContent() {
     }
   };
 
-  if (loading || !user || !profile) {
+  if (loading || dataLoading) {
     return (
       <div style={{ padding: "180px 0", textAlign: "center", color: "var(--wraith)" }}>
         Loading…
@@ -129,15 +132,19 @@ function AccountContent() {
     );
   }
 
+  if (!user) return null;
+
+  const p = profile ?? { username: "", display_name: "", avatar_url: null, bio: null };
+
   return (
     <main className="account-page">
       <div className="container">
         <div className="account-header">
           <div className="account-avatar">
-            {(profile.display_name || user.email || "G").slice(0, 2).toUpperCase()}
+            {(p.display_name || user.email || "G").slice(0, 2).toUpperCase()}
           </div>
           <div>
-            <h1 className="account-name">{profile.display_name || "Ghostrunner"}</h1>
+            <h1 className="account-name">{p.display_name || "Ghostrunner"}</h1>
             <p className="account-id">Ghostline ID · {user.email}</p>
           </div>
         </div>
@@ -150,24 +157,24 @@ function AccountContent() {
                 Display name
                 <input
                   className="auth-input"
-                  value={profile.display_name || ""}
-                  onChange={e => setProfile(p => p && { ...p, display_name: e.target.value })}
+                  value={p.display_name || ""}
+                  onChange={e => setProfile(prev => prev ? { ...prev, display_name: e.target.value } : { ...p, display_name: e.target.value })}
                 />
               </label>
               <label className="auth-label">
                 Username
                 <input
                   className="auth-input"
-                  value={profile.username || ""}
-                  onChange={e => setProfile(p => p && { ...p, username: e.target.value })}
+                  value={p.username || ""}
+                  onChange={e => setProfile(prev => prev ? { ...prev, username: e.target.value } : { ...p, username: e.target.value })}
                 />
               </label>
               <label className="auth-label">
                 Bio
                 <textarea
                   className="auth-input auth-textarea"
-                  value={profile.bio || ""}
-                  onChange={e => setProfile(p => p && { ...p, bio: e.target.value })}
+                  value={p.bio || ""}
+                  onChange={e => setProfile(prev => prev ? { ...prev, bio: e.target.value } : { ...p, bio: e.target.value })}
                   rows={3}
                   placeholder="A few words about you…"
                 />
