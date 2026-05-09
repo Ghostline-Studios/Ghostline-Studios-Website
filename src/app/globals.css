@@ -2133,6 +2133,40 @@ footer {
   color: var(--phantom-glow);
 }
 
+/* ── Welcome / onboarding page ──────────────────────────────── */
+.welcome-page {
+  min-height: 100vh; display: flex;
+  align-items: center; justify-content: center;
+  padding: 40px 24px;
+}
+.welcome-inner {
+  width: 100%; max-width: 440px;
+  display: flex; flex-direction: column;
+}
+.welcome-title {
+  font-size: clamp(28px, 5vw, 40px); font-weight: 300;
+  text-align: center; margin-bottom: 12px;
+}
+.welcome-sub {
+  font-size: 14px; color: var(--wraith); text-align: center;
+  line-height: 1.6; margin-bottom: 36px;
+}
+.welcome-form { gap: 20px; }
+.username-wrap { position: relative; display: flex; align-items: center; }
+.username-at {
+  position: absolute; left: 14px;
+  font-size: 15px; color: var(--wraith-soft);
+  pointer-events: none; z-index: 1;
+}
+.username-input { padding-left: 30px; }
+.username-input.error { border-color: rgba(255,80,80,0.5); }
+.username-hint {
+  font-size: 11px; font-family: var(--font-mono);
+  letter-spacing: 0.1em; margin-top: 2px;
+}
+.username-hint.error { color: #ff8080; }
+.username-hint.ok { color: var(--spectral); }
+
 /* ── Mobile auth adjustments ─────────────────────────────────── */
 @media (max-width: 768px) {
   .auth-panel { padding: 40px 24px 32px; }

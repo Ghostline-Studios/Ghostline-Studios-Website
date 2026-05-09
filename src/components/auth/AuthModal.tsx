@@ -9,7 +9,6 @@ export function AuthModal() {
   const [tab, setTab] = useState<"signin" | "signup">(authTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -51,7 +50,9 @@ export function AuthModal() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { username, display_name: username } },
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/welcome`,
+      },
     });
     if (error) setMsg({ ok: false, text: error.message });
     else setMsg({ ok: true, text: "Check your email to confirm your Ghostline ID." });
@@ -152,18 +153,6 @@ export function AuthModal() {
           </form>
         ) : (
           <form className="auth-form" onSubmit={handleSignUp}>
-            <label className="auth-label">
-              Username
-              <input
-                className="auth-input"
-                type="text"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                placeholder="ghostrunner"
-                required
-                autoComplete="username"
-              />
-            </label>
             <label className="auth-label">
               Email
               <input
