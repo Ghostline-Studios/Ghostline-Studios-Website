@@ -53,16 +53,31 @@ export function AboutSection() {
   );
 }
 
-const NEWS = [
-  { date: "MAY · 2026", tag: "STUDIO", tagClass: "studio", title: "Ghostline Studios opens its doors. Two projects, one direction." },
-  { date: "APR · 2026", tag: "SCRAPLINGS", tagClass: "scrap", title: "Devlog 04 — Tinhart, the first Scrapling we ever made." },
-  { date: "APR · 2026", tag: "SABRE", tagClass: "sabre", title: "How Sabre-9 learned to argue: writing a drone with a personality." },
-  { date: "MAR · 2026", tag: "SCRAPLINGS", tagClass: "scrap", title: "Building a vertical world: notes on portrait-first level design." },
-  { date: "MAR · 2026", tag: "SABRE", tagClass: "sabre", title: "Touch ganging — commanding four operators with one thumb." },
-  { date: "FEB · 2026", tag: "STUDIO", tagClass: "studio", title: "Why we&apos;re a remote-first, async-first, slack-last studio." },
-];
+type DevlogRow = { id: string; title: string; slug: string; game_id: string | null; published_at: string | null; created_at: string; };
+
+const GAME_TAG: Record<string, { label: string; cls: string }> = {
+  "scraplings":    { label: "SCRAPLINGS", cls: "scrap" },
+  "spectral-sabre":{ label: "SABRE",      cls: "sabre" },
+};
 
 export function NewsSection() {
+  const [posts, setPosts] = useState<DevlogRow[]>([]);
+
+  useEffect(() => {
+    import("@/lib/supabase/client").then(({ createClient }) => {
+      createClient()
+        .from("devlogs")
+        .select("id, title, slug, game_id, published_at, created_at")
+        .eq("is_published", true)
+        .order("published_at", { ascending: false })
+        .limit(6)
+        .then(({ data }) => { if (data) setPosts(data as DevlogRow[]); });
+    });
+  }, []);
+
+  const fmtDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" }).toUpperCase().replace(" ", " · ");
+
   return (
     <section id="news" data-screen-label="04 News">
       <div className="container">
@@ -71,21 +86,31 @@ export function NewsSection() {
             <h2>Devlog &amp; dispatches.</h2>
           </div>
           <div className="meta-block">
-            <strong>Updated weekly</strong>
+            <strong>Updated regularly</strong>
             Build notes, design rambling, occasional
             <br />
             screenshots, no hype cycles.
           </div>
         </div>
         <div className="devlog-list">
-          {NEWS.map((n, i) => (
-            <a key={i} className="devlog-item" href="#">
-              <div className="date">{n.date}</div>
-              <div className={"tag " + n.tagClass}>{n.tag}</div>
-              <h4 dangerouslySetInnerHTML={{ __html: n.title }} />
-              <div className="arrow-cell">Read</div>
-            </a>
+          {posts.map(p => {
+            const tag = p.game_id ? GAME_TAG[p.game_id] : { label: "STUDIO", cls: "studio" };
+            const date = fmtDate(p.published_at ?? p.created_at);
+            return (
+              <Link key={p.id} className="devlog-item" href={`/devlog/${p.slug}`}>
+                <div className="date">{date}</div>
+                <div className={"tag " + tag.cls}>{tag.label}</div>
+                <h4>{p.title}</h4>
+                <div className="arrow-cell">Read</div>
+              </Link>
+            );
+          })}
+          {posts.length === 0 && [0,1,2,3,4,5].map(i => (
+            <div key={i} className="devlog-item devlog-item-skeleton" aria-hidden />
           ))}
+        </div>
+        <div style={{ marginTop: 32 }}>
+          <Link href="/devlog" className="btn secondary"><span>All devlogs</span></Link>
         </div>
       </div>
     </section>
@@ -287,7 +312,7 @@ export function SiteFooter() {
                 <Link href="/#about">Manifesto</Link>
               </li>
               <li>
-                <Link href="/#news">Devlog</Link>
+                <Link href="/devlog">Devlog</Link>
               </li>
               <li>
                 <Link href="/#careers">Careers</Link>
@@ -422,7 +447,7 @@ export function TopNav() {
           <a href="#home" className={active === "home" ? "active" : ""}>Home</a>
           <Link href="/projects">Projects</Link>
           {link("about", "Studio")}
-          {link("news", "Devlog")}
+          <Link href="/devlog">Devlog</Link>
           {link("careers", "Careers")}
           {link("press", "Press")}
         </nav>
@@ -438,7 +463,7 @@ export function TopNav() {
         <a href="#home">Home</a>
         <Link href="/projects">Projects</Link>
         <a href="#about">Studio</a>
-        <a href="#news">Devlog</a>
+        <Link href="/devlog">Devlog</Link>
         <a href="#careers">Careers</a>
         <a href="#press">Press</a>
       </MobileDrawer>
@@ -461,7 +486,7 @@ export function ProjectsIndexNav() {
           <Link href="/">Home</Link>
           <Link href="/projects" className="active">Projects</Link>
           <Link href="/#about">Studio</Link>
-          <Link href="/#news">Devlog</Link>
+          <Link href="/devlog">Devlog</Link>
           <Link href="/#careers">Careers</Link>
           <Link href="/#press">Press</Link>
         </nav>
@@ -477,7 +502,7 @@ export function ProjectsIndexNav() {
         <Link href="/">Home</Link>
         <Link href="/projects">Projects</Link>
         <Link href="/#about">Studio</Link>
-        <Link href="/#news">Devlog</Link>
+        <Link href="/devlog">Devlog</Link>
         <Link href="/#careers">Careers</Link>
         <Link href="/#press">Press</Link>
       </MobileDrawer>
