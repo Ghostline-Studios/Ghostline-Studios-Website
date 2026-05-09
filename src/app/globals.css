@@ -2380,6 +2380,98 @@ footer {
 .devlog-list li { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7; }
 .devlog-post-footer { padding-top: 32px; border-top: 1px solid var(--rim); }
 
+/* ── Social / Friends page ──────────────────────────────────── */
+.social-page { padding: 120px 0 100px; min-height: 100vh; }
+.social-header { margin-bottom: 36px; }
+.social-title { font-size: clamp(32px, 5vw, 52px); font-weight: 300; margin: 0 0 8px; }
+.social-sub { font-size: 15px; color: var(--wraith); margin: 0; }
+
+.social-section {
+  border-radius: 20px; padding: 28px 32px;
+  border: 1px solid var(--rim);
+}
+.social-section-title {
+  font-size: 13px; font-family: var(--font-mono);
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--wraith); margin: 0 0 20px;
+}
+.social-requests-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+.social-list { display: flex; flex-direction: column; }
+.social-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--rim);
+}
+.social-row:last-child { border-bottom: none; }
+
+.social-avatar {
+  border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--spectral), var(--phantom));
+  font-weight: 600; color: var(--void);
+  display: flex; align-items: center; justify-content: center;
+}
+.social-row-info { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.social-row-name { font-size: 15px; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.social-row-username { font-size: 12px; color: var(--wraith); font-family: var(--font-mono); }
+
+.social-friend-label {
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--spectral);
+  padding: 4px 10px; border-radius: 20px;
+  border: 1px solid rgba(77,208,225,0.3); background: rgba(77,208,225,0.06);
+  white-space: nowrap;
+}
+.social-pending-label {
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--wraith);
+  white-space: nowrap;
+}
+
+.social-empty {
+  text-align: center; padding: 32px 0;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  color: var(--wraith); font-size: 14px;
+}
+
+/* Search */
+.social-search-wrap { margin-bottom: 4px; }
+.social-search-field {
+  position: relative; display: flex; align-items: center;
+}
+.social-search-icon {
+  position: absolute; left: 16px;
+  font-family: var(--font-mono); font-size: 14px; color: var(--wraith);
+  pointer-events: none;
+}
+.social-search-input { padding-left: 36px !important; }
+
+/* Tab counts */
+.tab-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 50%; font-size: 10px;
+  background: var(--mist); color: var(--wraith);
+  margin-left: 6px; vertical-align: middle;
+}
+.tab-count-alert { background: rgba(77,208,225,0.2); color: var(--spectral); }
+
+/* Notification badge on avatar */
+.gid-avatar { position: relative; }
+.gid-badge {
+  position: absolute; top: -4px; right: -4px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--spectral); color: var(--void);
+  font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--void);
+}
+.gid-dropdown-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; border-radius: 9px; padding: 0 4px;
+  background: rgba(77,208,225,0.2); color: var(--spectral);
+  font-size: 10px; font-family: var(--font-mono);
+  margin-left: auto;
+}
+
 /* ── Welcome / onboarding page ──────────────────────────────── */
 .welcome-page {
   min-height: 100vh; display: flex;

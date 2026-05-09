@@ -151,6 +151,36 @@ create policy "Admins can manage devlogs"
   on public.devlogs for all
   using (public.is_admin()) with check (public.is_admin());
 
+-- ── Friendships ─────────────────────────────────────────────────
+create table if not exists public.friendships (
+  id           uuid default gen_random_uuid() primary key,
+  requester_id uuid references auth.users on delete cascade not null,
+  addressee_id uuid references auth.users on delete cascade not null,
+  status       text check (status in ('pending','accepted','declined')) default 'pending',
+  created_at   timestamptz default now(),
+  updated_at   timestamptz default now(),
+  unique (requester_id, addressee_id),
+  check (requester_id != addressee_id)
+);
+
+alter table public.friendships enable row level security;
+
+create policy "Users can view own friendships"
+  on public.friendships for select
+  using (auth.uid() = requester_id or auth.uid() = addressee_id);
+
+create policy "Users can send friend requests"
+  on public.friendships for insert
+  with check (auth.uid() = requester_id);
+
+create policy "Users can update own friendships"
+  on public.friendships for update
+  using (auth.uid() = addressee_id or auth.uid() = requester_id);
+
+create policy "Users can delete own friendships"
+  on public.friendships for delete
+  using (auth.uid() = requester_id or auth.uid() = addressee_id);
+
 -- ── Make yourself an admin ───────────────────────────────────────
 -- After signing up, run this (replace with your actual email):
 -- update public.profiles
