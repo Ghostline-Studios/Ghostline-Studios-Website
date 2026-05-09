@@ -26,7 +26,24 @@ export async function middleware(request: NextRequest) {
   );
 
   // Refresh the session token — required for SSR auth to stay alive
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // ── Server-side admin gate ─────────────────────────────────────
+  // This runs before any JS reaches the browser, so it cannot be spoofed.
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    if (!user) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile?.is_admin) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
 
   return supabaseResponse;
 }

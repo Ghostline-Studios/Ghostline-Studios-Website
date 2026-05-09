@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { SiteChrome } from "@/components/SiteChrome";
@@ -17,56 +16,41 @@ type Profile = {
 
 type WishlistRow = { game_id: string };
 
-// Auth logic lives here — inside the SiteChrome/AuthProvider tree
+// Access is already server-gated by middleware — no client-side admin check needed.
 function AdminContent() {
   const { user, loading } = useAuth();
-  const router = useRouter();
   const supabase = createClient();
 
-  const [isAdmin, setIsAdmin] = useState(false);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [wishlistCounts, setWishlistCounts] = useState<Record<string, number>>({});
-  const [checking, setChecking] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) { router.push("/"); return; }
-    if (!user) return;
+    if (loading || !user) return;
 
-    supabase
-      .from("profiles")
-      .select("is_admin")
-      .eq("id", user.id)
-      .single()
-      .then(({ data }) => {
-        if (!data?.is_admin) { router.push("/"); return; }
-        setIsAdmin(true);
-
-        Promise.all([
-          supabase.from("profiles").select("*").order("created_at", { ascending: false }),
-          supabase.from("wishlists").select("game_id"),
-        ]).then(([{ data: p }, { data: w }]) => {
-          if (p) setProfiles(p as Profile[]);
-          if (w) {
-            const counts: Record<string, number> = {};
-            (w as WishlistRow[]).forEach(r => {
-              counts[r.game_id] = (counts[r.game_id] || 0) + 1;
-            });
-            setWishlistCounts(counts);
-          }
-          setChecking(false);
+    Promise.all([
+      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("wishlists").select("game_id"),
+    ]).then(([{ data: p }, { data: w }]) => {
+      if (p) setProfiles(p as Profile[]);
+      if (w) {
+        const counts: Record<string, number> = {};
+        (w as WishlistRow[]).forEach(r => {
+          counts[r.game_id] = (counts[r.game_id] || 0) + 1;
         });
-      });
+        setWishlistCounts(counts);
+      }
+      setDataLoading(false);
+    });
   }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (loading || checking) {
+  if (loading || dataLoading) {
     return (
       <div style={{ padding: "180px 0", textAlign: "center", color: "var(--wraith)" }}>
-        {checking ? "Checking access…" : "Loading…"}
+        Loading…
       </div>
     );
   }
-
-  if (!isAdmin) return null;
 
   return (
     <main className="account-page">
