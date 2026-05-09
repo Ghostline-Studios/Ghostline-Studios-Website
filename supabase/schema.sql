@@ -40,6 +40,21 @@ alter table public.profiles             enable row level security;
 alter table public.wishlists            enable row level security;
 alter table public.newsletter_preferences enable row level security;
 
+-- SECURITY DEFINER helper — avoids infinite recursion in RLS policies
+-- that would occur if the policy itself queried the profiles table.
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+stable
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and is_admin = true
+  );
+$$;
+
 -- Profiles: public read, owner write
 create policy "Profiles are publicly readable"
   on public.profiles for select using (true);
@@ -52,10 +67,7 @@ create policy "Users can update own profile"
 
 -- Admins can read all profiles (needed for admin dashboard)
 create policy "Admins can read all profiles"
-  on public.profiles for select
-  using (
-    auth.uid() in (select id from public.profiles where is_admin = true)
-  );
+  on public.profiles for select using (public.is_admin());
 
 -- Wishlists: owner only
 create policy "Users can read own wishlist"
@@ -69,10 +81,7 @@ create policy "Users can remove from own wishlist"
 
 -- Admins can read all wishlists (for admin dashboard counts)
 create policy "Admins can read all wishlists"
-  on public.wishlists for select
-  using (
-    auth.uid() in (select id from public.profiles where is_admin = true)
-  );
+  on public.wishlists for select using (public.is_admin());
 
 -- Newsletter: owner only
 create policy "Users can read own newsletter prefs"
