@@ -3,13 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { useChat, type ChatFriend } from "@/context/ChatContext";
 
 // ── Types ──────────────────────────────────────────────────────────
-type FriendProfile = {
-  id: string;
-  username: string | null;
-  display_name: string | null;
-};
+type FriendProfile = ChatFriend;
 
 type ConvRow = {
   id: string;
@@ -24,12 +21,6 @@ type Message = {
   sender_id: string;
   content: string;
   created_at: string;
-};
-
-type OpenWindow = {
-  convId: string;
-  friend: FriendProfile;
-  minimised: boolean;
 };
 
 // ── Small avatar ───────────────────────────────────────────────────
@@ -49,7 +40,7 @@ function ChatWindow({
   onClose,
   onUnread,
 }: {
-  win: OpenWindow;
+  win: { convId: string; friend: FriendProfile; minimised: boolean };
   userId: string;
   onMinimise: () => void;
   onClose: () => void;
@@ -184,12 +175,12 @@ function ChatWindow({
 // ── Main overlay ───────────────────────────────────────────────────
 export function ChatOverlay() {
   const { user, loading } = useAuth();
+  const { openWindows, openChat, closeChat, toggleMinimise } = useChat();
   const supabase = createClient();
 
   const [panelOpen, setPanelOpen] = useState(false);
   const [friends, setFriends] = useState<FriendProfile[]>([]);
   const [convMap, setConvMap] = useState<Record<string, string>>({}); // friendId → convId
-  const [openWindows, setOpenWindows] = useState<OpenWindow[]>([]);
   const [unread, setUnread] = useState<Record<string, number>>({}); // convId → count
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -255,16 +246,9 @@ export function ChatOverlay() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const openChat = async (friend: FriendProfile) => {
+  const startChat = async (friend: FriendProfile) => {
     if (!user) return;
     setPanelOpen(false);
-
-    // Already open? Restore it
-    const existing = openWindows.find(w => w.friend.id === friend.id);
-    if (existing) {
-      setOpenWindows(ws => ws.map(w => w.friend.id === friend.id ? { ...w, minimised: false } : w));
-      return;
-    }
 
     // Get or create conversation
     let convId = convMap[friend.id];
@@ -283,7 +267,7 @@ export function ChatOverlay() {
     }
 
     if (!convId) return;
-    setOpenWindows(ws => [...ws, { convId, friend, minimised: false }]);
+    openChat(friend, convId);
   };
 
   const handleUnread = useCallback((convId: string, count: number) => {
@@ -292,6 +276,9 @@ export function ChatOverlay() {
       return { ...prev, [convId]: (prev[convId] ?? 0) + count };
     });
   }, []);
+
+  const handleMinimise = (convId: string) => toggleMinimise(convId);
+  const handleClose = (convId: string) => { closeChat(convId); handleUnread(convId, 0); };
 
   if (!user) return null;
 
@@ -304,8 +291,8 @@ export function ChatOverlay() {
           key={win.convId}
           win={win}
           userId={user.id}
-          onMinimise={() => setOpenWindows(ws => ws.map(w => w.convId === win.convId ? { ...w, minimised: !w.minimised } : w))}
-          onClose={() => setOpenWindows(ws => ws.filter(w => w.convId !== win.convId))}
+          onMinimise={() => handleMinimise(win.convId)}
+          onClose={() => handleClose(win.convId)}
           onUnread={handleUnread}
         />
       ))}
@@ -325,7 +312,7 @@ export function ChatOverlay() {
                 const unreadCount = convId ? (unread[convId] ?? 0) : 0;
                 const name = f.display_name || f.username || "Unknown";
                 return (
-                  <button key={f.id} className="chat-panel-row" onClick={() => openChat(f)}>
+                  <button key={f.id} className="chat-panel-row" onClick={() => startChat(f)}>
                     <Avatar name={name} size={34} />
                     <div className="chat-panel-info">
                       <span className="chat-panel-name">{name}</span>
