@@ -16,6 +16,18 @@ type Profile = {
 
 type WishlistRow = { game_id: string };
 
+type Report = {
+  id: string;
+  reporter_id: string | null;
+  reported_id: string | null;
+  conversation_id: string | null;
+  context: string | null;
+  status: "pending" | "reviewed" | "dismissed";
+  created_at: string;
+  reporter_profile?: { username: string | null; display_name: string | null };
+  reported_profile?: { username: string | null; display_name: string | null };
+};
+
 type Devlog = {
   id: string;
   title: string;
@@ -45,11 +57,16 @@ function AdminContent() {
   const { user, loading } = useAuth();
   const supabase = createClient();
 
-  const [tab, setTab] = useState<"accounts" | "devlogs">("accounts");
+  const [tab, setTab] = useState<"accounts" | "devlogs" | "reports">("accounts");
 
   // Accounts
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [wishlistCounts, setWishlistCounts] = useState<Record<string, number>>({});
+
+  // Reports
+  const [reports, setReports] = useState<Report[]>([]);
+  const [reportChatLogs, setReportChatLogs] = useState<Record<string, { sender_id: string; content: string; created_at: string }[]>>({});
+  const [expandedReport, setExpandedReport] = useState<string | null>(null);
 
   // Devlogs
   const [devlogs, setDevlogs] = useState<Devlog[]>([]);
@@ -68,16 +85,50 @@ function AdminContent() {
       supabase.from("profiles").select("*").order("created_at", { ascending: false }),
       supabase.from("wishlists").select("game_id"),
       supabase.from("devlogs").select("*").order("created_at", { ascending: false }),
-    ]).then(([{ data: p }, { data: w }, { data: d }]) => {
+      supabase.from("reports").select("*").order("created_at", { ascending: false }),
+    ]).then(async ([{ data: p }, { data: w }, { data: d }, { data: r }]) => {
       if (p) setProfiles(p as Profile[]);
       if (w) {
         const counts: Record<string, number> = {};
-        (w as WishlistRow[]).forEach(r => { counts[r.game_id] = (counts[r.game_id] || 0) + 1; });
+        (w as WishlistRow[]).forEach(row => { counts[row.game_id] = (counts[row.game_id] || 0) + 1; });
         setWishlistCounts(counts);
       }
       if (d) setDevlogs(d as Devlog[]);
+      if (r && r.length > 0) {
+        // Enrich with profile names
+        const allIds = [...new Set([
+          ...(r as Report[]).map(rep => rep.reporter_id).filter(Boolean),
+          ...(r as Report[]).map(rep => rep.reported_id).filter(Boolean),
+        ])] as string[];
+        const { data: profileRows } = await supabase.from("profiles").select("id, username, display_name").in("id", allIds);
+        const profileMap: Record<string, { username: string | null; display_name: string | null }> = {};
+        (profileRows ?? []).forEach((pr: { id: string; username: string | null; display_name: string | null }) => { profileMap[pr.id] = pr; });
+        const enriched = (r as Report[]).map(rep => ({
+          ...rep,
+          reporter_profile: rep.reporter_id ? profileMap[rep.reporter_id] : undefined,
+          reported_profile: rep.reported_id ? profileMap[rep.reported_id] : undefined,
+        }));
+        setReports(enriched);
+      }
       setDataLoading(false);
     });
+
+    // Realtime: new reports badge
+    const reportChannel = supabase.channel("admin-reports")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "reports" }, async (payload) => {
+        const rep = payload.new as Report;
+        const allIds = [rep.reporter_id, rep.reported_id].filter(Boolean) as string[];
+        const { data: profileRows } = await supabase.from("profiles").select("id, username, display_name").in("id", allIds);
+        const profileMap: Record<string, { username: string | null; display_name: string | null }> = {};
+        (profileRows ?? []).forEach((pr: { id: string; username: string | null; display_name: string | null }) => { profileMap[pr.id] = pr; });
+        setReports(prev => [{
+          ...rep,
+          reporter_profile: rep.reporter_id ? profileMap[rep.reporter_id] : undefined,
+          reported_profile: rep.reported_id ? profileMap[rep.reported_id] : undefined,
+        }, ...prev]);
+      })
+      .subscribe();
+    return () => { supabase.removeChannel(reportChannel); };
   }, [user, loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-slug from title when creating
@@ -102,6 +153,20 @@ function AdminContent() {
   };
 
   const cancelEdit = () => { setEditingDevlog(null); setDevlogError(""); };
+
+  // Reports helpers
+  const loadChatLog = async (repId: string, convId: string) => {
+    if (reportChatLogs[repId]) { setExpandedReport(v => v === repId ? null : repId); return; }
+    const { data } = await supabase.from("messages").select("sender_id, content, created_at")
+      .eq("conversation_id", convId).order("created_at", { ascending: true });
+    if (data) setReportChatLogs(prev => ({ ...prev, [repId]: data }));
+    setExpandedReport(repId);
+  };
+
+  const setReportStatus = async (repId: string, status: Report["status"]) => {
+    await supabase.from("reports").update({ status, updated_at: new Date().toISOString() }).eq("id", repId);
+    setReports(prev => prev.map(r => r.id === repId ? { ...r, status } : r));
+  };
 
   const saveDevlog = async () => {
     if (!editingDevlog?.title || !editingDevlog.slug) {
@@ -195,6 +260,14 @@ function AdminContent() {
           </button>
           <button className={"admin-tab" + (tab === "devlogs" ? " active" : "")} onClick={() => setTab("devlogs")}>
             Devlogs
+          </button>
+          <button className={"admin-tab" + (tab === "reports" ? " active" : "")} onClick={() => setTab("reports")}>
+            Reports
+            {reports.filter(r => r.status === "pending").length > 0 && (
+              <span className="admin-reports-badge">
+                {reports.filter(r => r.status === "pending").length}
+              </span>
+            )}
           </button>
         </div>
 
@@ -378,6 +451,85 @@ function AdminContent() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ── Reports tab ─────────────────────────────────────── */}
+        {tab === "reports" && (
+          <section className="admin-section">
+            <h2 className="admin-section-title">Reports</h2>
+
+            {reports.length === 0 ? (
+              <p style={{ color: "var(--wraith)", textAlign: "center", padding: "32px 0" }}>No reports yet.</p>
+            ) : (
+              <div className="admin-reports-list">
+                {reports.map(rep => {
+                  const reporterName = rep.reporter_profile?.display_name || rep.reporter_profile?.username || rep.reporter_id?.slice(0, 8) || "?";
+                  const reportedName = rep.reported_profile?.display_name || rep.reported_profile?.username || rep.reported_id?.slice(0, 8) || "?";
+                  const log = reportChatLogs[rep.id];
+                  return (
+                    <div key={rep.id} className={"admin-report-card glass" + (rep.status !== "pending" ? " resolved" : "")}>
+                      <div className="admin-report-head">
+                        <div className="admin-report-meta">
+                          <span className={"admin-badge" + (rep.status === "pending" ? " pending" : rep.status === "reviewed" ? " reviewed" : " dismissed")}>
+                            {rep.status}
+                          </span>
+                          <span className="admin-report-who">
+                            <strong>{reporterName}</strong> reported <strong>{reportedName}</strong>
+                          </span>
+                          <span className="admin-report-time">
+                            {new Date(rep.created_at).toLocaleString("en-GB", {
+                              day: "numeric", month: "short", year: "numeric",
+                              hour: "2-digit", minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                          {rep.conversation_id && (
+                            <button className="admin-action-btn" onClick={() => loadChatLog(rep.id, rep.conversation_id!)}>
+                              {expandedReport === rep.id ? "Hide chat log" : "View chat log"}
+                            </button>
+                          )}
+                          {rep.status === "pending" && (
+                            <>
+                              <button className="admin-action-btn" onClick={() => setReportStatus(rep.id, "reviewed")}>Mark reviewed</button>
+                              <button className="admin-action-btn danger" onClick={() => setReportStatus(rep.id, "dismissed")}>Dismiss</button>
+                            </>
+                          )}
+                          {rep.status !== "pending" && (
+                            <button className="admin-action-btn" onClick={() => setReportStatus(rep.id, "pending")}>Reopen</button>
+                          )}
+                        </div>
+                      </div>
+
+                      {rep.context && (
+                        <div className="admin-report-context">
+                          <pre>{rep.context}</pre>
+                        </div>
+                      )}
+
+                      {expandedReport === rep.id && log && (
+                        <div className="admin-report-log">
+                          <div className="admin-report-log-label">Chat log</div>
+                          {log.map((m, i) => {
+                            const isReporter = m.sender_id === rep.reporter_id;
+                            return (
+                              <div key={i} className={"admin-report-log-msg" + (isReporter ? " reporter" : "")}>
+                                <span className="admin-report-log-who">{isReporter ? reporterName : reportedName}</span>
+                                <span className="admin-report-log-bubble">{m.content}</span>
+                                <span className="admin-report-log-time">
+                                  {new Date(m.created_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </section>

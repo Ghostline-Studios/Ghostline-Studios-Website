@@ -2696,6 +2696,169 @@ footer {
 .username-hint.error { color: #ff8080; }
 .username-hint.ok { color: var(--spectral); }
 
+/* ── Chat window name dropdown ───────────────────────────────── */
+.chat-window-name-wrap { position: relative; flex: 1; min-width: 0; }
+.chat-window-name {
+  display: flex; align-items: center; gap: 4px;
+  background: none; border: none; padding: 0;
+  color: white; font-size: 13px; font-weight: 600;
+  text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
+  max-width: 100%;
+}
+.chat-window-name:hover { color: var(--spectral); }
+.chat-name-caret { font-size: 9px; opacity: 0.6; flex-shrink: 0; }
+.chat-name-menu {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  background: #12141c; border: 1px solid var(--rim);
+  border-radius: 8px; overflow: hidden; z-index: 9999;
+  min-width: 160px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.chat-name-menu-item {
+  display: block; width: 100%; text-align: left;
+  padding: 10px 14px; font-size: 13px; color: var(--wraith);
+  background: none; border: none;
+  transition: background 0.12s, color 0.12s;
+  text-decoration: none;
+}
+.chat-name-menu-item:hover { background: rgba(255,255,255,0.06); color: white; }
+.chat-name-menu-item.danger:hover { background: rgba(255,80,80,0.1); color: #ff8080; }
+
+/* ── Public profile page (/u/[username]) ─────────────────────── */
+.public-profile-page {
+  min-height: 100vh;
+  padding: 100px 0 80px;
+}
+.public-profile-card {
+  display: flex; align-items: flex-start; gap: 28px;
+  padding: 36px; border-radius: 16px; margin-bottom: 32px;
+}
+.public-profile-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, rgba(77,208,225,0.2), rgba(100,80,200,0.2));
+  border: 1px solid var(--rim); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 600; flex-shrink: 0;
+}
+.public-profile-info { flex: 1; min-width: 0; }
+.public-profile-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.profile-gid-label {
+  font-size: 10px; font-family: var(--font-mono); letter-spacing: 0.15em;
+  color: var(--spectral); text-transform: uppercase; opacity: 0.8;
+}
+.profile-since { font-size: 12px; color: var(--wraith); font-family: var(--font-mono); }
+.public-profile-name { font-size: clamp(22px, 4vw, 32px); font-weight: 300; margin: 0 0 4px; }
+.public-profile-username { font-size: 13px; color: var(--wraith); margin: 0 0 12px; font-family: var(--font-mono); }
+.public-profile-bio { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0; }
+.public-profile-section { margin-bottom: 24px; }
+.public-profile-section-title {
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.15em;
+  color: var(--wraith); text-transform: uppercase; margin-bottom: 12px;
+}
+.public-profile-games { display: flex; flex-wrap: wrap; gap: 8px; }
+.public-profile-game-tag {
+  padding: 6px 14px; border-radius: 20px; font-size: 12px;
+  background: rgba(77,208,225,0.1); border: 1px solid rgba(77,208,225,0.25);
+  color: var(--spectral);
+}
+
+/* ── Report page ─────────────────────────────────────────────── */
+.report-page {
+  min-height: 100vh;
+  padding: 100px 0 80px;
+}
+.report-header { margin-bottom: 36px; }
+.report-title { font-size: clamp(28px, 5vw, 44px); font-weight: 300; margin: 8px 0 12px; }
+.report-sub { font-size: 14px; color: var(--wraith); line-height: 1.6; max-width: 520px; }
+.report-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.report-card { padding: 28px; border-radius: 14px; }
+.report-section-label {
+  font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.15em;
+  color: var(--wraith); text-transform: uppercase; margin-bottom: 14px;
+}
+.report-reasons { display: flex; flex-direction: column; gap: 8px; }
+.report-reason {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 8px; cursor: pointer;
+  border: 1px solid transparent; font-size: 14px; color: var(--wraith);
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.report-reason input[type="radio"] { display: none; }
+.report-reason:hover { background: rgba(255,255,255,0.04); color: white; }
+.report-reason.active { border-color: rgba(77,208,225,0.4); color: white; background: rgba(77,208,225,0.07); }
+.report-log-note { font-size: 12px; color: var(--wraith); margin-bottom: 12px; line-height: 1.5; }
+.report-log {
+  display: flex; flex-direction: column; gap: 8px;
+  max-height: 360px; overflow-y: auto; padding-right: 4px;
+}
+.report-log-msg { display: flex; flex-direction: column; gap: 2px; }
+.report-log-msg.mine { align-items: flex-end; }
+.report-log-bubble {
+  display: inline-block; max-width: 85%;
+  padding: 6px 12px; border-radius: 10px; font-size: 13px; line-height: 1.5;
+  background: rgba(255,255,255,0.07); color: white;
+}
+.report-log-msg.mine .report-log-bubble {
+  background: rgba(77,208,225,0.15); color: white;
+}
+.report-log-time { font-size: 10px; color: var(--wraith); font-family: var(--font-mono); margin-top: 1px; }
+.report-success-icon {
+  width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 20px;
+  background: rgba(77,208,225,0.15); border: 1px solid rgba(77,208,225,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: var(--spectral);
+}
+.report-success-title { font-size: 26px; font-weight: 300; text-align: center; margin-bottom: 10px; }
+.report-success-sub { font-size: 14px; color: var(--wraith); text-align: center; line-height: 1.6; margin-bottom: 24px; }
+
+/* ── Admin: reports tab ──────────────────────────────────────── */
+.admin-reports-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  background: rgba(255,80,80,0.8); color: white;
+  border-radius: 9px; font-size: 10px; font-weight: 700;
+  margin-left: 6px; line-height: 1;
+}
+.admin-reports-list { display: flex; flex-direction: column; gap: 16px; }
+.admin-report-card {
+  padding: 20px; border-radius: 12px;
+  transition: opacity 0.3s;
+}
+.admin-report-card.resolved { opacity: 0.65; }
+.admin-report-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.admin-report-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.admin-report-who { font-size: 14px; color: rgba(255,255,255,0.8); }
+.admin-report-who strong { color: white; }
+.admin-report-time { font-size: 11px; color: var(--wraith); font-family: var(--font-mono); }
+.admin-report-context {
+  background: rgba(255,255,255,0.04); border-radius: 8px;
+  padding: 12px; margin-bottom: 12px;
+}
+.admin-report-context pre {
+  font-size: 13px; color: rgba(255,255,255,0.7); font-family: var(--font-mono);
+  white-space: pre-wrap; word-break: break-word; margin: 0;
+}
+.admin-report-log {
+  background: rgba(0,0,0,0.3); border-radius: 10px;
+  padding: 14px; max-height: 320px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 6px;
+  border: 1px solid var(--rim);
+}
+.admin-report-log-label {
+  font-size: 10px; font-family: var(--font-mono); letter-spacing: 0.15em;
+  color: var(--wraith); text-transform: uppercase; margin-bottom: 8px;
+}
+.admin-report-log-msg { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.admin-report-log-msg.reporter .admin-report-log-bubble { background: rgba(77,208,225,0.15); }
+.admin-report-log-who { font-size: 11px; font-weight: 600; color: var(--wraith); min-width: 80px; flex-shrink: 0; }
+.admin-report-log-bubble {
+  flex: 1; padding: 5px 10px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); font-size: 13px; color: white;
+}
+.admin-report-log-time { font-size: 10px; color: var(--wraith); font-family: var(--font-mono); flex-shrink: 0; }
+.admin-badge.pending { background: rgba(255,165,0,0.2); color: #ffb347; border-color: rgba(255,165,0,0.3); }
+.admin-badge.reviewed { background: rgba(77,208,225,0.15); color: var(--spectral); border-color: rgba(77,208,225,0.25); }
+.admin-badge.dismissed { background: rgba(255,255,255,0.07); color: var(--wraith); }
+
 /* ── Mobile auth adjustments ─────────────────────────────────── */
 @media (max-width: 768px) {
   .auth-panel { padding: 40px 24px 32px; }
@@ -2706,5 +2869,7 @@ footer {
   .profile-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; }
   .profile-edit-grid { grid-template-columns: 1fr; }
   .account-lower { grid-template-columns: 1fr; }
+  .report-layout { grid-template-columns: 1fr; }
+  .public-profile-card { flex-direction: column; align-items: center; text-align: center; }
 }
 

@@ -221,10 +221,37 @@ create policy "Participants can send messages"
     select 1 from public.conversations where id = conversation_id
     and (participant_1 = auth.uid() or participant_2 = auth.uid())));
 
+-- ── Reports ──────────────────────────────────────────────────────────
+create table if not exists public.reports (
+  id              uuid default gen_random_uuid() primary key,
+  reporter_id     uuid references auth.users on delete set null,
+  reported_id     uuid references auth.users on delete set null,
+  conversation_id uuid references public.conversations on delete set null,
+  context         text,
+  status          text check (status in ('pending','reviewed','dismissed')) default 'pending',
+  created_at      timestamptz default now(),
+  updated_at      timestamptz default now()
+);
+
+alter table public.reports enable row level security;
+
+create policy "Users can submit reports"
+  on public.reports for insert
+  with check (auth.uid() = reporter_id);
+
+create policy "Users can view own reports"
+  on public.reports for select
+  using (auth.uid() = reporter_id);
+
+create policy "Admins can manage reports"
+  on public.reports for all
+  using (public.is_admin()) with check (public.is_admin());
+
 -- Enable realtime
 alter publication supabase_realtime add table public.friendships;
 alter publication supabase_realtime add table public.conversations;
 alter publication supabase_realtime add table public.messages;
+alter publication supabase_realtime add table public.reports;
 
 -- ── Make yourself an admin ───────────────────────────────────────
 -- After signing up, run this (replace with your actual email):

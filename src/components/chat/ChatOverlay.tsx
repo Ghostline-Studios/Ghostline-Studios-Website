@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useChat, type ChatFriend } from "@/context/ChatContext";
@@ -127,14 +128,61 @@ function ChatWindow({
   };
 
   const friendName = win.friend.display_name || win.friend.username || "Unknown";
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   return (
     <div className={"chat-window" + (win.minimised ? " minimised" : "")}>
       {/* Header */}
-      <div className="chat-window-header" onClick={onMinimise}>
+      <div className="chat-window-header" onClick={() => win.minimised && onMinimise()}>
         <Avatar name={friendName} size={28} />
-        <span className="chat-window-name">{friendName}</span>
-        <button className="chat-window-btn" onClick={e => { e.stopPropagation(); onClose(); }} aria-label="Close">×</button>
+
+        {/* Clickable name → dropdown */}
+        <div className="chat-window-name-wrap" ref={menuRef}>
+          <button
+            className="chat-window-name"
+            onClick={e => { e.stopPropagation(); setMenuOpen(v => !v); }}
+          >
+            {friendName}
+            <span className="chat-name-caret">▾</span>
+          </button>
+          {menuOpen && (
+            <div className="chat-name-menu">
+              {win.friend.username && (
+                <Link
+                  href={`/u/${win.friend.username}`}
+                  className="chat-name-menu-item"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  View profile
+                </Link>
+              )}
+              <Link
+                href={`/report?user=${win.friend.id}&conv=${win.convId}`}
+                className="chat-name-menu-item danger"
+                onClick={() => setMenuOpen(false)}
+              >
+                Report user
+              </Link>
+              <button
+                className="chat-name-menu-item"
+                onClick={() => { setMenuOpen(false); onMinimise(); }}
+              >
+                {win.minimised ? "Expand" : "Minimise"}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <button className="chat-window-btn" onClick={onClose} aria-label="Close">×</button>
       </div>
 
       {/* Body */}
