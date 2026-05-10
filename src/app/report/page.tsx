@@ -67,6 +67,24 @@ function ReportContent() {
     });
 
     if (err) { setError(err.message); setSubmitting(false); return; }
+
+    // Notify admins (non-blocking)
+    const reporterName = user.user_metadata?.display_name ?? user.email ?? "User";
+    const reporterUsername = user.user_metadata?.username ?? "";
+    fetch("/api/send/report-notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        reporterName,
+        reporterUsername,
+        reportedName: reportedProfile?.display_name ?? reportedProfile?.username ?? reportedId,
+        reportedUsername: reportedProfile?.username ?? "",
+        reason,
+        context,
+        reportedAt: new Date().toISOString(),
+      }),
+    }).catch(() => {});
+
     setSubmitted(true);
     setSubmitting(false);
   };
