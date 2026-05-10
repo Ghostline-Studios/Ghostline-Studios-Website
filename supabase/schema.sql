@@ -181,6 +181,51 @@ create policy "Users can delete own friendships"
   on public.friendships for delete
   using (auth.uid() = requester_id or auth.uid() = addressee_id);
 
+-- ── Conversations & Messages (DM system) ────────────────────────
+create table if not exists public.conversations (
+  id            uuid default gen_random_uuid() primary key,
+  participant_1 uuid references auth.users on delete cascade not null,
+  participant_2 uuid references auth.users on delete cascade not null,
+  last_message_at timestamptz default now(),
+  created_at    timestamptz default now(),
+  unique (participant_1, participant_2),
+  check (participant_1 < participant_2)
+);
+alter table public.conversations enable row level security;
+create policy "Participants can view their conversations"
+  on public.conversations for select
+  using (auth.uid() = participant_1 or auth.uid() = participant_2);
+create policy "Participants can create conversations"
+  on public.conversations for insert
+  with check (auth.uid() = participant_1 or auth.uid() = participant_2);
+create policy "Participants can update conversations"
+  on public.conversations for update
+  using (auth.uid() = participant_1 or auth.uid() = participant_2);
+
+create table if not exists public.messages (
+  id              uuid default gen_random_uuid() primary key,
+  conversation_id uuid references public.conversations on delete cascade not null,
+  sender_id       uuid references auth.users on delete cascade not null,
+  content         text not null,
+  created_at      timestamptz default now(),
+  read_at         timestamptz
+);
+alter table public.messages enable row level security;
+create policy "Participants can read messages"
+  on public.messages for select
+  using (exists (select 1 from public.conversations where id = conversation_id
+    and (participant_1 = auth.uid() or participant_2 = auth.uid())));
+create policy "Participants can send messages"
+  on public.messages for insert
+  with check (auth.uid() = sender_id and exists (
+    select 1 from public.conversations where id = conversation_id
+    and (participant_1 = auth.uid() or participant_2 = auth.uid())));
+
+-- Enable realtime
+alter publication supabase_realtime add table public.friendships;
+alter publication supabase_realtime add table public.conversations;
+alter publication supabase_realtime add table public.messages;
+
 -- ── Make yourself an admin ───────────────────────────────────────
 -- After signing up, run this (replace with your actual email):
 -- update public.profiles

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { CustomCursor, EnergyField, IntroOverlay } from "./Background";
 import { AuthProvider } from "@/context/AuthContext";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { ChatOverlay } from "@/components/chat/ChatOverlay";
 
 export function SiteChrome({
   children,
@@ -21,6 +22,7 @@ export function SiteChrome({
       <div className="bg-vignette" />
       <div className="app">{children}</div>
       <AuthModal />
+      <ChatOverlay />
     </AuthProvider>
   );
 }
