@@ -24,11 +24,6 @@ export default function CookiesPage() {
             <div className="legal-eyebrow">Legal</div>
             <h1>Cookie Policy</h1>
             <p className="legal-meta">Last updated: May 2026</p>
-            <div className="legal-notice">
-              <strong>Note for the site owner:</strong> Review this policy and implement a proper cookie
-              consent mechanism before a full public launch, particularly if you add analytics or
-              advertising cookies in the future.
-            </div>
           </div>
 
           <div className="legal-body">

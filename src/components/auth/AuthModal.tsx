@@ -88,7 +88,7 @@ export function AuthModal() {
         <div className="auth-header">
           <div className="auth-mark" />
           <h2 className="auth-title">Ghostline ID</h2>
-          <p className="auth-subtitle">Your account across every Ghostline world.</p>
+          <p className="auth-subtitle">Profiles, friends &amp; messages — all in one place.</p>
         </div>
 
         <div className="auth-tabs">
@@ -207,7 +207,7 @@ export function AuthModal() {
 
         <p className="auth-legal">
           By continuing you agree to the{" "}
-          <a href="#">Ghostline Terms</a> and <a href="#">Privacy Policy</a>.
+          <a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.
         </p>
       </div>
     </>

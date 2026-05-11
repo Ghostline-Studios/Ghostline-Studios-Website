@@ -24,11 +24,6 @@ export default function PrivacyPage() {
             <div className="legal-eyebrow">Legal</div>
             <h1>Privacy Policy</h1>
             <p className="legal-meta">Last updated: May 2026</p>
-            <div className="legal-notice">
-              <strong>Note for the site owner:</strong> This document is a good-faith draft. You should seek
-              proper legal advice before a full public launch to ensure this policy meets all applicable data
-              protection laws in your jurisdiction (e.g. GDPR, UK GDPR, CCPA).
-            </div>
           </div>
 
           <div className="legal-body">
@@ -46,14 +41,25 @@ export default function PrivacyPage() {
             <section className="legal-section">
               <h2>2. What data we collect</h2>
 
-              <h3>Account registration</h3>
-              <p>When you create a Ghostline ID, we collect:</p>
+              <h3>Account registration — email and password</h3>
+              <p>When you create a Ghostline ID using email and password, we collect:</p>
               <ul>
                 <li>Your email address</li>
                 <li>A hashed password (we never store plain-text passwords)</li>
                 <li>A display name and username (chosen by you during onboarding)</li>
                 <li>An optional bio</li>
                 <li>The date and time your account was created</li>
+              </ul>
+
+              <h3>Account registration — Google or Apple sign-in</h3>
+              <p>
+                Ghostline ID supports sign-in via Google and Apple as alternatives to email and password.
+                When you use these options:
+              </p>
+              <ul>
+                <li>We receive a unique identifier and, where permitted by you, your email address from Google or Apple</li>
+                <li>We do not receive your password from these providers</li>
+                <li>Google and Apple&rsquo;s own privacy policies govern the data they collect during sign-in. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a> and <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer">Apple Privacy Policy</a></li>
               </ul>
 
               <h3>Profile data</h3>
@@ -65,14 +71,15 @@ export default function PrivacyPage() {
               <h3>Friends and connections</h3>
               <p>
                 When you send or accept a friend request, we store the friendship relationship between your
-                account and the other user&apos;s account, along with the date it was created.
+                account and the other user&rsquo;s account, along with the date it was created.
               </p>
 
               <h3>Direct messages</h3>
               <p>
-                Messages sent between friends are stored in our database. Messages are only accessible to the
-                two participants in a conversation. We do not read, sell, or share your private messages
-                except where required by law or in the context of a moderation action following a report.
+                Messages sent between friends are stored in our database. Messages are visible in the app
+                only to the two participants in a conversation. Authorised Ghostline Studios administrators
+                may access message records only where necessary for safety, support, legal compliance, or
+                moderation following a report. We do not sell, share, or use message content for advertising.
               </p>
 
               <h3>Game wishlists</h3>
@@ -83,12 +90,11 @@ export default function PrivacyPage() {
 
               <h3>Newsletter</h3>
               <p>
-                If you subscribe to our newsletter (either via the homepage form or through account
-                preferences), we store your email address for the purpose of sending studio updates. You can
-                unsubscribe at any time via your account settings or by contacting us.
+                If you subscribe to our newsletter, we store your email address for the purpose of sending
+                studio updates. You can unsubscribe at any time via your account settings or by contacting us.
               </p>
 
-              <h3>Usage data</h3>
+              <h3>Usage and server logs</h3>
               <p>
                 Our hosting provider (Vercel) and authentication provider (Supabase) may collect standard
                 server logs including IP addresses, browser type, and request timestamps. We do not currently
@@ -115,30 +121,29 @@ export default function PrivacyPage() {
               <ul>
                 <li>
                   <strong>Supabase</strong> — database, authentication, and real-time features.
-                  Supabase stores data on AWS infrastructure. See{" "}
-                  <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">
-                    supabase.com/privacy
-                  </a>.
+                  See <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">supabase.com/privacy</a>.
                 </li>
                 <li>
                   <strong>Vercel</strong> — website hosting and serverless functions. See{" "}
-                  <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">
-                    vercel.com/legal/privacy-policy
-                  </a>.
+                  <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">vercel.com/legal/privacy-policy</a>.
                 </li>
                 <li>
-                  <strong>Resend</strong> — transactional email delivery. See{" "}
-                  <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">
-                    resend.com/legal/privacy-policy
-                  </a>.
+                  <strong>Resend</strong> — transactional email delivery (confirmation emails, password resets, welcome emails). See{" "}
+                  <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">resend.com/legal/privacy-policy</a>.
+                </li>
+                <li>
+                  <strong>Google</strong> — optional sign-in provider. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a>.
+                </li>
+                <li>
+                  <strong>Apple</strong> — optional sign-in provider. See <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer">apple.com/legal/privacy</a>.
                 </li>
               </ul>
             </section>
 
             <section className="legal-section">
-              <h2>5. Cookies</h2>
+              <h2>5. Cookies and local storage</h2>
               <p>
-                We use cookies and local storage to maintain your login session. See our{" "}
+                We use session cookies and browser local storage to maintain your login session. See our{" "}
                 <Link href="/cookies">Cookie Policy</Link> for full details.
               </p>
             </section>
@@ -154,9 +159,9 @@ export default function PrivacyPage() {
                 <li>Withdraw consent for newsletter communications at any time</li>
               </ul>
               <p>
-                To exercise any of these rights, email us at{" "}
+                To exercise any of these rights, email{" "}
                 <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a> with the subject
-                line &ldquo;Data request&rdquo;.
+                &ldquo;Data request&rdquo;. We will respond within 30 days.
               </p>
             </section>
 
@@ -165,14 +170,24 @@ export default function PrivacyPage() {
               <p>
                 You can request deletion of your Ghostline ID account and all associated data by contacting{" "}
                 <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>. We will process
-                deletion requests within 30 days. Note that some data (such as messages exchanged with other
-                users) may be retained in anonymised form or may remain visible to the other participant until
-                their account is also deleted.
+                deletion requests within 30 days. Note that messages exchanged with other users may remain
+                visible to the other participant until their account is also deleted or their messages are removed.
               </p>
             </section>
 
             <section className="legal-section">
-              <h2>8. Children</h2>
+              <h2>8. Moderation and safety</h2>
+              <p>
+                Ghostline Studios reserves the right to review account activity, message records, and user
+                reports where necessary to enforce our Terms of Use, respond to safety concerns, or comply
+                with legal obligations. Reports can be submitted in-app using the report tool in the messaging
+                interface, or by emailing{" "}
+                <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>.
+              </p>
+            </section>
+
+            <section className="legal-section">
+              <h2>9. Children</h2>
               <p>
                 Ghostline ID is not intended for children under the age of 13. We do not knowingly collect
                 personal data from children. If you believe a child has registered without parental consent,
@@ -181,7 +196,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="legal-section">
-              <h2>9. Changes to this policy</h2>
+              <h2>10. Changes to this policy</h2>
               <p>
                 We may update this policy from time to time. The &ldquo;last updated&rdquo; date at the top
                 of this page will reflect any changes. Continued use of the site after changes are posted
@@ -190,7 +205,7 @@ export default function PrivacyPage() {
             </section>
 
             <section className="legal-section">
-              <h2>10. Contact</h2>
+              <h2>11. Contact</h2>
               <p>
                 For any questions about this Privacy Policy, email{" "}
                 <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>.

@@ -2985,6 +2985,44 @@ footer {
   .public-profile-card { flex-direction: column; align-items: center; text-align: center; }
 }
 
+/* ===== Account loading state ===== */
+.account-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160px 24px 120px;
+  text-align: center;
+  min-height: 60vh;
+}
+.account-loading-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(77, 208, 225, 0.3);
+  border-top-color: var(--spectral);
+  animation: spin 1s linear infinite;
+  margin-bottom: 28px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.account-loading-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--spectral);
+  margin-bottom: 12px;
+}
+.account-loading-sub {
+  font-size: 15px;
+  color: var(--wraith);
+  max-width: 40ch;
+  line-height: 1.6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-loading-mark { animation: none; border-color: rgba(77,208,225,0.4); }
+}
+
 /* ===== Careers: planned-only variant ===== */
 .role-item-future { cursor: default; }
 .role-item-future:hover { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.0)); }
@@ -3111,5 +3149,20 @@ footer {
   .press-project-grid { grid-template-columns: 1fr; }
   .press-contact-grid { grid-template-columns: 1fr; }
   .press-table td:first-child { width: 140px; }
+}
+
+/* ===== Global: prefers-reduced-motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Preserve opacity/fade transitions for auth/chat panels that need to feel responsive */
+  .auth-panel, .auth-backdrop, .mobile-drawer, .mobile-drawer-backdrop,
+  .chat-overlay, .notification-toast {
+    transition: opacity 0.15s ease, visibility 0.15s ease !important;
+  }
 }
 

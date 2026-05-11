@@ -100,7 +100,7 @@ function GameCard({
             <strong>{game.genre.split("·")[0].trim()}</strong>Genre
           </div>
           <div>
-            <strong>{game.release}</strong>Window
+            <strong>{game.status}</strong>Status
           </div>
           <div>
             <strong>Mobile</strong>Platform
@@ -133,7 +133,7 @@ function ExpandedGame({ game, onClose }: { game: GameUnion; onClose: () => void 
         <div className="left">
           <div>
             <div className="game-card-tag">
-              {game.status} · {game.platform} · {game.release}
+              {game.status} · {game.platform}
             </div>
             <h3 className="game-card-title" style={{ marginBottom: 18 }}>
               {game.title}
@@ -460,7 +460,7 @@ export function ProjectsTeaser() {
               <ScraplingsArt big />
             </div>
             <div className="teaser-meta">
-              <div className="teaser-tag">In Production · iOS · Android</div>
+              <div className="teaser-tag">Pre-production · iOS · Android</div>
               <h3 className="teaser-title">Scraplings</h3>
               <p className="teaser-line">A cosy collector. Salvage the forgotten — give it a soul.</p>
               <span className="teaser-cta">Open project</span>
@@ -471,7 +471,7 @@ export function ProjectsTeaser() {
               <SpectralSabreArt big />
             </div>
             <div className="teaser-meta">
-              <div className="teaser-tag">Pre-Alpha · Android first</div>
+              <div className="teaser-tag">Pre-production · Android · iOS</div>
               <h3 className="teaser-title">Spectral Sabre</h3>
               <p className="teaser-line">Lead Sabre Unit. Bend light. Vanish before the alarm.</p>
               <span className="teaser-cta">Open project</span>

@@ -4,7 +4,15 @@ import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata = {
-  title: "Projects — Ghostline Studios",
+  title: "Projects",
+  description: "Ghostline Studios has two games in pre-production: Scraplings, a cosy mobile collector, and Spectral Sabre, a tactical stealth shooter.",
+  alternates: { canonical: "https://www.ghostlinestudios.com/projects" },
+  openGraph: {
+    title: "Projects | Ghostline Studios",
+    description: "Two games in pre-production: Scraplings and Spectral Sabre.",
+    images: [{ url: "/assets/ghostline-og.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function ProjectsPage() {
@@ -19,7 +27,7 @@ export default function ProjectsPage() {
               <h2>Two worlds, in motion.</h2>
             </div>
             <div className="meta-block">
-              <strong>Currently in production</strong>
+              <strong>Currently in pre-production</strong>
               Mobile-first · Player-respecting
               <br />
               Hand-built · No dark patterns
@@ -32,7 +40,7 @@ export default function ProjectsPage() {
                 <ScraplingsArt big />
               </div>
               <div className="teaser-meta">
-                <div className="teaser-tag">In Production · iOS · Android</div>
+                <div className="teaser-tag">Pre-production · iOS · Android</div>
                 <h3 className="teaser-title">Scraplings</h3>
                 <p className="teaser-line">A cosy collector. Salvage the forgotten — give it a soul.</p>
                 <span className="teaser-cta">
@@ -45,7 +53,7 @@ export default function ProjectsPage() {
                 <SpectralSabreArt big />
               </div>
               <div className="teaser-meta">
-                <div className="teaser-tag">Pre-Alpha · Android first</div>
+                <div className="teaser-tag">Pre-production · Android · iOS</div>
                 <h3 className="teaser-title">Spectral Sabre</h3>
                 <p className="teaser-line">Lead Sabre Unit. Bend light. Vanish before the alarm.</p>
                 <span className="teaser-cta">

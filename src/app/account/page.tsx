@@ -185,8 +185,10 @@ function AccountContent() {
 
   if (loading || dataLoading) {
     return (
-      <div style={{ padding: "180px 0", textAlign: "center", color: "var(--wraith)" }}>
-        Loading…
+      <div className="account-loading-state">
+        <div className="account-loading-mark" aria-hidden />
+        <p className="account-loading-label">Loading Ghostline ID&hellip;</p>
+        <p className="account-loading-sub">Profiles, friends, and messages are available once you sign in.</p>
       </div>
     );
   }

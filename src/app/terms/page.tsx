@@ -24,10 +24,6 @@ export default function TermsPage() {
             <div className="legal-eyebrow">Legal</div>
             <h1>Terms of Use</h1>
             <p className="legal-meta">Last updated: May 2026</p>
-            <div className="legal-notice">
-              <strong>Note for the site owner:</strong> This is a good-faith draft. Seek proper legal
-              advice before a full public launch to ensure these terms are enforceable in your jurisdiction.
-            </div>
           </div>
 
           <div className="legal-body">
@@ -36,7 +32,7 @@ export default function TermsPage() {
               <h2>1. Acceptance of terms</h2>
               <p>
                 By accessing or using ghostlinestudios.com or creating a Ghostline ID account, you agree to
-                these Terms of Use. If you do not agree, do not use the site or create an account.
+                these Terms of Use. If you do not agree, please do not use the site or create an account.
               </p>
               <p>
                 These terms apply to all users of the website, including visitors and registered Ghostline ID
@@ -52,7 +48,7 @@ export default function TermsPage() {
               <ul>
                 <li>User profiles with a display name, username, and optional bio</li>
                 <li>A friends system — you can connect with other users</li>
-                <li>Direct messaging between accepted friends</li>
+                <li>Direct messaging between accepted friends only</li>
                 <li>Game wishlisting on your public profile</li>
                 <li>Newsletter opt-in preferences</li>
               </ul>
@@ -68,7 +64,7 @@ export default function TermsPage() {
               <ul>
                 <li>Post or send content that is abusive, harassing, threatening, defamatory, or illegal</li>
                 <li>Impersonate any person or entity</li>
-                <li>Attempt to gain unauthorised access to another user&apos;s account or data</li>
+                <li>Attempt to gain unauthorised access to another user&rsquo;s account or data</li>
                 <li>Interfere with the operation of the site or its infrastructure</li>
                 <li>Use automated tools (bots, scrapers) to access or collect data without our permission</li>
                 <li>Send unsolicited messages or spam to other users</li>
@@ -79,12 +75,19 @@ export default function TermsPage() {
               <h2>4. Messaging and friend connections</h2>
               <p>
                 Direct messaging is available only between accepted friends. You may only send messages to
-                users who have accepted your friend request. This is a deliberate safety measure.
+                users who have accepted your friend request. This is a deliberate safety measure — only
+                connect with people you know.
               </p>
               <p>
-                You can report another user using the report tool available in the messaging interface.
-                Reports are reviewed by our team and we reserve the right to suspend or remove accounts that
-                violate these terms.
+                Messages are visible in the app only to the conversation participants. Authorised Ghostline
+                Studios administrators may access message records only where necessary for safety, support,
+                legal compliance, or moderation following a report.
+              </p>
+              <p>
+                You can report another user using the report tool available in the messaging interface, or by
+                emailing <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>. Reports
+                are reviewed by our team and we reserve the right to suspend or remove accounts that violate
+                these terms.
               </p>
             </section>
 
@@ -126,20 +129,20 @@ export default function TermsPage() {
               <h2>8. Disclaimers</h2>
               <p>
                 The site is provided &ldquo;as is&rdquo; without warranties of any kind. We do not guarantee
-                continuous uptime, and reserve the right to modify or discontinue features at any time.
+                continuous uptime and reserve the right to modify or discontinue features at any time.
               </p>
               <p>
-                Games listed on this site are in development. Release dates, features, and platform
-                availability may change. Nothing on this site constitutes a pre-order, purchase commitment,
-                or guarantee of delivery.
+                Games listed on this site are in pre-production. Features, platforms, and availability may
+                change. Nothing on this site constitutes a pre-order, purchase commitment, or guarantee of
+                delivery.
               </p>
             </section>
 
             <section className="legal-section">
-              <h2>9. Account termination</h2>
+              <h2>9. Account suspension and removal</h2>
               <p>
-                We reserve the right to suspend or permanently close accounts that violate these terms,
-                with or without notice. You may request deletion of your account at any time by contacting{" "}
+                We reserve the right to suspend or permanently close accounts that violate these terms, with
+                or without notice. You may request deletion of your own account at any time by contacting{" "}
                 <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>.
               </p>
             </section>
@@ -164,7 +167,7 @@ export default function TermsPage() {
             <section className="legal-section">
               <h2>12. Changes to these terms</h2>
               <p>
-                We may update these terms at any time. The &ldquo;last updated&rdquo; date will reflect
+                We may update these terms at any time. The &ldquo;last updated&rdquo; date will reflect any
                 changes. Continued use of the service after changes are posted constitutes acceptance.
               </p>
             </section>
@@ -172,8 +175,8 @@ export default function TermsPage() {
             <section className="legal-section">
               <h2>13. Contact</h2>
               <p>
-                Questions about these terms?{" "}
-                <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>
+                Questions about these terms? Email{" "}
+                <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>.
               </p>
             </section>
 

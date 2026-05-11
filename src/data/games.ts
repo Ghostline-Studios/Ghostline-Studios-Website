@@ -40,17 +40,17 @@ export const SCRAPLINGS: ScraplingsGame = {
   tagline: "A cosy collector. Salvage the forgotten — give it a soul.",
   blurb:
     "Scraplings is a vertical mobile game about scavenging discarded objects from a quiet, abandoned world and recycling them into Scraplings: tiny creatures stitched together from junk and small kindnesses. Build a sanctuary. Memorize their songs. Watch them remember you.",
-  status: "In Production",
+  status: "Pre-production",
   genre: "Cosy / Collector",
   platform: "iOS · Android",
-  release: "2026 — Early Access",
+  release: "Pre-production",
   features: [
     "100+ unique Scraplings to discover, name and bond with",
     "Hand-painted vertical worlds you peel back layer by layer",
-    "Adaptive ambient soundtrack that learns your routine",
+    "Adaptive ambient soundtrack that responds to your play",
     "Offline-first — your sanctuary lives on your device",
     "No timers, no energy bars, no dark patterns. Ever.",
-    "Cross-save between phones via your Ghostline ID",
+    "Ghostline ID support planned for future profile and save features",
   ],
   bestiary: [
     { id: "001", name: "Tinhart" },
@@ -71,10 +71,10 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
   tagline: "Lead Sabre Unit. Bend light. Vanish before the alarm.",
   blurb:
     "Spectral Sabre is a mobile-first third-person tactical stealth shooter. Command a four-person black-ops squad equipped with hyperspectral camouflage — an experimental refraction system that distorts the operator's signature across visible light, thermal, infrared and drone optics. Plan with KIP, your digital infiltration companion. Tag with the recon drone. Sync four shots into one. Move like a rumour.",
-  status: "Pre-Alpha",
+  status: "Pre-production",
   genre: "Tactical Stealth · Squad Shooter",
-  platform: "Android first · iOS to follow",
-  release: "2027 — Vertical Slice",
+  platform: "Android · iOS",
+  release: "Pre-production",
   features: [
     "Hyperspectral camouflage with real rules — heat, battery, scanner fields, weather",
     "Four operators commanded with a single thumb — Mark, Sync, Breach, Hold",
@@ -97,7 +97,7 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
       img: "/assets/op-vantage.png",
       codename: "Vantage",
       role: "Long-Range Overwatch",
-      speciality: "Precision shots · drone-assisted targeting · thermal optics",
+      speciality: "Precision shots · recon-assisted targeting · thermal optics",
       bio: "Holds sightlines, covers the squad, eliminates marked threats. Excels at sync shots and silent guard removals. Reinforces patient, tactical mission pacing — strongest when holding a protected sightline.",
     },
     {
@@ -105,7 +105,7 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
       img: "/assets/op-rook.png",
       codename: "Rook",
       role: "Close-Quarters Assault",
-      speciality: "Door breaching · shield module · flash charges · heavy armour",
+      speciality: "Door breaching · shield module · flash charges · breach-rated armour",
       bio: "The squad's frontline protector. Lead high-risk entries and absorb pressure when stealth breaks. Less subtle, but still built for stealth-team pacing. KIP hides behind Rook when explosions happen.",
     },
     {
