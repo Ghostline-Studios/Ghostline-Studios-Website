@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { SpectralSabreArt } from "@/components/Games";
+import { JsonLd } from "@/components/JsonLd";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
 import { SPECTRAL_SABRE } from "@/data/games";
 
 export const metadata = {
-  title: "Spectral Sabre",
-  description: "Spectral Sabre — a tactical action-RPG from Ghostline Studios. Master blade and spirit in a world balanced between light and shadow.",
+  title: "Spectral Sabre — Tactical Stealth Shooter",
+  description: "Spectral Sabre is a tactical stealth shooter for mobile from Ghostline Studios. Command a four-person squad plus KIP through short, high-stakes infiltrations.",
+  alternates: { canonical: "https://www.ghostlinestudios.com/spectral-sabre" },
   openGraph: {
-    title: "Spectral Sabre — Ghostline Studios",
-    description: "A tactical action-RPG. Master blade and spirit.",
+    title: "Spectral Sabre — Tactical Stealth Shooter | Ghostline Studios",
+    description: "Command a squad. Stay in shadow. Trust KIP.",
     images: [{ url: "/assets/ghostline-og.png" }],
   },
   twitter: { card: "summary_large_image" },
@@ -19,6 +21,23 @@ export default function SpectralSabrePage() {
   const G = SPECTRAL_SABRE;
   return (
     <SiteChrome>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          name: "Spectral Sabre",
+          description: "A tactical stealth shooter for mobile. Command a four-person squad plus KIP through short, high-stakes infiltrations.",
+          url: "https://www.ghostlinestudios.com/spectral-sabre",
+          publisher: {
+            "@type": "Organization",
+            name: "Ghostline Studios",
+            url: "https://www.ghostlinestudios.com",
+          },
+          applicationCategory: "Game",
+          operatingSystem: "iOS, Android",
+          genre: "Tactical Stealth",
+        }}
+      />
       <ProjectsIndexNav />
 
       <section className="project-hero" data-screen-label="Sabre Hero">
@@ -29,7 +48,7 @@ export default function SpectralSabrePage() {
           <div className="project-hero-grid">
             <div>
               <div className="project-tag" style={{ color: "var(--phantom-glow)" }}>
-                Pre-Alpha · Android first · 2027 Vertical Slice
+                Pre-Production · Android · iOS
               </div>
               <h1 className="project-title">Spectral Sabre</h1>
               <p className="project-tagline">{G.tagline}</p>
@@ -45,16 +64,16 @@ export default function SpectralSabrePage() {
                   <strong>Android · iOS</strong>Platform
                 </div>
                 <div>
-                  <strong>3–8 min</strong>Mission
+                  <strong>Pre-Production</strong>Status
                 </div>
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a className="btn primary" href="#">
-                  <span>Wishlist</span>
+                <a className="btn primary" href="mailto:press@ghostlinestudios.com">
+                  <span>Press enquiry</span>
                 </a>
-                <a className="btn" href="#">
-                  <span>Press Kit</span>
-                </a>
+                <Link className="btn" href="/press">
+                  <span>Press info</span>
+                </Link>
               </div>
             </div>
             <div className="project-key-art">
@@ -206,7 +225,7 @@ export default function SpectralSabrePage() {
               <strong>Voice samples</strong>
               Kinetic Intelligence Platform
               <br />
-              Field log · channel SABRE-9
+              Field log · KIP channel
             </div>
           </div>
           <div style={{ display: "grid", gap: 12 }}>

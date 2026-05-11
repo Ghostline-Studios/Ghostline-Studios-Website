@@ -39,8 +39,8 @@ export function Hero() {
             <div className="label">Ghostlines drawn</div>
           </div>
           <div className="pin br">
-            <div className="num">07</div>
-            <div className="label">Crew aboard</div>
+            <div className="num">Mobile</div>
+            <div className="label">First</div>
           </div>
         </div>
       </div>

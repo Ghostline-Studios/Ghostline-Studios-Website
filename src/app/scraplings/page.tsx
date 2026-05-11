@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { ScraplingsArt, ScraplingsBestiary } from "@/components/Games";
+import { JsonLd } from "@/components/JsonLd";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
 import { SCRAPLINGS } from "@/data/games";
 
 export const metadata = {
-  title: "Scraplings",
-  description: "Scraplings — a creature-collector mobile game from Ghostline Studios. Explore a vast world, discover hidden creatures, and build your ultimate team.",
+  title: "Scraplings — Cosy Mobile Collector Game",
+  description: "Scraplings is a cosy creature-collector mobile game from Ghostline Studios. Salvage forgotten creatures, build your team, and explore a world that feels quietly alive.",
+  alternates: { canonical: "https://www.ghostlinestudios.com/scraplings" },
   openGraph: {
-    title: "Scraplings — Ghostline Studios",
-    description: "A creature-collector mobile game. Explore, discover, build.",
+    title: "Scraplings — Cosy Mobile Collector Game | Ghostline Studios",
+    description: "A cosy creature-collector mobile game. Salvage, discover, build.",
     images: [{ url: "/assets/ghostline-og.png" }],
   },
   twitter: { card: "summary_large_image" },
@@ -19,6 +21,23 @@ export default function ScraplingsPage() {
   const G = SCRAPLINGS;
   return (
     <SiteChrome>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          name: "Scraplings",
+          description: "A cosy creature-collector mobile game. Salvage forgotten creatures, give them a soul, and explore a world that feels quietly alive.",
+          url: "https://www.ghostlinestudios.com/scraplings",
+          publisher: {
+            "@type": "Organization",
+            name: "Ghostline Studios",
+            url: "https://www.ghostlinestudios.com",
+          },
+          applicationCategory: "Game",
+          operatingSystem: "iOS, Android",
+          genre: "Cosy / Collector",
+        }}
+      />
       <ProjectsIndexNav />
 
       <section className="project-hero" data-screen-label="Scraplings Hero">
@@ -28,7 +47,7 @@ export default function ScraplingsPage() {
           </Link>
           <div className="project-hero-grid">
             <div>
-              <div className="project-tag">In Production · iOS · Android · 2026 Early Access</div>
+              <div className="project-tag">In Development · iOS · Android</div>
               <h1 className="project-title">Scraplings</h1>
               <p className="project-tagline">A cosy collector. Salvage the forgotten — give it a soul.</p>
               <p className="project-blurb">{G.blurb}</p>
@@ -43,16 +62,16 @@ export default function ScraplingsPage() {
                   <strong>iOS · Android</strong>Platform
                 </div>
                 <div>
-                  <strong>2026 EA</strong>Window
+                  <strong>Pre-Production</strong>Status
                 </div>
               </div>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                <a className="btn primary" href="#">
-                  <span>Wishlist</span>
+                <a className="btn primary" href="mailto:press@ghostlinestudios.com">
+                  <span>Press enquiry</span>
                 </a>
-                <a className="btn" href="#">
-                  <span>Press Kit</span>
-                </a>
+                <Link className="btn" href="/press">
+                  <span>Press info</span>
+                </Link>
               </div>
             </div>
             <div className="project-key-art">

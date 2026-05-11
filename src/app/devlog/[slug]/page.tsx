@@ -3,9 +3,12 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { createClient } from "@/lib/supabase/server";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteChrome } from "@/components/SiteChrome";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 import type { Metadata } from "next";
+
+const SITE_URL = "https://www.ghostlinestudios.com";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +33,11 @@ export async function generateMetadata(
   const game = post.game_id ? ` · ${GAME_LABELS[post.game_id] ?? post.game_id}` : "";
   const description = post.excerpt ?? `A devlog post from Ghostline Studios${game}.`;
   return {
-    title: `${post.title} | Ghostline Devlog`,
+    title: post.title,
     description,
+    alternates: { canonical: `${SITE_URL}/devlog/${slug}` },
     openGraph: {
-      title: post.title,
+      title: `${post.title} | Ghostline Studios Devlog`,
       description,
       images: [{ url: "/assets/ghostline-og.png" }],
     },
@@ -56,6 +60,26 @@ export default async function DevlogPostPage({ params }: { params: Promise<{ slu
 
   return (
     <SiteChrome>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt ?? undefined,
+          url: `${SITE_URL}/devlog/${post.slug}`,
+          datePublished: post.published_at ?? post.created_at,
+          dateModified: post.updated_at ?? post.published_at ?? post.created_at,
+          publisher: {
+            "@type": "Organization",
+            name: "Ghostline Studios",
+            url: SITE_URL,
+          },
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": `${SITE_URL}/devlog/${post.slug}`,
+          },
+        }}
+      />
       <ProjectsIndexNav />
       <main className="devlog-post-page">
         <div className="container">

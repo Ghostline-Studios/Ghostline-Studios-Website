@@ -118,12 +118,12 @@ export function NewsSection() {
   );
 }
 
-const ROLES = [
-  { title: "Senior Mobile Engineer (Unity)", team: "Spectral Sabre", location: "Remote · UK / EU", type: "Full time" },
-  { title: "Game Designer — Cosy Systems", team: "Scraplings", location: "Remote · Anywhere", type: "Full time" },
-  { title: "Technical Artist — Mobile FX", team: "Both projects", location: "Remote · UK / EU", type: "Full time" },
-  { title: "Narrative Designer", team: "Spectral Sabre", location: "Remote · Anywhere", type: "Contract" },
-  { title: "Open application", team: "Studio", location: "Remote · Anywhere", type: "Tell us why" },
+const FUTURE_AREAS = [
+  "Unity / mobile engineering",
+  "Technical art & mobile VFX",
+  "Game & systems design",
+  "Narrative & world-building",
+  "Community & player experience",
 ];
 
 export function CareersSection() {
@@ -135,45 +135,82 @@ export function CareersSection() {
             <h2>Join the line.</h2>
           </div>
           <div className="meta-block">
-            <strong>Currently 7 aboard</strong>
-            Small studio. Senior people.
+            <strong>Not hiring yet</strong>
+            Small studio. Building in the quiet.
             <br />
-            Async-first. Calendars protected.
+            We&apos;ll open when the work needs it.
           </div>
         </div>
         <div className="careers-wrap">
           <div className="careers-intro">
-            <h3>We hire slowly. We treat people well. We make the work the thing.</h3>
+            <h3>We are not actively recruiting right now.</h3>
             <p>
-              If you&apos;ve shipped before, if you care about the small details no-one notices, if you can read a build
-              log without flinching — there&apos;s probably a chair here for you.
+              Ghostline Studios is early and intentional. We grow when the work genuinely requires it, not before.
+              When we do hire, we hire slowly, treat people well, and make the work the thing.
+            </p>
+            <p style={{ marginTop: 16, color: "var(--wraith)" }}>
+              Future opportunities may include areas such as Unity engineering, technical art, systems design,
+              narrative, and community. If that sounds like you, introduce yourself.
             </p>
             <div style={{ marginTop: 28 }}>
-              <a className="btn primary" href="#contact">
-                <span>Open Application</span>
+              <a className="btn primary" href="mailto:studio@ghostlinestudios.com">
+                <span>Introduce yourself</span>
               </a>
             </div>
           </div>
           <div className="role-list">
-            {ROLES.map((r, i) => (
-              <a key={i} className="role-item" href="#">
+            {FUTURE_AREAS.map((area, i) => (
+              <div key={i} className="role-item role-item-future">
                 <div>
-                  <h4>{r.title}</h4>
+                  <h4>{area}</h4>
                   <div className="role-meta">
-                    <span>{r.team}</span>
+                    <span>Future area</span>
                     <span className="dot">●</span>
-                    <span>{r.location}</span>
-                    <span className="dot">●</span>
-                    <span>{r.type}</span>
+                    <span>Remote</span>
                   </div>
                 </div>
-                <div className="role-cta">View</div>
-              </a>
+                <div className="role-cta role-cta-planned">Planned</div>
+              </div>
             ))}
           </div>
         </div>
       </div>
     </section>
+  );
+}
+
+export function NewsletterSignup() {
+  const [email, setEmail] = React.useState("");
+  const [status, setStatus] = React.useState<"idle" | "ok" | "err">("idle");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    // TODO: wire to real mailing list
+    setStatus("ok");
+    setEmail("");
+  };
+
+  return (
+    <form className="signup" onSubmit={submit} aria-label="Newsletter signup">
+      {status === "ok" ? (
+        <p style={{ color: "var(--spectral)", fontSize: 14, margin: 0 }}>
+          You&apos;re on the list — we&apos;ll be in touch when there&apos;s something real to say.
+        </p>
+      ) : (
+        <>
+          <input
+            type="email"
+            placeholder="you@somewhere.net"
+            required
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            aria-label="Email address"
+          />
+          <button type="submit">Join</button>
+        </>
+      )}
+    </form>
   );
 }
 
@@ -191,49 +228,43 @@ export function PressContactSection() {
               <br />
               and friendly humans
             </strong>
-            press@ghostline.studio
+            <a href="mailto:press@ghostlinestudios.com">press@ghostlinestudios.com</a>
             <br />
-            hello@ghostline.studio
+            <a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a>
           </div>
         </div>
 
         <div className="press-wrap">
           <div className="press-card glass">
-            <h3>Logos, screenshots, fact sheets, b-roll.</h3>
-            <p>Everything you need to write about Ghostline or either game. Updated whenever something interesting ships.</p>
+            <h3>Press assets &amp; fact sheet.</h3>
+            <p>
+              Studio boilerplate, project summaries, and key facts for Ghostline Studios, Scraplings, and Spectral Sabre.
+              Logos and screenshot packs are in preparation.
+            </p>
             <div className="links">
-              <a className="link-row" href="#">
-                <span>Studio Press Kit</span>
-                <span className="size">ZIP · 184 MB</span>
-              </a>
-              <a className="link-row" href="#">
-                <span>Scraplings — Press Kit</span>
-                <span className="size">ZIP · 92 MB</span>
-              </a>
-              <a className="link-row" href="#">
-                <span>Spectral Sabre — Press Kit</span>
-                <span className="size">ZIP · 156 MB</span>
-              </a>
-              <a className="link-row" href="#">
-                <span>Brand Guidelines</span>
-                <span className="size">PDF · 6 MB</span>
-              </a>
+              <Link className="link-row" href="/press">
+                <span>Full press page</span>
+                <span className="size">ghostlinestudios.com/press</span>
+              </Link>
+              <div className="link-row link-row-coming">
+                <span>Studio logos &amp; artwork</span>
+                <span className="size">Coming soon</span>
+              </div>
+              <div className="link-row link-row-coming">
+                <span>Scraplings — screenshots</span>
+                <span className="size">Coming soon</span>
+              </div>
+              <div className="link-row link-row-coming">
+                <span>Spectral Sabre — screenshots</span>
+                <span className="size">Coming soon</span>
+              </div>
             </div>
           </div>
 
           <div className="press-card glass" id="contact">
             <h3>One letter, every now and then.</h3>
             <p>No marketing. No countdown timers. Build notes, occasional screenshots, the rare announcement when we have something real to say.</p>
-            <form
-              className="signup"
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert("Subscribed — keep an eye on your inbox.");
-              }}
-            >
-              <input type="email" placeholder="you@somewhere.net" required />
-              <button type="submit">Join</button>
-            </form>
+            <NewsletterSignup />
             <div style={{ marginTop: 28 }}>
               <div
                 style={{
@@ -245,20 +276,16 @@ export function PressContactSection() {
                   marginBottom: 12,
                 }}
               >
-                — Or find us
+                — Contact
               </div>
               <div className="links">
-                <a className="link-row" href="#">
-                  <span>Discord — Ghostline Crew</span>
-                  <span className="size">3,402 members</span>
+                <a className="link-row" href="mailto:studio@ghostlinestudios.com">
+                  <span>General enquiries</span>
+                  <span className="size">studio@ghostlinestudios.com</span>
                 </a>
-                <a className="link-row" href="#">
-                  <span>Bluesky — @ghostline.studio</span>
-                  <span className="size">@ghostline</span>
-                </a>
-                <a className="link-row" href="#">
-                  <span>YouTube — Devlog channel</span>
-                  <span className="size">/ghostlinestudios</span>
+                <a className="link-row" href="mailto:press@ghostlinestudios.com">
+                  <span>Press &amp; media</span>
+                  <span className="size">press@ghostlinestudios.com</span>
                 </a>
               </div>
             </div>
@@ -295,55 +322,35 @@ export function SiteFooter() {
           <div className="col">
             <h5>Worlds</h5>
             <ul>
-              <li>
-                <Link href="/scraplings">Scraplings</Link>
-              </li>
-              <li>
-                <Link href="/spectral-sabre">Spectral Sabre</Link>
-              </li>
-              <li>
-                <Link href="/#games">Future projects</Link>
-              </li>
+              <li><Link href="/scraplings">Scraplings</Link></li>
+              <li><Link href="/spectral-sabre">Spectral Sabre</Link></li>
+              <li><Link href="/projects">All projects</Link></li>
             </ul>
           </div>
           <div className="col">
             <h5>Studio</h5>
             <ul>
-              <li>
-                <Link href="/#about">Manifesto</Link>
-              </li>
-              <li>
-                <Link href="/devlog">Devlog</Link>
-              </li>
-              <li>
-                <Link href="/#careers">Careers</Link>
-              </li>
-              <li>
-                <Link href="/#press">Press kit</Link>
-              </li>
+              <li><Link href="/#about">Manifesto</Link></li>
+              <li><Link href="/devlog">Devlog</Link></li>
+              <li><Link href="/press">Press</Link></li>
+              <li><Link href="/#careers">Careers</Link></li>
+              <li><Link href="/account">Ghostline ID</Link></li>
             </ul>
           </div>
           <div className="col">
-            <h5>Contact</h5>
+            <h5>Legal &amp; contact</h5>
             <ul>
-              <li>
-                <a href="mailto:hello@ghostline.studio">hello@ghostline.studio</a>
-              </li>
-              <li>
-                <a href="mailto:press@ghostline.studio">press@ghostline.studio</a>
-              </li>
-              <li>
-                <a href="#">Discord</a>
-              </li>
-              <li>
-                <a href="#">Bluesky</a>
-              </li>
+              <li><a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a></li>
+              <li><a href="mailto:press@ghostlinestudios.com">press@ghostlinestudios.com</a></li>
+              <li><Link href="/privacy">Privacy Policy</Link></li>
+              <li><Link href="/terms">Terms of Use</Link></li>
+              <li><Link href="/cookies">Cookie Policy</Link></li>
             </ul>
           </div>
         </div>
         <div className="footer-bottom">
           <span>© 2026 Ghostline Studios — All ghosts reserved</span>
-          <span>v0.7.4 · Built quietly</span>
+          <span>Built quietly</span>
         </div>
       </div>
     </footer>
@@ -502,7 +509,7 @@ export function TopNav() {
           {link("about", "Studio")}
           <Link href="/devlog">Devlog</Link>
           {link("careers", "Careers")}
-          {link("press", "Press")}
+          <Link href="/press">Press</Link>
         </nav>
         <div className="meta">
           <span className="live-dot" />
@@ -518,7 +525,7 @@ export function TopNav() {
         <a href="#about">Studio</a>
         <Link href="/devlog">Devlog</Link>
         <a href="#careers">Careers</a>
-        <a href="#press">Press</a>
+        <Link href="/press">Press</Link>
       </MobileDrawer>
     </>
   );
@@ -540,8 +547,7 @@ export function ProjectsIndexNav() {
           <Link href="/projects" className="active">Projects</Link>
           <Link href="/#about">Studio</Link>
           <Link href="/devlog">Devlog</Link>
-          <Link href="/#careers">Careers</Link>
-          <Link href="/#press">Press</Link>
+          <Link href="/press">Press</Link>
         </nav>
         <div className="meta">
           <span className="live-dot" />
@@ -556,8 +562,7 @@ export function ProjectsIndexNav() {
         <Link href="/projects">Projects</Link>
         <Link href="/#about">Studio</Link>
         <Link href="/devlog">Devlog</Link>
-        <Link href="/#careers">Careers</Link>
-        <Link href="/#press">Press</Link>
+        <Link href="/press">Press</Link>
       </MobileDrawer>
     </>
   );

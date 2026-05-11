@@ -2,12 +2,14 @@
 
 export const metadata: Metadata = {
   title: "Devlog",
-  description: "Behind-the-scenes updates on Ghostline Studios games.",
+  description: "Build notes, design thinking, and occasional screenshots from Ghostline Studios. No hype cycles.",
+  alternates: { canonical: "https://www.ghostlinestudios.com/devlog" },
   openGraph: {
-    title: "Ghostline Devlog",
+    title: "Devlog | Ghostline Studios",
     description: "Behind-the-scenes updates from Ghostline Studios.",
     images: [{ url: "/assets/ghostline-og.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function DevlogLayout({ children }: { children: React.ReactNode }) {
