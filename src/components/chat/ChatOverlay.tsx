@@ -5,24 +5,12 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { useChat, type ChatFriend } from "@/context/ChatContext";
+import type { MessageRow, ConversationRow } from "@/lib/supabase/database.types";
 
 // ── Types ──────────────────────────────────────────────────────────
 type FriendProfile = ChatFriend;
-
-type ConvRow = {
-  id: string;
-  participant_1: string;
-  participant_2: string;
-  last_message_at: string;
-};
-
-type Message = {
-  id: string;
-  conversation_id: string;
-  sender_id: string;
-  content: string;
-  created_at: string;
-};
+type ConvRow = ConversationRow;
+type Message = MessageRow;
 
 // ── Small avatar ───────────────────────────────────────────────────
 function Avatar({ name, size = 32 }: { name: string; size?: number }) {
@@ -109,20 +97,25 @@ function ChatWindow({
     }
   }, [win.minimised, win.convId, userId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const [sendError, setSendError] = useState("");
+
   const send = async () => {
     const text = draft.trim();
     if (!text || sending) return;
     setDraft("");
+    setSendError("");
     setSending(true);
-    await supabase.from("messages").insert({
+    const { error } = await supabase.from("messages").insert({
       conversation_id: win.convId,
       sender_id: userId,
       content: text,
     });
-    // Also bump conversation last_message_at
-    await supabase.from("conversations")
-      .update({ last_message_at: new Date().toISOString() })
-      .eq("id", win.convId);
+    if (error) { setSendError("Failed to send."); setDraft(text); }
+    else {
+      await supabase.from("conversations")
+        .update({ last_message_at: new Date().toISOString() })
+        .eq("id", win.convId);
+    }
     setSending(false);
     inputRef.current?.focus();
   };
@@ -202,6 +195,7 @@ function ChatWindow({
             ))}
             <div ref={bottomRef} />
           </div>
+          {sendError && <p className="chat-send-error">{sendError}</p>}
           <div className="chat-compose">
             <input
               ref={inputRef}

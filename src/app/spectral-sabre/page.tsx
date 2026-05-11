@@ -5,7 +5,14 @@ import { SiteChrome } from "@/components/SiteChrome";
 import { SPECTRAL_SABRE } from "@/data/games";
 
 export const metadata = {
-  title: "Spectral Sabre — Ghostline Studios",
+  title: "Spectral Sabre",
+  description: "Spectral Sabre — a tactical action-RPG from Ghostline Studios. Master blade and spirit in a world balanced between light and shadow.",
+  openGraph: {
+    title: "Spectral Sabre — Ghostline Studios",
+    description: "A tactical action-RPG. Master blade and spirit.",
+    images: [{ url: "/assets/ghostline-og.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function SpectralSabrePage() {

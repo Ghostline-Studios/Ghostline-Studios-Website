@@ -5,7 +5,14 @@ import { SiteChrome } from "@/components/SiteChrome";
 import { SCRAPLINGS } from "@/data/games";
 
 export const metadata = {
-  title: "Scraplings — Ghostline Studios",
+  title: "Scraplings",
+  description: "Scraplings — a creature-collector mobile game from Ghostline Studios. Explore a vast world, discover hidden creatures, and build your ultimate team.",
+  openGraph: {
+    title: "Scraplings — Ghostline Studios",
+    description: "A creature-collector mobile game. Explore, discover, build.",
+    images: [{ url: "/assets/ghostline-og.png" }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function ScraplingsPage() {

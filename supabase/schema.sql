@@ -83,6 +83,10 @@ create policy "Users can remove from own wishlist"
 create policy "Admins can read all wishlists"
   on public.wishlists for select using (public.is_admin());
 
+-- Wishlists are publicly visible (for /u/[username] profile pages)
+create policy "Wishlists are publicly readable"
+  on public.wishlists for select using (true);
+
 -- Newsletter: owner only
 create policy "Users can read own newsletter prefs"
   on public.newsletter_preferences for select using (auth.uid() = user_id);
@@ -220,6 +224,14 @@ create policy "Participants can send messages"
   with check (auth.uid() = sender_id and exists (
     select 1 from public.conversations where id = conversation_id
     and (participant_1 = auth.uid() or participant_2 = auth.uid())));
+create policy "Participants can mark messages read"
+  on public.messages for update
+  using (
+    auth.uid() != sender_id
+    and exists (select 1 from public.conversations where id = conversation_id
+      and (participant_1 = auth.uid() or participant_2 = auth.uid()))
+  )
+  with check (true);
 
 -- ── Reports ──────────────────────────────────────────────────────────
 create table if not exists public.reports (

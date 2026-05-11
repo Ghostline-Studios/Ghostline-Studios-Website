@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
 import { useAuth } from "@/context/AuthContext";
+import type { DevlogRow } from "@/lib/supabase/database.types";
 
 export function AboutSection() {
   return (
@@ -54,7 +55,6 @@ export function AboutSection() {
   );
 }
 
-type DevlogRow = { id: string; title: string; slug: string; game_id: string | null; published_at: string | null; created_at: string; };
 
 const GAME_TAG: Record<string, { label: string; cls: string }> = {
   "scraplings":    { label: "SCRAPLINGS", cls: "scrap" },

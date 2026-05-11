@@ -42,6 +42,15 @@ function AccountContent() {
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState("");
 
+  // Password change state
+  const [pwOpen, setPwOpen] = useState(false);
+  const [pwCurrent, setPwCurrent] = useState("");
+  const [pwNew, setPwNew] = useState("");
+  const [pwConfirm, setPwConfirm] = useState("");
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwError, setPwError] = useState("");
+  const [pwSaved, setPwSaved] = useState(false);
+
   useEffect(() => {
     if (!loading && !user) {
       openAuth("signin");
@@ -131,6 +140,26 @@ function AccountContent() {
     setSaved(true);
     await refreshProfile();
     setTimeout(() => setSaved(false), 2500);
+  };
+
+  const changePassword = async () => {
+    if (!user) return;
+    if (pwNew.length < 8) { setPwError("Password must be at least 8 characters."); return; }
+    if (pwNew !== pwConfirm) { setPwError("Passwords don't match."); return; }
+    setPwSaving(true);
+    setPwError("");
+    // Re-authenticate with current password first
+    const { error: signInErr } = await supabase.auth.signInWithPassword({
+      email: user.email!,
+      password: pwCurrent,
+    });
+    if (signInErr) { setPwError("Current password is incorrect."); setPwSaving(false); return; }
+    const { error } = await supabase.auth.updateUser({ password: pwNew });
+    if (error) { setPwError(error.message); setPwSaving(false); return; }
+    setPwSaving(false);
+    setPwSaved(true);
+    setPwCurrent(""); setPwNew(""); setPwConfirm("");
+    setTimeout(() => { setPwSaved(false); setPwOpen(false); }, 2500);
   };
 
   const saveNewsletter = async (prefs: NewsletterPrefs) => {
@@ -252,6 +281,45 @@ function AccountContent() {
             )}
           </div>
         )}
+
+        {/* ── Change password ──────────────────────────────────── */}
+        <div className="pw-change-section">
+          <button
+            className="pw-change-toggle"
+            onClick={() => { setPwOpen(v => !v); setPwError(""); }}
+          >
+            {pwOpen ? "Cancel" : "Change password"}
+          </button>
+          {pwOpen && (
+            <div className="pw-change-panel glass">
+              {pwSaved ? (
+                <p className="pw-saved">Password updated successfully.</p>
+              ) : (
+                <>
+                  <div className="auth-field">
+                    <label className="auth-label">Current password</label>
+                    <input type="password" className="auth-input" value={pwCurrent}
+                      onChange={e => setPwCurrent(e.target.value)} autoComplete="current-password" />
+                  </div>
+                  <div className="auth-field">
+                    <label className="auth-label">New password</label>
+                    <input type="password" className="auth-input" value={pwNew}
+                      onChange={e => setPwNew(e.target.value)} autoComplete="new-password" />
+                  </div>
+                  <div className="auth-field">
+                    <label className="auth-label">Confirm new password</label>
+                    <input type="password" className="auth-input" value={pwConfirm}
+                      onChange={e => setPwConfirm(e.target.value)} autoComplete="new-password" />
+                  </div>
+                  {pwError && <p className="profile-save-error">{pwError}</p>}
+                  <button className="profile-save-btn" onClick={changePassword} disabled={pwSaving || !pwCurrent || !pwNew || !pwConfirm}>
+                    {pwSaving ? "Saving…" : "Update password"}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* ── Lower sections ───────────────────────────────────── */}
         <div className="account-lower">

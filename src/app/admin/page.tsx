@@ -3,41 +3,16 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import type { ProfileRow, DevlogRow as DevlogRowType, ReportRow as ReportRowType, WishlistRow as WishlistRowType } from "@/lib/supabase/database.types";
 import { SiteChrome } from "@/components/SiteChrome";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 
-type Profile = {
-  id: string;
-  username: string;
-  display_name: string;
-  is_admin: boolean;
-  created_at: string;
-};
-
-type WishlistRow = { game_id: string };
-
-type Report = {
-  id: string;
-  reporter_id: string | null;
-  reported_id: string | null;
-  conversation_id: string | null;
-  context: string | null;
-  status: "pending" | "reviewed" | "dismissed";
-  created_at: string;
+type Profile = ProfileRow;
+type Devlog = DevlogRowType;
+type WishlistRow = Pick<WishlistRowType, "game_id">;
+type Report = ReportRowType & {
   reporter_profile?: { username: string | null; display_name: string | null };
   reported_profile?: { username: string | null; display_name: string | null };
-};
-
-type Devlog = {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content: string | null;
-  game_id: string | null;
-  is_published: boolean;
-  published_at: string | null;
-  created_at: string;
 };
 
 const GAMES = [

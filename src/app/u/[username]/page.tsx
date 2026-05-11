@@ -2,8 +2,33 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SiteChrome } from "@/components/SiteChrome";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ username: string }> }
+): Promise<Metadata> {
+  const { username } = await params;
+  const supabase = await createClient();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name, bio")
+    .eq("username", username)
+    .single();
+
+  if (!profile) return { title: "Profile not found" };
+  const name = profile.display_name || username;
+  return {
+    title: `${name} (@${username})`,
+    description: profile.bio ?? `View ${name}'s Ghostline ID profile.`,
+    openGraph: {
+      title: `${name} on Ghostline Studios`,
+      description: profile.bio ?? `@${username}'s profile on Ghostline ID.`,
+      images: [{ url: "/assets/ghostline-og.png" }],
+    },
+  };
+}
 
 const GAME_LABELS: Record<string, string> = {
   "scraplings": "Scraplings",

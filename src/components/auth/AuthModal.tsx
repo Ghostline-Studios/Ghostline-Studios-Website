@@ -141,10 +141,11 @@ export function AuthModal() {
               className="auth-forgot"
               onClick={async () => {
                 if (!email) { setMsg({ ok: false, text: "Enter your email above first." }); return; }
-                await supabase.auth.resetPasswordForEmail(email, {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
                   redirectTo: `${window.location.origin}/auth/callback?next=/account`,
                 });
-                setMsg({ ok: true, text: "Password reset email sent." });
+                if (error) setMsg({ ok: false, text: error.message });
+                else setMsg({ ok: true, text: "Password reset email sent — check your inbox." });
               }}
             >
               Forgot password?

@@ -25,6 +25,7 @@
   --shadow-glow-pu: 0 0 40px rgba(179, 136, 255, 0.25), 0 0 80px rgba(179, 136, 255, 0.1);
   --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ember: #ff6b6b;
 }
 
 /* ===== Reset ===== */
@@ -1366,6 +1367,18 @@ section { position: relative; }
   transition: background 0.3s;
 }
 .devlog-item:hover { background: linear-gradient(90deg, rgba(179, 136, 255, 0.04), transparent 60%); }
+.devlog-item-skeleton {
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.03) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  height: 72px;
+  border-radius: 4px;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
 .devlog-item .date {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -2166,6 +2179,20 @@ footer {
 }
 
 /* Lower sections */
+.pw-change-section { margin-bottom: 24px; }
+.pw-change-toggle {
+  font-size: 13px; color: var(--wraith); background: none; border: none;
+  padding: 0; text-decoration: underline; text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+.pw-change-toggle:hover { color: white; }
+.pw-change-panel {
+  margin-top: 14px; padding: 24px; border-radius: 14px;
+  display: flex; flex-direction: column; gap: 16px;
+  max-width: 400px;
+}
+.pw-saved { font-size: 14px; color: var(--spectral); margin: 0; }
+
 .account-lower {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2363,6 +2390,22 @@ footer {
   letter-spacing: -0.02em; line-height: 1.05; margin: 0 0 16px;
 }
 .devlog-index-sub { font-size: 16px; color: var(--wraith); line-height: 1.6; margin: 0; }
+.devlog-filter-bar {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 32px 0 40px;
+}
+.devlog-filter-btn {
+  padding: 8px 18px; border-radius: 20px; font-size: 13px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--wraith); transition: all 0.15s;
+}
+.devlog-filter-btn:hover { background: rgba(255,255,255,0.09); color: white; border-color: rgba(255,255,255,0.2); }
+.devlog-filter-btn.active {
+  background: rgba(77,208,225,0.12); border-color: rgba(77,208,225,0.4);
+  color: var(--spectral);
+}
+.devlog-card-skeleton { min-height: 200px; pointer-events: none; animation: shimmer 1.6s infinite; }
+.devlog-card-tag.studio { background: rgba(179,136,255,0.12); color: var(--phantom-glow); border-color: rgba(179,136,255,0.25); }
 
 .devlog-grid {
   display: grid;
@@ -2424,8 +2467,26 @@ footer {
 .devlog-h2 { font-size: 26px; font-weight: 300; margin: 12px 0 0; }
 .devlog-h3 { font-size: 20px; font-weight: 300; margin: 8px 0 0; color: var(--spectral); }
 .devlog-h4 { font-size: 16px; font-weight: 400; margin: 4px 0 0; color: var(--wraith); }
-.devlog-list { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; margin: 0; }
-.devlog-list li { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7; }
+.devlog-prose-list { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; margin: 0; }
+.devlog-prose-list li { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7; }
+.devlog-prose-link { color: var(--spectral); text-decoration: underline; text-underline-offset: 3px; }
+.devlog-prose-link:hover { color: var(--spectral-glow); }
+.devlog-blockquote {
+  border-left: 3px solid rgba(77,208,225,0.4); margin: 0;
+  padding: 10px 20px; background: rgba(77,208,225,0.05); border-radius: 0 8px 8px 0;
+}
+.devlog-blockquote p { color: rgba(255,255,255,0.65) !important; font-style: italic; }
+.devlog-code-block {
+  background: rgba(0,0,0,0.4); border: 1px solid var(--rim); border-radius: 8px;
+  padding: 16px 20px; overflow-x: auto; margin: 0;
+}
+.devlog-code-block code { font-family: var(--font-mono); font-size: 13px; color: var(--spectral-glow); }
+.devlog-code-inline {
+  font-family: var(--font-mono); font-size: 13px;
+  background: rgba(77,208,225,0.1); color: var(--spectral-glow);
+  padding: 2px 6px; border-radius: 4px;
+}
+.devlog-hr { border: none; border-top: 1px solid var(--rim); margin: 8px 0; }
 .devlog-post-footer { padding-top: 32px; border-top: 1px solid var(--rim); }
 
 /* ── Social / Friends page ──────────────────────────────────── */
@@ -2633,6 +2694,9 @@ footer {
   font-family: var(--font-mono); padding: 0 4px;
 }
 
+.chat-send-error {
+  font-size: 11px; color: var(--ember); padding: 4px 12px 0; margin: 0;
+}
 .chat-compose {
   display: flex; align-items: center; gap: 8px;
   padding: 10px 12px; border-top: 1px solid var(--rim);
