@@ -3,6 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
+import { useAuth } from "@/context/AuthContext";
 
 export function AboutSection() {
   return (
@@ -350,6 +351,57 @@ export function SiteFooter() {
 }
 
 /* ─── Mobile drawer ─────────────────────────────────────────────── */
+/* ─── Ghostline ID section inside mobile drawer ──────────────── */
+function MobileGhostlineID({ onClose }: { onClose: () => void }) {
+  const { user, profile, loading, openAuth, signOut } = useAuth();
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <div className="drawer-gid-section">
+        <button
+          className="drawer-gid-signin"
+          onClick={() => { openAuth("signin"); onClose(); }}
+        >
+          <span className="gid-mark" />
+          <span>Sign in with Ghostline ID</span>
+        </button>
+      </div>
+    );
+  }
+
+  const displayLabel = profile?.display_name || user.email || "G";
+  const initials = displayLabel.slice(0, 2).toUpperCase();
+
+  return (
+    <div className="drawer-gid-section">
+      <div className="drawer-gid-user">
+        <div className="drawer-gid-avatar">{initials}</div>
+        <div className="drawer-gid-info">
+          <span className="drawer-gid-name">{profile?.display_name || user.email}</span>
+          {profile?.username && (
+            <span className="drawer-gid-username">@{profile.username}</span>
+          )}
+        </div>
+      </div>
+      <div className="drawer-gid-links">
+        <Link href="/account" className="drawer-gid-link" onClick={onClose}>Profile</Link>
+        <Link href="/social" className="drawer-gid-link" onClick={onClose}>Friends</Link>
+        {profile?.is_admin && (
+          <Link href="/admin" className="drawer-gid-link" onClick={onClose}>Admin</Link>
+        )}
+        <button
+          className="drawer-gid-link drawer-gid-signout"
+          onClick={() => { signOut(); onClose(); }}
+        >
+          Sign out
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function MobileDrawer({
   open,
   onClose,
@@ -390,6 +442,7 @@ function MobileDrawer({
         <nav className="mobile-drawer-nav" onClick={onClose}>
           {children}
         </nav>
+        <MobileGhostlineID onClose={onClose} />
         <div className="mobile-drawer-footer">
           <span className="live-dot" />
           <span>Live · 2026.05.08</span>

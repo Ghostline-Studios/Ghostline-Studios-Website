@@ -1708,6 +1708,54 @@ footer {
   color: var(--wraith-faint);
 }
 
+/* ── Drawer Ghostline ID section ──────────────────────────────── */
+.drawer-gid-section {
+  padding: 16px 24px 4px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.drawer-gid-signin {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 12px 16px; border-radius: 10px;
+  background: rgba(77,208,225,0.07); border: 1px solid rgba(77,208,225,0.2);
+  color: var(--spectral); font-size: 13px; font-weight: 500;
+  transition: background 0.15s, border-color 0.15s;
+}
+.drawer-gid-signin:hover { background: rgba(77,208,225,0.12); border-color: rgba(77,208,225,0.35); }
+.drawer-gid-signin .gid-mark {
+  width: 20px; height: 20px; flex-shrink: 0;
+  background: var(--spectral); border-radius: 4px; opacity: 0.85;
+}
+.drawer-gid-user {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+}
+.drawer-gid-avatar {
+  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(77,208,225,0.25), rgba(100,80,200,0.2));
+  border: 1px solid rgba(77,208,225,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white;
+}
+.drawer-gid-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.drawer-gid-name {
+  font-size: 14px; font-weight: 500; color: white;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.drawer-gid-username { font-size: 11px; color: var(--spectral); font-family: var(--font-mono); }
+.drawer-gid-links {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.drawer-gid-link {
+  display: flex; align-items: center; justify-content: center;
+  padding: 9px 12px; border-radius: 8px; font-size: 13px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.7); text-decoration: none; text-align: center;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  width: 100%;
+}
+.drawer-gid-link:hover { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.15); }
+.drawer-gid-signout { color: rgba(255,100,100,0.7); }
+.drawer-gid-signout:hover { background: rgba(255,80,80,0.08); color: #ff8080; border-color: rgba(255,80,80,0.2); }
+
 /* ── Hide custom cursor on touch/pointer:coarse devices ── */
 @media (hover: none), (pointer: coarse) {
   body { cursor: auto; }
