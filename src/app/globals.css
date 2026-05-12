@@ -2976,7 +2976,7 @@ footer {
 @media (max-width: 768px) {
   .auth-panel { padding: 40px 24px 32px; }
   .gid-btn { display: none; }
-  .gid-signed-in { display: flex; }
+  .gid-signed-in { display: none; }
   .account-page { padding: 90px 0 60px; }
   .profile-hero { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
   .profile-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; }
