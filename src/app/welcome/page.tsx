@@ -17,6 +17,11 @@ function WelcomeContent() {
   const [usernameError, setUsernameError] = useState("");
   const [usernameOk, setUsernameOk] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [returnTo, setReturnTo] = useState("");
+
+  useEffect(() => {
+    setReturnTo(sessionStorage.getItem("gid_return_to") ?? "");
+  }, []);
 
   // Redirect if not authed
   useEffect(() => {
@@ -131,7 +136,14 @@ function WelcomeContent() {
       body: JSON.stringify({ displayName: displayName || username, username }),
     }).catch(() => {});
 
-    router.push("/account");
+    const destination = sessionStorage.getItem("gid_return_to") ?? returnTo;
+    sessionStorage.removeItem("gid_return_to");
+
+    if (destination === "scicrime") {
+      window.location.href = "https://scicrime.com";
+    } else {
+      router.push("/account");
+    }
   };
 
   if (loading || !user) return null;
@@ -157,6 +169,23 @@ function WelcomeContent() {
         <p className="welcome-sub">
           One last step — choose how you&apos;ll appear across every Ghostline world.
         </p>
+        {returnTo === "scicrime" && (
+          <p
+            style={{
+              fontSize: 13,
+              color: "var(--spectral)",
+              textAlign: "center",
+              marginBottom: 24,
+              marginTop: -12,
+              padding: "10px 14px",
+              background: "rgba(77,208,225,0.07)",
+              border: "1px solid rgba(77,208,225,0.22)",
+              borderRadius: 8,
+            }}
+          >
+            Once you&apos;re set up, you&apos;ll be taken back to SciCrime.
+          </p>
+        )}
 
         <form className="auth-form welcome-form" onSubmit={handleSubmit}>
           <label className="auth-label">

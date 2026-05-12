@@ -11,6 +11,7 @@ export function AuthModal() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [resetSent, setResetSent] = useState(false);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -24,6 +25,7 @@ export function AuthModal() {
       setEmail("");
       setPassword("");
       setMsg(null);
+      setResetSent(false);
     }
   }, [authOpen]);
 
@@ -158,7 +160,7 @@ export function AuthModal() {
             role="tab"
             aria-selected={tab === "signin"}
             className={"auth-tab" + (tab === "signin" ? " active" : "")}
-            onClick={() => { setTab("signin"); setMsg(null); }}
+            onClick={() => { setTab("signin"); setMsg(null); setResetSent(false); }}
           >
             Sign in
           </button>
@@ -166,13 +168,37 @@ export function AuthModal() {
             role="tab"
             aria-selected={tab === "signup"}
             className={"auth-tab" + (tab === "signup" ? " active" : "")}
-            onClick={() => { setTab("signup"); setMsg(null); }}
+            onClick={() => { setTab("signup"); setMsg(null); setResetSent(false); }}
           >
             Create account
           </button>
         </div>
 
         {tab === "signin" ? (
+          resetSent ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div
+                className="auth-msg ok"
+                role="status"
+                aria-live="polite"
+                style={{ display: "flex", alignItems: "flex-start", gap: 10 }}
+              >
+                <span style={{ fontSize: 16, lineHeight: 1, marginTop: 1 }}>✓</span>
+                <span>
+                  <strong style={{ display: "block", marginBottom: 4 }}>Email sent</strong>
+                  Check your inbox for password reset instructions.
+                </span>
+              </div>
+              <button
+                type="button"
+                className="auth-forgot"
+                style={{ textAlign: "left" }}
+                onClick={() => { setResetSent(false); setMsg(null); }}
+              >
+                ← Back to sign in
+              </button>
+            </div>
+          ) : (
           <form className="auth-form" onSubmit={handleSignIn} aria-label="Sign in">
             <label className="auth-label" htmlFor="auth-email-signin">
               Email
@@ -218,16 +244,20 @@ export function AuthModal() {
               className="auth-forgot"
               onClick={async () => {
                 if (!email) { setMsg({ ok: false, text: "Enter your email above first." }); return; }
+                setBusy(true);
+                setMsg(null);
                 const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                  redirectTo: `${window.location.origin}/auth/callback?next=/account`,
+                  redirectTo: `${window.location.origin}/reset-password`,
                 });
+                setBusy(false);
                 if (error) setMsg({ ok: false, text: error.message });
-                else setMsg({ ok: true, text: "Password reset email sent — check your inbox." });
+                else setResetSent(true);
               }}
             >
               Forgot password?
             </button>
           </form>
+          )
         ) : (
           <form className="auth-form" onSubmit={handleSignUp} aria-label="Create account">
             <label className="auth-label" htmlFor="auth-email-signup">
