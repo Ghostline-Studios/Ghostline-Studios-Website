@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
 import { useAuth } from "@/context/AuthContext";
@@ -330,10 +331,10 @@ export function SiteFooter() {
           <div className="col">
             <h5>Studio</h5>
             <ul>
-              <li><Link href="/#about">Manifesto</Link></li>
+              <li><Link href="/studio">Manifesto</Link></li>
               <li><Link href="/devlog">Devlog</Link></li>
               <li><Link href="/press">Press</Link></li>
-              <li><Link href="/#careers">Careers</Link></li>
+              <li><Link href="/careers">Careers</Link></li>
               <li><Link href="/account">Ghostline ID</Link></li>
             </ul>
           </div>
@@ -468,71 +469,18 @@ function Hamburger({ onClick }: { onClick: () => void }) {
   );
 }
 
-/* ─── TopNav (home page) ─────────────────────────────────────────── */
-export function TopNav() {
-  const [active, setActive] = useState("home");
-  const [drawerOpen, setDrawerOpen] = useState(false);
+/* ─── Shared site navigation (all pages) ────────────────────────── */
+const NAV_LINKS = [
+  { href: "/",         label: "Home",     match: (p: string) => p === "/" },
+  { href: "/projects", label: "Projects", match: (p: string) => p.startsWith("/projects") || p.startsWith("/scraplings") || p.startsWith("/spectral-sabre") },
+  { href: "/studio",   label: "Studio",   match: (p: string) => p.startsWith("/studio") },
+  { href: "/devlog",   label: "Devlog",   match: (p: string) => p.startsWith("/devlog") },
+  { href: "/careers",  label: "Careers",  match: (p: string) => p.startsWith("/careers") },
+  { href: "/press",    label: "Press",    match: (p: string) => p.startsWith("/press") },
+] as const;
 
-  useEffect(() => {
-    const ids = ["home", "games", "about", "news", "careers", "press"];
-    const onScroll = () => {
-      const y = window.scrollY + 200;
-      let cur = "home";
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= y) cur = id;
-      }
-      setActive(cur);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const link = (id: string, label: string) => (
-    <a key={id} href={`#${id}`} className={active === id ? "active" : ""}>
-      {label}
-    </a>
-  );
-
-  return (
-    <>
-      <header className="topnav">
-        <Link href="/" className="brand">
-          <div className="brand-mark" />
-          <span>Ghostline / Studios</span>
-        </Link>
-        {/* desktop nav */}
-        <nav className="topnav-desktop-nav">
-          <a href="#home" className={active === "home" ? "active" : ""}>Home</a>
-          <Link href="/projects">Projects</Link>
-          {link("about", "Studio")}
-          <Link href="/devlog">Devlog</Link>
-          {link("careers", "Careers")}
-          <Link href="/press">Press</Link>
-        </nav>
-        <div className="meta">
-          <span className="live-dot" />
-          <span>Live · 2026.05.08</span>
-        </div>
-        <GhostlineIDButton />
-        <Hamburger onClick={() => setDrawerOpen(true)} />
-      </header>
-
-      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <a href="#home">Home</a>
-        <Link href="/projects">Projects</Link>
-        <a href="#about">Studio</a>
-        <Link href="/devlog">Devlog</Link>
-        <a href="#careers">Careers</a>
-        <Link href="/press">Press</Link>
-      </MobileDrawer>
-    </>
-  );
-}
-
-/* ─── ProjectsIndexNav (project pages) ──────────────────────────── */
-export function ProjectsIndexNav() {
+export function SiteNav() {
+  const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -542,28 +490,42 @@ export function ProjectsIndexNav() {
           <div className="brand-mark" />
           <span>Ghostline / Studios</span>
         </Link>
-        <nav className="topnav-desktop-nav">
-          <Link href="/">Home</Link>
-          <Link href="/projects" className="active">Projects</Link>
-          <Link href="/#about">Studio</Link>
-          <Link href="/devlog">Devlog</Link>
-          <Link href="/press">Press</Link>
+        <nav className="topnav-desktop-nav" aria-label="Main navigation">
+          {NAV_LINKS.map(({ href, label, match }) => (
+            <Link
+              key={href}
+              href={href}
+              className={match(pathname) ? "active" : ""}
+              aria-current={match(pathname) ? "page" : undefined}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
-        <div className="meta">
+        <div className="meta" aria-hidden>
           <span className="live-dot" />
-          <span>Live · 2026.05.08</span>
+          <span>Live</span>
         </div>
         <GhostlineIDButton />
         <Hamburger onClick={() => setDrawerOpen(true)} />
       </header>
 
       <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <Link href="/">Home</Link>
-        <Link href="/projects">Projects</Link>
-        <Link href="/#about">Studio</Link>
-        <Link href="/devlog">Devlog</Link>
-        <Link href="/press">Press</Link>
+        {NAV_LINKS.map(({ href, label, match }) => (
+          <Link
+            key={href}
+            href={href}
+            className={match(pathname) ? "active" : ""}
+            aria-current={match(pathname) ? "page" : undefined}
+          >
+            {label}
+          </Link>
+        ))}
       </MobileDrawer>
     </>
   );
 }
+
+/* Keep old names as aliases so existing imports continue to work */
+export const TopNav = SiteNav;
+export const ProjectsIndexNav = SiteNav;

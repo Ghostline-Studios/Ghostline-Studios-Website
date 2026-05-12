@@ -2,14 +2,7 @@ import type { Metadata } from "next";
 import { Hero, ProjectsTeaser } from "@/components/Games";
 import { JsonLd } from "@/components/JsonLd";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
-import {
-  AboutSection,
-  CareersSection,
-  NewsSection,
-  PressContactSection,
-  SiteFooter,
-  TopNav,
-} from "@/components/sections";
+import { NewsSection, SiteFooter, SiteNav } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
@@ -45,15 +38,8 @@ export default function HomePage() {
               "@id": `${SITE_URL}/#organization`,
               name: "Ghostline Studios",
               url: SITE_URL,
-              logo: {
-                "@type": "ImageObject",
-                url: `${SITE_URL}/assets/ghostline-og.png`,
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                email: "studio@ghostlinestudios.com",
-                contactType: "Customer Support",
-              },
+              logo: { "@type": "ImageObject", url: `${SITE_URL}/assets/ghostline-og.png` },
+              contactPoint: { "@type": "ContactPoint", email: "studio@ghostlinestudios.com", contactType: "Customer Support" },
               sameAs: [],
             },
             {
@@ -67,13 +53,10 @@ export default function HomePage() {
         }}
       />
       <RevealOnScroll />
-      <TopNav />
+      <SiteNav />
       <Hero />
       <ProjectsTeaser />
-      <AboutSection />
       <NewsSection />
-      <CareersSection />
-      <PressContactSection />
       <SiteFooter />
     </SiteChrome>
   );
