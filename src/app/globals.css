@@ -1769,6 +1769,34 @@ footer {
 .drawer-gid-link:hover { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.15); }
 .drawer-gid-signout { color: rgba(255,100,100,0.7); }
 .drawer-gid-signout:hover { background: rgba(255,80,80,0.08); color: #ff8080; border-color: rgba(255,80,80,0.2); }
+/* Friend-request badges inside the mobile drawer */
+.drawer-gid-avatar { position: relative; }
+.drawer-gid-avatar-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: #ff4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+.drawer-gid-friends-badge {
+  background: #ff4444;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1;
+  margin-left: auto;
+}
 
 /* ── Hide custom cursor on touch/pointer:coarse devices ── */
 @media (hover: none), (pointer: coarse) {

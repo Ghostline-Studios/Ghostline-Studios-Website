@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
 import { useAuth } from "@/context/AuthContext";
+import { createClient } from "@/lib/supabase/client";
 import type { DevlogRow } from "@/lib/supabase/database.types";
 
 export function AboutSection() {
@@ -362,6 +363,25 @@ export function SiteFooter() {
 /* ─── Ghostline ID section inside mobile drawer ──────────────── */
 function MobileGhostlineID({ onClose }: { onClose: () => void }) {
   const { user, profile, loading, openAuth, signOut } = useAuth();
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    if (!user) return;
+    const supabase = createClient();
+    const fetchCount = () =>
+      supabase
+        .from("friendships")
+        .select("id", { count: "exact", head: true })
+        .eq("addressee_id", user.id)
+        .eq("status", "pending")
+        .then(({ count }) => setPendingCount(count ?? 0));
+    fetchCount();
+    const channel = supabase
+      .channel("mobile-friend-requests")
+      .on("postgres_changes", { event: "*", schema: "public", table: "friendships" }, fetchCount)
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return null;
 
@@ -385,7 +405,10 @@ function MobileGhostlineID({ onClose }: { onClose: () => void }) {
   return (
     <div className="drawer-gid-section">
       <div className="drawer-gid-user">
-        <div className="drawer-gid-avatar">{initials}</div>
+        <div className="drawer-gid-avatar">
+          {initials}
+          {pendingCount > 0 && <span className="drawer-gid-avatar-badge">{pendingCount}</span>}
+        </div>
         <div className="drawer-gid-info">
           <span className="drawer-gid-name">{profile?.display_name || user.email}</span>
           {profile?.username && (
@@ -395,7 +418,12 @@ function MobileGhostlineID({ onClose }: { onClose: () => void }) {
       </div>
       <div className="drawer-gid-links">
         <Link href="/account" className="drawer-gid-link" onClick={onClose}>Profile</Link>
-        <Link href="/social" className="drawer-gid-link" onClick={onClose}>Friends</Link>
+        <Link href="/social" className="drawer-gid-link" onClick={onClose}>
+          Friends
+          {pendingCount > 0 && (
+            <span className="drawer-gid-friends-badge">{pendingCount}</span>
+          )}
+        </Link>
         {profile?.is_admin && (
           <Link href="/admin" className="drawer-gid-link" onClick={onClose}>Admin</Link>
         )}
