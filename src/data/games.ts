@@ -1,3 +1,36 @@
+export type SciCrimeGame = {
+  id: string;
+  title: string;
+  tagline: string;
+  blurb: string;
+  status: string;
+  genre: string;
+  platform: string;
+  release: string;
+  features: string[];
+  externalUrl: string;
+};
+
+export const SCICRIME: SciCrimeGame = {
+  id: "scicrime",
+  title: "SciCrime",
+  tagline: "The future is crime.",
+  blurb:
+    "SciCrime is a persistent browser-based game set in a dark, futuristic universe where technology and crime collide. Build your reputation, forge alliances, and outwit rivals as you climb the criminal underworld of tomorrow — from orchestrating heists and smuggling advanced tech to infiltrating networks and eliminating threats.",
+  status: "Live",
+  genre: "Persistent Browser Game",
+  platform: "Browser · PC · Mobile",
+  release: "Live",
+  features: [
+    "Five distinct districts across Station 4 — each with its own economy and crime",
+    "Corporate espionage, data heists, smuggling runs, stakeouts, and more",
+    "Skill trees, combat, gym, hospital, and property ownership",
+    "Live multiplayer with chat, rivals, and a real-time economy",
+    "Sign in with your Ghostline ID — one account across the ecosystem",
+  ],
+  externalUrl: "https://scicrime.com",
+};
+
 export type ScraplingsGame = {
   id: string;
   title: string;

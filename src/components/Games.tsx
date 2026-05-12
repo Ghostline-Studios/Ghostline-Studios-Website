@@ -1,12 +1,12 @@
 "use client";
 
 import type { ScraplingsGame, SpectralSabreGame } from "@/data/games";
-import { SCRAPLINGS, SPECTRAL_SABRE } from "@/data/games";
+import { SCRAPLINGS, SPECTRAL_SABRE, SCICRIME } from "@/data/games";
 import Link from "next/link";
 import { useState, type MouseEvent } from "react";
 
-export type { ScraplingsGame, SpectralSabreGame } from "@/data/games";
-export { SCRAPLINGS, SPECTRAL_SABRE } from "@/data/games";
+export type { ScraplingsGame, SpectralSabreGame, SciCrimeGame } from "@/data/games";
+export { SCRAPLINGS, SPECTRAL_SABRE, SCICRIME } from "@/data/games";
 
 export function Hero() {
   return (
@@ -27,7 +27,7 @@ export function Hero() {
 
         <div className="hero-hud" aria-hidden>
           <div className="pin tl">
-            <div className="num">02</div>
+            <div className="num">03</div>
             <div className="label">Active worlds</div>
           </div>
           <div className="pin tr">
@@ -283,6 +283,50 @@ export function SpectralSabreArt({ big }: { big?: boolean }) {
   );
 }
 
+export function SciCrimeArt({ big }: { big?: boolean }) {
+  return (
+    <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+      <div
+        style={{
+          width: big ? "72%" : "62%",
+          aspectRatio: 1,
+          background: "radial-gradient(circle at 50% 50%, rgba(0,200,255,0.4), rgba(0,100,180,0.15) 50%, transparent 70%)",
+          filter: "blur(22px)",
+        }}
+      />
+      {/* Grid lines — cyberpunk city-grid aesthetic */}
+      <svg viewBox="0 0 200 200" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.55 }}>
+        {[30, 60, 90, 110, 140, 170].map((y, i) => (
+          <line key={`h${i}`} x1="0" y1={y} x2="200" y2={y} stroke="rgba(0,200,255,0.3)" strokeWidth="0.5" strokeDasharray={i % 2 ? "2 6" : "4 4"} />
+        ))}
+        {[30, 70, 100, 130, 170].map((x, i) => (
+          <line key={`v${i}`} x1={x} y1="0" x2={x} y2="200" stroke="rgba(0,200,255,0.25)" strokeWidth="0.5" strokeDasharray={i % 2 ? "3 5" : "2 8"} />
+        ))}
+        <circle cx="100" cy="100" r="28" fill="none" stroke="rgba(0,200,255,0.6)" strokeWidth="1" />
+        <circle cx="100" cy="100" r="14" fill="none" stroke="rgba(0,200,255,0.4)" strokeWidth="0.5" strokeDasharray="2 3" />
+        <circle cx="100" cy="100" r="4" fill="rgba(0,200,255,0.9)" />
+        <line x1="100" y1="72" x2="100" y2="86" stroke="rgba(0,200,255,0.7)" strokeWidth="1" />
+        <line x1="100" y1="114" x2="100" y2="128" stroke="rgba(0,200,255,0.7)" strokeWidth="1" />
+        <line x1="72" y1="100" x2="86" y2="100" stroke="rgba(0,200,255,0.7)" strokeWidth="1" />
+        <line x1="114" y1="100" x2="128" y2="100" stroke="rgba(0,200,255,0.7)" strokeWidth="1" />
+      </svg>
+      {/* Scan line */}
+      <div
+        className="scrap-scan"
+        style={{
+          position: "absolute",
+          bottom: "12%",
+          left: 0,
+          right: 0,
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(0,200,255,0.6), transparent)",
+          opacity: 0.5,
+        }}
+      />
+    </div>
+  );
+}
+
 export function ScraplingsBestiary({ game }: { game: ScraplingsGame }) {
   const clipPaths = [
     "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)",
@@ -445,10 +489,10 @@ export function ProjectsTeaser() {
       <div className="container">
         <div className="section-head">
           <div>
-            <h2>Two worlds in motion.</h2>
+            <h2>Three worlds in motion.</h2>
           </div>
           <div className="meta-block">
-            <strong>In production · 2026</strong>
+            <strong>One live · two in pre-production</strong>
             Mobile-first · Player-respecting
             <br />
             Hand-built · No dark patterns
@@ -477,6 +521,24 @@ export function ProjectsTeaser() {
               <span className="teaser-cta">Open project</span>
             </div>
           </Link>
+          <a
+            href={SCICRIME.externalUrl}
+            className="teaser-card scicrime"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div className="teaser-art">
+              <SciCrimeArt big />
+            </div>
+            <div className="teaser-meta">
+              <div className="teaser-tag">Live · Browser · PC · Mobile</div>
+              <h3 className="teaser-title">SciCrime</h3>
+              <p className="teaser-line">The future is crime. Build your empire in Station 4.</p>
+              <span className="teaser-cta">
+                Play now <span className="arrow">↗</span>
+              </span>
+            </div>
+          </a>
         </div>
         <div className="projects-link">
           <Link className="btn primary" href="/projects">

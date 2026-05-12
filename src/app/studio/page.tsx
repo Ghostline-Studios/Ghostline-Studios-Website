@@ -77,10 +77,10 @@ export default function StudioPage() {
                 <h2>What we are building.</h2>
               </div>
               <div className="meta-block">
-                <strong>Two worlds. One line.</strong>
-                Both games in pre-production.
+                <strong>Three worlds. One line.</strong>
+                One live, two in pre-production.
                 <br />
-                Both mobile-first from day one.
+                All mobile-first from day one.
               </div>
             </div>
             <div className="studio-projects-grid">
@@ -93,6 +93,11 @@ export default function StudioPage() {
                 <div className="studio-project-tag studio-tag-sabre">Spectral Sabre</div>
                 <p>A tactical stealth shooter. Lead the squad. Bend light. Vanish.</p>
                 <span className="studio-project-cta">View project →</span>
+              </a>
+              <a className="studio-project-link" href="https://scicrime.com" target="_blank" rel="noopener noreferrer">
+                <div className="studio-project-tag studio-tag-scicrime">SciCrime</div>
+                <p>A live browser PBBG. Build your empire in the criminal underworld of Station 4.</p>
+                <span className="studio-project-cta">Play now ↗</span>
               </a>
             </div>
           </div>

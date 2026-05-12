@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { ScraplingsArt, SpectralSabreArt } from "@/components/Games";
+import { ScraplingsArt, SpectralSabreArt, SciCrimeArt, SCICRIME } from "@/components/Games";
 import { ProjectsIndexNav, SiteFooter } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata = {
   title: "Projects",
-  description: "Ghostline Studios has two games in pre-production: Scraplings, a cosy mobile collector, and Spectral Sabre, a tactical stealth shooter.",
+  description: "Three games from Ghostline Studios: SciCrime (live browser PBBG), Scraplings and Spectral Sabre (both in pre-production).",
   alternates: { canonical: "https://www.ghostlinestudios.com/projects" },
   openGraph: {
     title: "Projects | Ghostline Studios",
-    description: "Two games in pre-production: Scraplings and Spectral Sabre.",
+    description: "One live game and two in pre-production: SciCrime, Scraplings, and Spectral Sabre.",
     images: [{ url: "/assets/ghostline-og.png" }],
   },
   twitter: { card: "summary_large_image" },
@@ -24,10 +24,10 @@ export default function ProjectsPage() {
           <div className="section-head">
             <div>
               <div className="index">— Index / Active Projects</div>
-              <h2>Two worlds, in motion.</h2>
+              <h2>Three worlds in motion.</h2>
             </div>
             <div className="meta-block">
-              <strong>Currently in pre-production</strong>
+              <strong>One live · two in pre-production</strong>
               Mobile-first · Player-respecting
               <br />
               Hand-built · No dark patterns
@@ -61,6 +61,24 @@ export default function ProjectsPage() {
                 </span>
               </div>
             </Link>
+            <a
+              href={SCICRIME.externalUrl}
+              className="teaser-card scicrime"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="teaser-art">
+                <SciCrimeArt big />
+              </div>
+              <div className="teaser-meta">
+                <div className="teaser-tag">Live · Browser · PC · Mobile</div>
+                <h3 className="teaser-title">SciCrime</h3>
+                <p className="teaser-line">The future is crime. Build your empire in Station 4.</p>
+                <span className="teaser-cta">
+                  Play now <span className="arrow">↗</span>
+                </span>
+              </div>
+            </a>
           </div>
 
           <div

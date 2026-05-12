@@ -150,7 +150,7 @@ export function AuthModal() {
         <div className="auth-header">
           <div className="auth-mark" aria-hidden="true" />
           <h2 className="auth-title">Ghostline ID</h2>
-          <p className="auth-subtitle">Profiles, friends &amp; messages — all in one place.</p>
+          <p className="auth-subtitle">Profiles, friends &amp; messages — and your key to SciCrime.</p>
         </div>
 
         <div className="auth-tabs" role="tablist" aria-label="Sign in or create account">
