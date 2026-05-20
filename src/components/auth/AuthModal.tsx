@@ -246,8 +246,15 @@ export function AuthModal() {
                 if (!email) { setMsg({ ok: false, text: "Enter your email above first." }); return; }
                 setBusy(true);
                 setMsg(null);
+                const returnTo =
+                  typeof window !== "undefined"
+                    ? sessionStorage.getItem("gid_return_to")
+                    : null;
+                const redirectTo = returnTo
+                  ? `${window.location.origin}/reset-password?returnTo=${encodeURIComponent(returnTo)}`
+                  : `${window.location.origin}/reset-password`;
                 const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                  redirectTo: `${window.location.origin}/reset-password`,
+                  redirectTo,
                 });
                 setBusy(false);
                 if (error) setMsg({ ok: false, text: error.message });

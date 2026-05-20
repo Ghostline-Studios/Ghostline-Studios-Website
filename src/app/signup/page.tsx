@@ -212,7 +212,7 @@ function SignUpContent() {
 export default function SignUpPage() {
   return (
     <SiteChrome>
-      <Suspense>
+      <Suspense fallback={<main className="welcome-page"><div className="welcome-inner">Loading…</div></main>}>
         <SignUpContent />
       </Suspense>
     </SiteChrome>

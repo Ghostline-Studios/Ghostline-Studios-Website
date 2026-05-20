@@ -257,7 +257,7 @@ function ResetPasswordContent() {
 export default function ResetPasswordPage() {
   return (
     <SiteChrome>
-      <Suspense>
+      <Suspense fallback={<main className="welcome-page"><div className="welcome-inner">Loading…</div></main>}>
         <ResetPasswordContent />
       </Suspense>
     </SiteChrome>
