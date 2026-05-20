@@ -69,6 +69,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [fetchProfile]);
 
+  // Open sign-in modal when linked from /signup or /reset-password (?openAuth=true)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("openAuth") === "true") {
+      setAuthTab("signin");
+      setAuthOpen(true);
+      params.delete("openAuth");
+      const qs = params.toString();
+      const next = window.location.pathname + (qs ? `?${qs}` : "");
+      window.history.replaceState(null, "", next);
+    }
+  }, []);
+
   const openAuth = useCallback((tab: AuthTab = "signin") => {
     setAuthTab(tab);
     setAuthOpen(true);

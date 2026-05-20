@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SiteChrome } from "@/components/SiteChrome";
@@ -59,9 +60,13 @@ function ResetPasswordContent() {
     setBusy(true);
     setError(null);
 
+    const redirectTo = returnToParam
+      ? `https://www.ghostlinestudios.com/reset-password?returnTo=${encodeURIComponent(returnToParam)}`
+      : "https://www.ghostlinestudios.com/reset-password";
+
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       email,
-      { redirectTo: "https://www.ghostlinestudios.com/reset-password" }
+      { redirectTo }
     );
 
     if (resetError) {
@@ -236,12 +241,12 @@ function ResetPasswordContent() {
 
         {!isRecovery && (
           <div style={{ marginTop: 24, textAlign: "center" }}>
-            <a
+            <Link
               href="/?openAuth=true"
               style={{ fontSize: 13, color: "var(--wraith-soft)" }}
             >
               ← Back to sign in
-            </a>
+            </Link>
           </div>
         )}
       </div>

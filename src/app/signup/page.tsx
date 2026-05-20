@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { SiteChrome } from "@/components/SiteChrome";
@@ -181,12 +182,12 @@ function SignUpContent() {
             alignItems: "center",
           }}
         >
-          <a
+          <Link
             href="/?openAuth=true"
             style={{ fontSize: 13, color: "var(--wraith-soft)" }}
           >
             Already have a Ghostline ID? Sign in →
-          </a>
+          </Link>
 
           {returnTo === "scicrime" && (
             <a
