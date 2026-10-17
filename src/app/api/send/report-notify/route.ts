@@ -13,16 +13,6 @@ const ADMIN_EMAILS = (process.env.ADMIN_NOTIFICATION_EMAIL ?? "studio@ghostlines
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const REPORT_WINDOW_MS = 10 * 60 * 1000;
 
-// Best-effort duplicate guard: reportId -> time it was claimed on this server instance.
-// Not shared across instances or restarts. The robust fix is a DB flag (reports.notified_at).
-const notifiedReports = new Map<string, number>();
-
-function pruneNotified(now: number) {
-  for (const [id, claimedAt] of notifiedReports) {
-    if (now - claimedAt > REPORT_WINDOW_MS) notifiedReports.delete(id);
-  }
-}
-
 // Truncate by code point; strip line breaks for single-line fields (names, reason, subject).
 const clip = (value: unknown, max: number) =>
   typeof value === "string" ? Array.from(value).slice(0, max).join("") : "";
@@ -54,11 +44,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Report is too old to notify" }, { status: 400 });
   }
 
-  pruneNotified(now);
-  if (notifiedReports.has(report.id)) {
-    return NextResponse.json({ error: "Already notified" }, { status: 409 });
-  }
-  notifiedReports.set(report.id, now);
+  // Atomic, cross-instance claim on reports.notified_at (see the harden_rls migration).
+  const { data: claimed, error: claimError } = await supabase.rpc("claim_report_notification", {
+    p_report_id: report.id,
+  });
+  if (claimError) return NextResponse.json({ error: claimError.message }, { status: 500 });
+  if (!claimed) return NextResponse.json({ error: "Already notified" }, { status: 409 });
 
   const profileIds = [report.reporter_id, report.reported_id].filter((id): id is string => !!id);
   const { data: profileRows } = await supabase
@@ -101,7 +92,8 @@ export async function POST(req: NextRequest) {
   });
 
   if (error) {
-    notifiedReports.delete(report.id); // allow a retry after a failed send
+    // allow a retry after a failed send
+    await supabase.rpc("release_report_notification", { p_report_id: report.id });
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

@@ -5,6 +5,7 @@ export type ProfileRow = {
   avatar_url: string | null;
   bio: string | null;
   is_admin: boolean;
+  welcome_sent_at: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -66,6 +67,7 @@ export type ReportRow = {
   conversation_id: string | null;
   context: string | null;
   status: "pending" | "reviewed" | "dismissed";
+  notified_at: string | null;
   created_at: string;
   updated_at: string;
 };
