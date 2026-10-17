@@ -1,4 +1,4 @@
-﻿export type ProfileRow = {
+export type ProfileRow = {
   id: string;
   username: string | null;
   display_name: string | null;

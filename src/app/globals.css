@@ -1,6 +1,6 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
-/* ===== Ghostline Studios â€” Design Tokens ===== */
+/* ===== Ghostline Studios — Design Tokens ===== */
 :root {
   --void: #050507;
   --void-2: #08080d;
@@ -1093,7 +1093,7 @@ section { position: relative; }
   margin-bottom: 28px;
 }
 .project-tag::before {
-  content: "â€”"; color: var(--phantom);
+  content: "\2014"; color: var(--phantom);
 }
 .project-title {
   font-size: clamp(56px, 9vw, 144px);
