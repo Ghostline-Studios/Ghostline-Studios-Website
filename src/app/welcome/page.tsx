@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { SiteChrome } from "@/components/SiteChrome";
+import { safeReturnTo, getReturnTo, clearReturnTo } from "@/lib/returnTo";
 
 function WelcomeContent() {
   const { user, loading, refreshProfile } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlReturnTo = safeReturnTo(searchParams.get("returnTo"));
   const supabase = createClient();
 
   const [displayName, setDisplayName] = useState("");
@@ -19,9 +22,10 @@ function WelcomeContent() {
   const [busy, setBusy] = useState(false);
   const [returnTo, setReturnTo] = useState("");
 
+  // Query param from the email link first, then the stored fallback
   useEffect(() => {
-    setReturnTo(sessionStorage.getItem("gid_return_to") ?? "");
-  }, []);
+    setReturnTo(urlReturnTo || getReturnTo());
+  }, [urlReturnTo]);
 
   // Redirect if not authed
   useEffect(() => {
@@ -136,8 +140,8 @@ function WelcomeContent() {
       body: JSON.stringify({ displayName: displayName || username, username }),
     }).catch(() => {});
 
-    const destination = sessionStorage.getItem("gid_return_to") ?? returnTo;
-    sessionStorage.removeItem("gid_return_to");
+    const destination = returnTo;
+    clearReturnTo();
 
     if (destination === "scicrime") {
       window.location.href = "https://scicrime.com";
@@ -234,7 +238,9 @@ function WelcomeContent() {
 export default function WelcomePage() {
   return (
     <SiteChrome>
-      <WelcomeContent />
+      <Suspense fallback={<main className="welcome-page"><div className="welcome-inner">Loading…</div></main>}>
+        <WelcomeContent />
+      </Suspense>
     </SiteChrome>
   );
 }

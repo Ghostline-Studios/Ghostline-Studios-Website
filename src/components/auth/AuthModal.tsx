@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { getReturnTo } from "@/lib/returnTo";
 
 export function AuthModal() {
   const { authOpen, authTab, closeAuth } = useAuth();
@@ -246,10 +247,7 @@ export function AuthModal() {
                 if (!email) { setMsg({ ok: false, text: "Enter your email above first." }); return; }
                 setBusy(true);
                 setMsg(null);
-                const returnTo =
-                  typeof window !== "undefined"
-                    ? sessionStorage.getItem("gid_return_to")
-                    : null;
+                const returnTo = getReturnTo();
                 const redirectTo = returnTo
                   ? `${window.location.origin}/reset-password?returnTo=${encodeURIComponent(returnTo)}`
                   : `${window.location.origin}/reset-password`;
