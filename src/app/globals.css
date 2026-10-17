@@ -602,7 +602,8 @@ section { position: relative; }
   color: transparent;
   max-width: 11ch;
 }
-.section-head .meta-block {
+.section-head .meta-block,
+.project-section-head .meta-block {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.2em;
@@ -613,7 +614,8 @@ section { position: relative; }
   flex-shrink: 0;
   max-width: 320px;
 }
-.section-head .meta-block strong {
+.section-head .meta-block strong,
+.project-section-head .meta-block strong {
   color: var(--spectral);
   font-weight: 400;
   display: block;
@@ -1907,7 +1909,8 @@ footer {
     gap: 24px;
     padding: clamp(80px, 18vw, 140px) 0 clamp(40px, 6vw, 64px);
   }
-  .section-head .meta-block {
+  .section-head .meta-block,
+  .project-section-head .meta-block {
     text-align: left;
     max-width: 100%;
   }
