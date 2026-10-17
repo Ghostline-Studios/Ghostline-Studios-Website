@@ -158,6 +158,7 @@ html.has-custom-cursor .cursor-dot { display: block; }
 .intro-overlay.done {
   opacity: 0; pointer-events: none;
 }
+html.intro-skip .intro-overlay { display: none; }
 .intro-rings {
   position: absolute; inset: 0;
   display: grid; place-items: center;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 export function EnergyField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -293,41 +293,83 @@ export function CustomCursor() {
   );
 }
 
+const INTRO_KEY = "gl_intro_seen";
+
+// Runs before first paint (inline, in the SSR markup) so returning visitors and
+// reduced-motion users never see the overlay. Mirrors introSkipped() below.
+const INTRO_SKIP_SCRIPT = `(function(){try{var s=false;try{s=sessionStorage.getItem("${INTRO_KEY}")==="1"}catch(e){}if(s||window.matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("intro-skip")}catch(e){}})();`;
+
+function introSkipped(): boolean {
+  try {
+    if (sessionStorage.getItem(INTRO_KEY) === "1") return true;
+  } catch {
+    // storage unavailable (private mode, blocked): fall through and show the intro
+  }
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
+
 export function IntroOverlay() {
   const [done, setDone] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setDone(true), 3600);
-    return () => clearTimeout(t);
+  const finish = useCallback(() => {
+    setDone(true);
+    try {
+      sessionStorage.setItem(INTRO_KEY, "1");
+    } catch {
+      // storage unavailable: intro may show again on next navigation
+    }
   }, []);
+  useLayoutEffect(() => {
+    if (introSkipped()) {
+      setDone(true);
+      return;
+    }
+    const t = setTimeout(finish, 3600);
+    window.addEventListener("keydown", finish);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("keydown", finish);
+    };
+  }, [finish]);
   return (
-    <div className={"intro-overlay" + (done ? " done" : "")}>
-      <div className="intro-rings">
-        {[420, 540, 680, 820].map((s, i) => (
-          <div
-            key={i}
-            className="intro-ring"
-            style={{
-              width: s,
-              height: s,
-              borderColor: i % 2 === 0 ? "rgba(77, 208, 225, 0.3)" : "rgba(179, 136, 255, 0.3)",
-              animation: `introRing 2.6s var(--ease-cinema) ${0.2 + i * 0.18}s forwards`,
-            }}
-          />
-        ))}
+    <>
+      <script dangerouslySetInnerHTML={{ __html: INTRO_SKIP_SCRIPT }} />
+      <div
+        className={"intro-overlay" + (done ? " done" : "")}
+        aria-hidden="true"
+        onClick={finish}
+      >
+        <div className="intro-rings">
+          {[420, 540, 680, 820].map((s, i) => (
+            <div
+              key={i}
+              className="intro-ring"
+              style={{
+                width: s,
+                height: s,
+                borderColor: i % 2 === 0 ? "rgba(77, 208, 225, 0.3)" : "rgba(179, 136, 255, 0.3)",
+                animation: `introRing 2.6s var(--ease-cinema) ${0.2 + i * 0.18}s forwards`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="intro-core" />
+        <div className="intro-line" />
+        <div className="intro-text">
+          Ghostline
+          <small>Studios — Awaken</small>
+        </div>
+        <style>{`
+          @keyframes introRing {
+            0% { opacity: 0; transform: scale(0.4); }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; transform: scale(1.1); }
+          }
+        `}</style>
       </div>
-      <div className="intro-core" />
-      <div className="intro-line" />
-      <div className="intro-text">
-        Ghostline
-        <small>Studios — Awaken</small>
-      </div>
-      <style>{`
-        @keyframes introRing {
-          0% { opacity: 0; transform: scale(0.4); }
-          50% { opacity: 1; }
-          100% { opacity: 0.4; transform: scale(1.1); }
-        }
-      `}</style>
-    </div>
+    </>
   );
 }
