@@ -4,12 +4,13 @@ import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { safeReturnTo, setReturnTo, getReturnTo, clearReturnTo } from "@/lib/returnTo";
 import { SiteChrome } from "@/components/SiteChrome";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const returnToParam = searchParams.get("returnTo") ?? "";
+  const returnToParam = safeReturnTo(searchParams.get("returnTo"));
 
   const [isRecovery, setIsRecovery] = useState(false);
   const [email, setEmail] = useState("");
@@ -20,9 +21,9 @@ function ResetPasswordContent() {
 
   const supabase = createClient();
 
-  // Persist returnTo so it survives the recovery email redirect
+  // Persist returnTo as a fallback in case the recovery link drops the query
   useEffect(() => {
-    if (returnToParam) sessionStorage.setItem("gid_return_to", returnToParam);
+    if (returnToParam) setReturnTo(returnToParam);
   }, [returnToParam]);
 
   // Detect recovery session — both on initial load (hash) and via auth state change
@@ -61,8 +62,8 @@ function ResetPasswordContent() {
     setError(null);
 
     const redirectTo = returnToParam
-      ? `https://www.ghostlinestudios.com/reset-password?returnTo=${encodeURIComponent(returnToParam)}`
-      : "https://www.ghostlinestudios.com/reset-password";
+      ? `${window.location.origin}/reset-password?returnTo=${encodeURIComponent(returnToParam)}`
+      : `${window.location.origin}/reset-password`;
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(
       email,
@@ -92,10 +93,9 @@ function ResetPasswordContent() {
       return;
     }
 
-    // Resolve returnTo: query param first, then sessionStorage
-    const returnTo =
-      returnToParam || sessionStorage.getItem("gid_return_to") || "";
-    sessionStorage.removeItem("gid_return_to");
+    // Resolve returnTo: query param first, then stored fallback
+    const returnTo = returnToParam || getReturnTo();
+    clearReturnTo();
 
     if (returnTo === "scicrime") {
       window.location.href = "https://scicrime.com";

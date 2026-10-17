@@ -4,11 +4,12 @@ import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { safeReturnTo, setReturnTo, clearReturnTo } from "@/lib/returnTo";
 import { SiteChrome } from "@/components/SiteChrome";
 
 function SignUpContent() {
   const searchParams = useSearchParams();
-  const returnTo = searchParams.get("returnTo") ?? "";
+  const returnTo = safeReturnTo(searchParams.get("returnTo"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +19,10 @@ function SignUpContent() {
 
   const supabase = createClient();
 
-  // Persist returnTo before the email-verification redirect wipes query params
+  // Persist returnTo as a same-browser fallback; the email link carries it too
   useEffect(() => {
-    if (returnTo) sessionStorage.setItem("gid_return_to", returnTo);
+    if (returnTo) setReturnTo(returnTo);
+    else clearReturnTo();
   }, [returnTo]);
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -28,11 +30,12 @@ function SignUpContent() {
     setBusy(true);
     setError(null);
 
+    const next = returnTo ? `/welcome?returnTo=${returnTo}` : "/welcome";
     const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: "https://www.ghostlinestudios.com/welcome",
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     });
 
