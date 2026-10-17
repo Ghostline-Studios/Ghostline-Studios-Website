@@ -8,7 +8,7 @@ import { SiteChrome } from "@/components/SiteChrome";
 export const metadata: Metadata = {
   title: "Ghostline Studios — Mobile-First Game Studio",
   description:
-    "Ghostline Studios is an independent mobile game studio building games with thought, intention, and the player at the centre. Two games in development: Scraplings and Spectral Sabre.",
+    "Ghostline Studios is an independent mobile game studio building games with thought, intention, and the player at the centre. One live game and two in pre-production: SciCrime, Scraplings, and Spectral Sabre.",
   alternates: { canonical: "https://www.ghostlinestudios.com" },
   openGraph: {
     title: "Ghostline Studios — Mobile-First Game Studio",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Ghostline Studios — Mobile-First Game Studio",
-    description: "Independent mobile games. Two worlds in development.",
+    description: "Independent mobile games. One world live, two in pre-production.",
     images: ["/assets/ghostline-og.png"],
   },
 };

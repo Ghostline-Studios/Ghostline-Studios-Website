@@ -5,7 +5,7 @@ import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "Press",
-  description: "Press information, studio boilerplate, and project details for Ghostline Studios, Scraplings, and Spectral Sabre.",
+  description: "Press information, studio boilerplate, and project details for Ghostline Studios, SciCrime, Scraplings, and Spectral Sabre.",
   alternates: { canonical: "https://www.ghostlinestudios.com/press" },
   openGraph: {
     title: "Press | Ghostline Studios",
@@ -26,7 +26,7 @@ export default function PressPage() {
             <div className="press-page-eyebrow">Press</div>
             <h1>Ghostline Studios</h1>
             <p className="press-page-lead">
-              Independent mobile game studio. Two games in development. No hype.
+              Independent mobile game studio. One game live, two in pre-production. No hype.
             </p>
           </header>
 
@@ -67,7 +67,7 @@ export default function PressPage() {
                 <tr><td>Founded</td><td>2026</td></tr>
                 <tr><td>Location</td><td>Remote</td></tr>
                 <tr><td>Platform focus</td><td>iOS · Android</td></tr>
-                <tr><td>Projects in development</td><td>Scraplings · Spectral Sabre</td></tr>
+                <tr><td>Projects</td><td>SciCrime (live) · Scraplings (pre-production) · Spectral Sabre (pre-production)</td></tr>
                 <tr><td>Press contact</td><td><a href="mailto:press@ghostlinestudios.com">press@ghostlinestudios.com</a></td></tr>
                 <tr><td>General contact</td><td><a href="mailto:studio@ghostlinestudios.com">studio@ghostlinestudios.com</a></td></tr>
                 <tr><td>Website</td><td><a href="https://www.ghostlinestudios.com">ghostlinestudios.com</a></td></tr>
@@ -80,6 +80,23 @@ export default function PressPage() {
             <h2>Projects</h2>
 
             <div className="press-project-grid">
+              <div className="press-project-card">
+                <div className="press-project-tag press-tag-scicrime">SciCrime</div>
+                <h3>SciCrime</h3>
+                <p className="press-project-status">Status: Live · Browser · PC · Mobile</p>
+                <p>
+                  SciCrime is a persistent browser-based game set in a dark, futuristic universe where technology
+                  and crime collide. Build your reputation, forge alliances, and climb the criminal underworld of
+                  Station 4.
+                </p>
+                <p className="press-copy-detail">
+                  <strong>Genre:</strong> Persistent browser game (PBBG)<br />
+                  <strong>Platform:</strong> Browser · PC · Mobile<br />
+                  <strong>Status:</strong> Live
+                </p>
+                <a href="https://scicrime.com" target="_blank" rel="noopener noreferrer" className="press-project-link">Play SciCrime ↗</a>
+              </div>
+
               <div className="press-project-card">
                 <div className="press-project-tag press-tag-scrap">Scraplings</div>
                 <h3>Scraplings</h3>

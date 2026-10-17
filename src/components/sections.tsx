@@ -324,6 +324,7 @@ export function SiteFooter() {
           <div className="col">
             <h5>Worlds</h5>
             <ul>
+              <li><a href="https://scicrime.com" target="_blank" rel="noopener noreferrer">SciCrime</a></li>
               <li><Link href="/scraplings">Scraplings</Link></li>
               <li><Link href="/spectral-sabre">Spectral Sabre</Link></li>
               <li><Link href="/projects">All projects</Link></li>

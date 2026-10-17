@@ -47,7 +47,7 @@ export function Hero() {
 
       <div className="hero-pitch">
         We make <em>interactive mobile games with deep story</em> — built with thought, intention, and the
-        player&apos;s experience at the center.
+        player&apos;s experience at the centre.
       </div>
 
       <div className="hero-bottom">
@@ -459,7 +459,7 @@ export function GamesSection() {
             <h2>Worlds in motion.</h2>
           </div>
           <div className="meta-block">
-            <strong>Two projects</strong>
+            <strong>Three projects</strong>
             Active development · Mobile-first
             <br />
             Hand-built · Player-respecting · No dark patterns

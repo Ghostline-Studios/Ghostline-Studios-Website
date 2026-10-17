@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Ghostline Studios — Mobile-First Game Studio",
-    description: "Independent mobile games. Two worlds in development.",
+    description: "Independent mobile games. One world live, two in pre-production.",
     images: [OG_IMAGE],
   },
   icons: { icon: "/favicon.ico" },

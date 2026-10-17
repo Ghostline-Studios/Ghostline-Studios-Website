@@ -3116,6 +3116,7 @@ footer {
 .press-project-card p { color: var(--wraith); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
 .press-project-tag { display: inline-block; font-size: 11px; font-family: var(--font-mono); letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; margin-bottom: 12px; }
 .press-tag-scrap { background: rgba(77,208,225,0.1); color: var(--spectral); border: 1px solid rgba(77,208,225,0.2); }
+.press-tag-scicrime { background: rgba(0,200,255,0.08); color: #00c8ff; border: 1px solid rgba(0,200,255,0.2); }
 .press-tag-sabre { background: rgba(124,77,255,0.1); color: var(--phantom-glow); border: 1px solid rgba(124,77,255,0.2); }
 .press-project-link { font-size: 12px; color: var(--spectral); font-family: var(--font-mono); letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; }
 .press-project-link:hover { text-decoration: underline; }
