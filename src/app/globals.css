@@ -348,16 +348,23 @@ section { position: relative; }
 /* ===== Hero ===== */
 .hero {
   min-height: 100vh;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 2.4vh, 30px);
   position: relative;
-  padding: 180px 0 140px;
+  padding: 100px 0 32px;
 }
 .hero-eclipse-wrap {
   position: relative;
-  width: min(620px, 64vw);
+  /* shrinks with viewport height so pitch, eclipse, title and CTAs fit above the fold */
+  width: min(620px, 64vw, calc(83vh - 290px));
   aspect-ratio: 1;
   margin: 0 auto;
+  flex-shrink: 0;
+  /* glow is applied to the wrapper so it follows the masked ring, not the square */
+  filter: drop-shadow(0 0 80px rgba(77, 208, 225, 0.25)) drop-shadow(0 0 140px rgba(124, 77, 255, 0.22));
 }
 .hero-eclipse {
   position: absolute; inset: 0;
@@ -365,8 +372,26 @@ section { position: relative; }
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 80px rgba(77, 208, 225, 0.25)) drop-shadow(0 0 140px rgba(124, 77, 255, 0.22));
+  /* The PNG has an opaque black background and the "GHOSTLINE STUDIOS" wordmark baked into
+     its lower quarter. Layer 1 uses the PNG's own luminance as alpha, so the black background
+     becomes transparent and only the ring glows. Layer 2 fades out the bottom of the box so the
+     wordmark is hidden and only the hero's own title shows the name. */
+  -webkit-mask-image: url("/assets/ghostline-mark.png"), linear-gradient(to bottom, #000 69%, transparent 73%);
+  mask-image: url("/assets/ghostline-mark.png"), linear-gradient(to bottom, #000 69%, transparent 73%);
+  -webkit-mask-size: contain, 100% 100%;
+  mask-size: contain, 100% 100%;
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  -webkit-mask-position: center, center;
+  mask-position: center, center;
+  mask-mode: luminance, alpha;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
   animation: eclipseFloat 12s ease-in-out infinite;
+}
+/* desktop: pitch sits above the eclipse (DOM order is eclipse, pitch, title, CTAs) */
+@media (min-width: 769px) {
+  .hero-pitch { order: -1; }
 }
 @keyframes eclipseFloat {
   0%, 100% { transform: translateY(0) scale(1); }
@@ -413,14 +438,13 @@ section { position: relative; }
 }
 
 .hero-bottom {
-  position: absolute;
-  bottom: 8%;
-  left: 0; right: 0;
+  position: relative;
+  width: 100%;
   text-align: center;
   pointer-events: none;
 }
 .hero-title {
-  font-size: clamp(48px, 9vw, 144px);
+  font-size: clamp(48px, min(9vw, 14vh), 144px);
   font-weight: 200;
   letter-spacing: 0.22em;
   line-height: 1;
@@ -446,7 +470,7 @@ section { position: relative; }
   position: absolute;
   top: 50%; left: 50%;
   width: min(1280px, 95vw);
-  height: min(820px, 80vw);
+  height: 132%; /* scales with the eclipse so the corner pins stay clear of the nav */
   transform: translate(-50%, -52%);
   pointer-events: none;
   font-family: var(--font-mono);
@@ -467,17 +491,12 @@ section { position: relative; }
 .hero-hud .pin.br { bottom: 22%; right: 0; text-align: right; align-items: flex-end; }
 
 .hero-cta-row {
-  position: absolute;
-  bottom: 2%;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   display: flex; gap: 16px;
   pointer-events: auto;
 }
 .hero-pitch {
-  position: absolute;
-  top: 16%; left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   width: min(560px, 80vw);
   text-align: center;
   font-size: clamp(14px, 1.4vw, 18px);
