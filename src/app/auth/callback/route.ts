@@ -26,8 +26,13 @@ export async function GET(request: NextRequest) {
         },
       }
     );
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // /welcome writes user_metadata.username on completion. OAuth users
+      // (Google/Apple) never hit it via `next`, so send them there until they have one.
+      if (data.user && !data.user.user_metadata?.username) {
+        return NextResponse.redirect(`${origin}/welcome`);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
