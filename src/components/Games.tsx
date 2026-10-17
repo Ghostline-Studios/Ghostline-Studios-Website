@@ -56,12 +56,12 @@ export function Hero() {
       </div>
 
       <div className="hero-cta-row">
-        <a className="btn primary" href="#games">
+        <a className="btn primary" href="#projects">
           <span>Enter the Worlds</span>
         </a>
-        <a className="btn" href="#about">
+        <Link className="btn" href="/studio">
           <span>The Studio</span>
-        </a>
+        </Link>
       </div>
     </section>
   );
