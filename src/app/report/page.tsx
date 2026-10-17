@@ -59,30 +59,20 @@ function ReportContent() {
     setSubmitting(true);
     setError("");
 
-    const { error: err } = await supabase.from("reports").insert({
+    const { data: inserted, error: err } = await supabase.from("reports").insert({
       reporter_id: user.id,
       reported_id: reportedId,
       conversation_id: convId ?? null,
       context: `Reason: ${reason}\n\n${context}`,
-    });
+    }).select("id").single();
 
-    if (err) { setError(err.message); setSubmitting(false); return; }
+    if (err || !inserted) { setError(err?.message ?? "Couldn't submit report"); setSubmitting(false); return; }
 
-    // Notify admins (non-blocking)
-    const reporterName = user.user_metadata?.display_name ?? user.email ?? "User";
-    const reporterUsername = user.user_metadata?.username ?? "";
+    // Notify admins (non-blocking). The server reads the report from the DB.
     fetch("/api/send/report-notify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        reporterName,
-        reporterUsername,
-        reportedName: reportedProfile?.display_name ?? reportedProfile?.username ?? reportedId,
-        reportedUsername: reportedProfile?.username ?? "",
-        reason,
-        context,
-        reportedAt: new Date().toISOString(),
-      }),
+      body: JSON.stringify({ reportId: inserted.id }),
     }).catch(() => {});
 
     setSubmitted(true);

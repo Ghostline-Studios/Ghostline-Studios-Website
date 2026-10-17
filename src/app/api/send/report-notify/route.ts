@@ -10,12 +10,75 @@ const ADMIN_EMAILS = (process.env.ADMIN_NOTIFICATION_EMAIL ?? "studio@ghostlines
   .map(e => e.trim())
   .filter(Boolean);
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const REPORT_WINDOW_MS = 10 * 60 * 1000;
+
+// Best-effort duplicate guard: reportId -> time it was claimed on this server instance.
+// Not shared across instances or restarts. The robust fix is a DB flag (reports.notified_at).
+const notifiedReports = new Map<string, number>();
+
+function pruneNotified(now: number) {
+  for (const [id, claimedAt] of notifiedReports) {
+    if (now - claimedAt > REPORT_WINDOW_MS) notifiedReports.delete(id);
+  }
+}
+
+// Truncate by code point; strip line breaks for single-line fields (names, reason, subject).
+const clip = (value: unknown, max: number) =>
+  typeof value === "string" ? Array.from(value).slice(0, max).join("") : "";
+const line = (value: unknown, max: number) =>
+  clip(value, max).replace(/[\r\n\t]+/g, " ").trim();
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { reporterName, reporterUsername, reportedName, reportedUsername, reason, context, reportedAt } = await req.json();
+  const body = await req.json().catch(() => null);
+  const reportId = typeof body?.reportId === "string" ? body.reportId : "";
+  if (!UUID_RE.test(reportId)) return NextResponse.json({ error: "Invalid reportId" }, { status: 400 });
+
+  // RLS limits this read to the user's own reports, so a missing row is also a foreign one.
+  const { data: report } = await supabase
+    .from("reports")
+    .select("id, reporter_id, reported_id, context, status, created_at")
+    .eq("id", reportId)
+    .maybeSingle();
+  if (!report) return NextResponse.json({ error: "Report not found" }, { status: 404 });
+  if (report.reporter_id !== user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (report.status !== "pending") return NextResponse.json({ error: "Report is not pending" }, { status: 400 });
+
+  const createdAt = Date.parse(report.created_at);
+  const now = Date.now();
+  if (!Number.isFinite(createdAt) || now - createdAt > REPORT_WINDOW_MS) {
+    return NextResponse.json({ error: "Report is too old to notify" }, { status: 400 });
+  }
+
+  pruneNotified(now);
+  if (notifiedReports.has(report.id)) {
+    return NextResponse.json({ error: "Already notified" }, { status: 409 });
+  }
+  notifiedReports.set(report.id, now);
+
+  const profileIds = [report.reporter_id, report.reported_id].filter((id): id is string => !!id);
+  const { data: profileRows } = await supabase
+    .from("profiles")
+    .select("id, username, display_name")
+    .in("id", profileIds);
+  const profileById = new Map((profileRows ?? []).map(p => [p.id, p]));
+  const reporter = profileById.get(report.reporter_id);
+  const reported = report.reported_id ? profileById.get(report.reported_id) : undefined;
+
+  // Context is stored as `Reason: ${reason}\n\n${context}` by /report.
+  const raw = report.context ?? "";
+  const match = raw.match(/^Reason: ([^\n]*)\n\n([\s\S]*)$/);
+  const reason = line(match ? match[1] : "Other", 100) || "Other";
+  const context = clip(match ? match[2] : raw, 2000);
+
+  const reporterName = line(reporter?.display_name || reporter?.username, 80) || "User";
+  const reporterUsername = line(reporter?.username, 80);
+  const reportedName = line(reported?.display_name || reported?.username, 80) || "User";
+  const reportedUsername = line(reported?.username, 80);
 
   const html = await render(
     ReportNotificationEmail({
@@ -25,7 +88,7 @@ export async function POST(req: NextRequest) {
       reportedUsername,
       reason,
       context,
-      reportedAt,
+      reportedAt: report.created_at,
       adminDashboardUrl: "https://www.ghostlinestudios.com/admin",
     })
   );
@@ -37,6 +100,9 @@ export async function POST(req: NextRequest) {
     html,
   });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    notifiedReports.delete(report.id); // allow a retry after a failed send
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
   return NextResponse.json({ ok: true });
 }
