@@ -51,7 +51,9 @@ export function Hero() {
       </div>
 
       <div className="hero-bottom">
-        <div className="hero-title">Ghostline</div>
+        <h1 className="hero-title">
+          Ghostline<span className="sr-only"> Studios</span>
+        </h1>
         <div className="hero-subtitle">— Studios —</div>
       </div>
 
