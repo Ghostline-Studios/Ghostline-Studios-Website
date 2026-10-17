@@ -3242,3 +3242,19 @@ footer {
   }
 }
 
+/* === Operator portrait placeholder (shown when an operator has no img yet) === */
+/* Sits inside .portrait / .squad-portrait; disappears once real art is set. */
+.portrait-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--spectral);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(124, 77, 255, 0.22), transparent 70%),
+    var(--fog);
+}

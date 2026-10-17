@@ -56,7 +56,7 @@ export type SpectralSabreGame = {
   features: string[];
   operators: {
     id: string;
-    img: string;
+    img?: string; // optional: omit to render the built-in callsign placeholder
     codename: string;
     role: string;
     speciality: string;
@@ -119,7 +119,6 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
   operators: [
     {
       id: "OP-01",
-      img: "/assets/op-wraith.png",
       codename: "Wraith",
       role: "Adaptive Commander",
       speciality: "Player-selected loadout",
@@ -127,7 +126,6 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
     },
     {
       id: "OP-02",
-      img: "/assets/op-vantage.png",
       codename: "Vantage",
       role: "Long-Range Overwatch",
       speciality: "Precision shots · recon-assisted targeting · thermal optics",
@@ -135,7 +133,6 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
     },
     {
       id: "OP-03",
-      img: "/assets/op-rook.png",
       codename: "Rook",
       role: "Close-Quarters Assault",
       speciality: "Door breaching · shield module · flash charges · breach-rated armour",
@@ -143,7 +140,6 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
     },
     {
       id: "OP-04",
-      img: "/assets/op-echo.png",
       codename: "Echo",
       role: "Electronic Warfare",
       speciality: "EMP pulses · camera loops · turret hijacking · sensor spoofing",
@@ -151,7 +147,6 @@ export const SPECTRAL_SABRE: SpectralSabreGame = {
     },
     {
       id: "OP-05",
-      img: "/assets/op-kip.png",
       codename: "KIP",
       role: "Digital Infiltration Companion",
       speciality: "Hacking · scouting · spoofing · device manipulation",
