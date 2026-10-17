@@ -153,7 +153,12 @@ export default function SpectralSabrePage() {
           <div className="squad-grid">
             {G.operators.map((op) => (
               <div className="squad-card" key={op.id}>
-                <div className="squad-portrait" style={{ backgroundImage: `url("${op.img}")` }} />
+                <div
+                  className="squad-portrait"
+                  style={op.img ? { backgroundImage: `url("${op.img}")` } : undefined}
+                >
+                  {op.img ? null : <span className="portrait-placeholder">{op.codename}</span>}
+                </div>
                 <div className="squad-meta">
                   <div className="squad-id">{op.id}</div>
                   <div className="squad-name">{op.codename}</div>

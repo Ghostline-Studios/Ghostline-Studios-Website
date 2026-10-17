@@ -417,12 +417,14 @@ export function SpectralSabreSquad({ game }: { game: SpectralSabreGame }) {
           <div className="op-card" key={op.id}>
             <div
               className="portrait"
-              style={{
-                backgroundImage: `url("${op.img}")`,
-                backgroundSize: "cover",
-                backgroundPosition: "center top",
-              }}
-            />
+              style={
+                op.img
+                  ? { backgroundImage: `url("${op.img}")`, backgroundSize: "cover", backgroundPosition: "center top" }
+                  : undefined
+              }
+            >
+              {op.img ? null : <span className="portrait-placeholder">{op.codename}</span>}
+            </div>
             <div className="info">
               <div className="codename">{op.codename}</div>
               <div className="role">{op.role}</div>
