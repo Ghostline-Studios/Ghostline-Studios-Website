@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Create a Ghostline ID — Ghostline Studios",
+  title: "Create a Ghostline ID",
   description:
     "Sign up for a Ghostline ID to access your profile, friends, and the Ghostline ecosystem.",
 };
