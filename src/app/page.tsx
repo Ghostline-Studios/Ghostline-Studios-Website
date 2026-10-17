@@ -4,6 +4,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
 import { NewsSection, SiteFooter, SiteNav } from "@/components/sections";
 import { SiteChrome } from "@/components/SiteChrome";
+import { NEWS_COLUMNS, NEWS_LIMIT, type NewsPost } from "@/lib/devlog-news";
+import { createPublicClient } from "@/lib/supabase/public";
 
 export const metadata: Metadata = {
   title: "Ghostline Studios — Mobile-First Game Studio",
@@ -26,7 +28,33 @@ export const metadata: Metadata = {
 
 const SITE_URL = "https://www.ghostlinestudios.com";
 
-export default function HomePage() {
+// Static render, revalidated every 5 minutes (ISR).
+export const revalidate = 300;
+
+/**
+ * Latest published devlogs, fetched on the server so they appear in the HTML.
+ * Returns null on failure (e.g. Supabase unreachable at build time) so the
+ * build does not break and NewsSection falls back to a client-side fetch.
+ */
+async function getNewsPosts(): Promise<NewsPost[] | null> {
+  try {
+    const { data, error } = await createPublicClient()
+      .from("devlogs")
+      .select(NEWS_COLUMNS)
+      .eq("is_published", true)
+      .order("published_at", { ascending: false })
+      .limit(NEWS_LIMIT);
+    if (error) throw error;
+    return (data ?? []) as NewsPost[];
+  } catch (err) {
+    console.error("[home] devlog fetch failed, falling back to client fetch", err);
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const posts = await getNewsPosts();
+
   return (
     <SiteChrome showIntro>
       <JsonLd
@@ -56,7 +84,7 @@ export default function HomePage() {
       <SiteNav />
       <Hero />
       <ProjectsTeaser />
-      <NewsSection />
+      <NewsSection posts={posts} />
       <SiteFooter />
     </SiteChrome>
   );

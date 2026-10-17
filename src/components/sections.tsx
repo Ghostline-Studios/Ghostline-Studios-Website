@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { GhostlineIDButton } from "@/components/auth/GhostlineIDButton";
 import { useAuth } from "@/context/AuthContext";
 import { createClient } from "@/lib/supabase/client";
-import type { DevlogRow } from "@/lib/supabase/database.types";
+import { NEWS_COLUMNS, NEWS_LIMIT, type NewsPost } from "@/lib/devlog-news";
 
 export function AboutSection() {
   return (
@@ -63,20 +63,32 @@ const GAME_TAG: Record<string, { label: string; cls: string }> = {
   "spectral-sabre":{ label: "SABRE",      cls: "sabre" },
 };
 
-export function NewsSection() {
-  const [posts, setPosts] = useState<DevlogRow[]>([]);
+/**
+ * Homepage devlog list.
+ * - `posts` provided (array, possibly empty): rendered as-is, no client fetch. Server-fetched data.
+ * - `posts` undefined/null: client-side fallback fetch, skeletons while loading.
+ */
+export function NewsSection({ posts: serverPosts }: { posts?: NewsPost[] | null } = {}) {
+  const hasServerPosts = Array.isArray(serverPosts);
+  const [clientPosts, setClientPosts] = useState<NewsPost[] | null>(null);
 
   useEffect(() => {
+    if (hasServerPosts) return;
+    let cancelled = false;
     import("@/lib/supabase/client").then(({ createClient }) => {
       createClient()
         .from("devlogs")
-        .select("id, title, slug, game_id, published_at, created_at")
+        .select(NEWS_COLUMNS)
         .eq("is_published", true)
         .order("published_at", { ascending: false })
-        .limit(6)
-        .then(({ data }) => { if (data) setPosts(data as DevlogRow[]); });
+        .limit(NEWS_LIMIT)
+        .then(({ data }) => { if (!cancelled && data) setClientPosts(data as NewsPost[]); });
     });
-  }, []);
+    return () => { cancelled = true; };
+  }, [hasServerPosts]);
+
+  // null = not fetched yet (client fallback loading); [] = fetched, nothing published.
+  const posts: NewsPost[] | null = Array.isArray(serverPosts) ? serverPosts : clientPosts;
 
   const fmtDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-GB", { month: "short", year: "numeric" }).toUpperCase().replace(" ", " · ");
@@ -96,7 +108,7 @@ export function NewsSection() {
           </div>
         </div>
         <div className="devlog-list">
-          {posts.map(p => {
+          {posts?.map(p => {
             const tag = p.game_id ? GAME_TAG[p.game_id] : { label: "STUDIO", cls: "studio" };
             const date = fmtDate(p.published_at ?? p.created_at);
             return (
@@ -108,9 +120,12 @@ export function NewsSection() {
               </Link>
             );
           })}
-          {posts.length === 0 && [0,1,2,3,4,5].map(i => (
+          {posts === null && [0,1,2,3,4,5].map(i => (
             <div key={i} className="devlog-item devlog-item-skeleton" aria-hidden />
           ))}
+          {posts !== null && posts.length === 0 && (
+            <p className="devlog-empty" style={{ color: "var(--wraith)", margin: 0 }}>No dispatches yet.</p>
+          )}
         </div>
         <div style={{ marginTop: 32 }}>
           <Link href="/devlog" className="btn secondary"><span>All devlogs</span></Link>
