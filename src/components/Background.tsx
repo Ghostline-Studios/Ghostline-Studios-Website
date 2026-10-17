@@ -217,6 +217,9 @@ export function EnergyField() {
   return <canvas ref={canvasRef} className="bg-canvas" />;
 }
 
+const TEXT_ENTRY =
+  'textarea, input:not([type]), input[type="text"], input[type="search"], input[type="email"], input[type="url"], input[type="tel"], input[type="password"], input[type="number"], [contenteditable]:not([contenteditable="false"])';
+
 export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -231,7 +234,11 @@ export function CustomCursor() {
     let raf = 0;
     const ring = ringRef.current;
     const dot = dotRef.current;
-    if (!ring || !dot) return;
+    // Coarse pointers and reduced motion keep the native cursor (ring/dot stay display:none).
+    const coarse = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!ring || !dot || coarse || reduced) return;
+    document.documentElement.classList.add("has-custom-cursor");
     const ringEl: HTMLDivElement = ring;
     const dotEl: HTMLDivElement = dot;
 
@@ -245,6 +252,9 @@ export function CustomCursor() {
         "a, button, .game-card, .op-card, .scrapling-cell, .role-item, .pillar, .devlog-item, .link-row, input, .role-cta",
       );
       ringEl.classList.toggle("hover", !!interactive);
+      const textEntry = !!el?.closest(TEXT_ENTRY);
+      ringEl.classList.toggle("text", textEntry);
+      dotEl.classList.toggle("text", textEntry);
     }
     function onDown() {
       ringEl.classList.add("click");
@@ -267,6 +277,7 @@ export function CustomCursor() {
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     return () => {
+      document.documentElement.classList.remove("has-custom-cursor");
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mousedown", onDown);
