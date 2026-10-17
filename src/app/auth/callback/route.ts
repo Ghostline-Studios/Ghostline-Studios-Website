@@ -3,10 +3,18 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Only allow same-origin relative paths; anything else falls back to "/".
+function safeNext(raw: string | null): string {
+  if (!raw) return "/";
+  if (!raw.startsWith("/") || raw.startsWith("//") || raw.startsWith("/\\")) return "/";
+  if (raw.includes("\\") || /[\u0000-\u001f\u007f]/.test(raw)) return "/";
+  return raw;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/";
+  const next = safeNext(searchParams.get("next"));
 
   if (code) {
     const cookieStore = await cookies();
@@ -28,7 +36,10 @@ export async function GET(request: NextRequest) {
     );
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const target = new URL(next, origin);
+      return NextResponse.redirect(
+        target.origin === origin ? target : new URL("/", origin)
+      );
     }
   }
 
