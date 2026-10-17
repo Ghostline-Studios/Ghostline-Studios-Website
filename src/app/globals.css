@@ -39,10 +39,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
-body { cursor: none; }
-a { color: inherit; text-decoration: none; cursor: none; }
-button { font: inherit; color: inherit; background: none; border: none; cursor: none; }
-input, select, textarea, label { cursor: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; }
 img { display: block; max-width: 100%; }
 ::selection { background: rgba(179, 136, 255, 0.35); color: white; }
 
@@ -94,18 +92,42 @@ img { display: block; max-width: 100%; }
 }
 
 /* ===== Custom cursor ===== */
+/* The native cursor is hidden only after CustomCursor mounts and adds
+   html.has-custom-cursor (fine pointer, no reduced motion). :where() keeps the
+   specificity of the original per-element rules. */
+:where(html.has-custom-cursor) body,
+:where(html.has-custom-cursor) a,
+:where(html.has-custom-cursor) button,
+:where(html.has-custom-cursor) label,
+:where(html.has-custom-cursor) input,
+:where(html.has-custom-cursor) .game-card,
+:where(html.has-custom-cursor) .op-card,
+:where(html.has-custom-cursor) .teaser-card,
+:where(html.has-custom-cursor) .auth-input,
+:where(html.has-custom-cursor) .gid-dropdown-item { cursor: none; }
+/* Text entry keeps the I-beam. Declared after the group above so it wins. */
+:where(html.has-custom-cursor) :is(
+  input[type="text"], input[type="search"], input[type="email"], input[type="url"],
+  input[type="tel"], input[type="password"], input[type="number"], input:not([type]),
+  textarea, [contenteditable]:not([contenteditable="false"])
+) { cursor: text; }
+:where(html.has-custom-cursor) select { cursor: auto; }
+
 .cursor-ring, .cursor-dot {
+  display: none;
   position: fixed; top: 0; left: 0;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   will-change: transform;
 }
+html.has-custom-cursor .cursor-ring,
+html.has-custom-cursor .cursor-dot { display: block; }
 .cursor-ring {
   width: 36px; height: 36px;
   border: 1px solid rgba(179, 136, 255, 0.55);
   border-radius: 50%;
-  transition: width 0.3s var(--ease-cinema), height 0.3s var(--ease-cinema), border-color 0.3s, background 0.3s;
+  transition: width 0.3s var(--ease-cinema), height 0.3s var(--ease-cinema), border-color 0.3s, background 0.3s, opacity 0.2s;
   background: radial-gradient(circle, rgba(77, 208, 225, 0.05), transparent 70%);
   backdrop-filter: blur(2px);
 }
@@ -114,6 +136,7 @@ img { display: block; max-width: 100%; }
   background: var(--spectral);
   border-radius: 50%;
   box-shadow: 0 0 8px var(--spectral), 0 0 16px var(--spectral);
+  transition: opacity 0.2s;
 }
 .cursor-ring.hover {
   width: 64px; height: 64px;
@@ -121,6 +144,8 @@ img { display: block; max-width: 100%; }
   background: radial-gradient(circle, rgba(179, 136, 255, 0.12), transparent 70%);
 }
 .cursor-ring.click { width: 26px; height: 26px; }
+/* Hidden over text fields, where the native I-beam is shown instead. */
+.cursor-ring.text, .cursor-dot.text { opacity: 0; }
 
 /* ===== Intro overlay ===== */
 .intro-overlay {
@@ -613,7 +638,6 @@ section { position: relative; }
   position: relative;
   border-radius: 24px;
   overflow: hidden;
-  cursor: none;
   transition: transform 0.6s var(--ease-cinema);
   aspect-ratio: 4 / 5;
 }
@@ -855,7 +879,6 @@ section { position: relative; }
   background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
   border: 1px solid rgba(255,255,255,0.06);
   transition: all 0.3s;
-  cursor: none;
   position: relative;
   overflow: hidden;
 }
@@ -1010,7 +1033,6 @@ section { position: relative; }
   aspect-ratio: 4 / 5;
   border: 1px solid rgba(255,255,255,0.08);
   transition: transform 0.6s var(--ease-cinema), border-color 0.4s;
-  cursor: none;
   display: block;
 }
 .teaser-card:hover { transform: translateY(-8px); }
@@ -2001,7 +2023,7 @@ footer {
   border-radius: 10px; padding: 12px 14px;
   font-size: 14px; color: white;
   transition: border-color 0.2s, box-shadow 0.2s;
-  cursor: none; width: 100%;
+  width: 100%;
 }
 .auth-input:focus {
   outline: none; border-color: rgba(77,208,225,0.45);
@@ -2108,7 +2130,7 @@ footer {
 .gid-dropdown-item {
   display: block; width: 100%; padding: 10px 16px;
   font-size: 13px; color: var(--wraith); text-align: left;
-  transition: background 0.15s, color 0.15s; cursor: none;
+  transition: background 0.15s, color 0.15s;
 }
 .gid-dropdown-item:hover { background: var(--mist); color: white; }
 .gid-signout { color: rgba(255,120,120,0.85); }
