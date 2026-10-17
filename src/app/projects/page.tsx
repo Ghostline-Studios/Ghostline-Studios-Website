@@ -24,7 +24,7 @@ export default function ProjectsPage() {
           <div className="section-head">
             <div>
               <div className="index">— Index / Active Projects</div>
-              <h2>Three worlds in motion.</h2>
+              <h1 className="section-head-title">Three worlds in motion.</h1>
             </div>
             <div className="meta-block">
               <strong>One live · two in pre-production</strong>
