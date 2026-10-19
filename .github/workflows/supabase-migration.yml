@@ -1,0 +1,104 @@
+# Runs a SQL migration from supabase/migrations against the live Supabase database.
+#
+# Manual only (Actions → "Supabase migration" → Run workflow). Defaults to a
+# dry run: the migration is executed inside a transaction that is rolled back,
+# so nothing changes. Choose mode "apply" to commit it.
+#
+# Requires the repository secret SUPABASE_DB_URL: the *Session pooler*
+# connection string from Supabase → Connect (GitHub runners have no IPv6, so
+# the direct db.<ref>.supabase.co host will not work), e.g.
+#   postgresql://postgres.<project-ref>:<db-password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+name: Supabase migration
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch or commit to take the migration file from
+        required: true
+        default: claude/site-review-fixes
+      migration:
+        description: Migration file (path in the repo)
+        required: true
+        default: supabase/migrations/20261018000000_harden_rls.sql
+      mode:
+        description: dry-run rolls back; apply commits
+        required: true
+        type: choice
+        default: dry-run
+        options: [dry-run, apply]
+
+concurrency:
+  group: supabase-migration
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      MIGRATION: ${{ inputs.migration }}
+      MODE: ${{ inputs.mode }}
+      # Fail fast instead of queueing behind live traffic for locks.
+      PGOPTIONS: -c lock_timeout=10s -c statement_timeout=120s
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Check inputs
+        run: |
+          if [ -z "$DB_URL" ]; then
+            echo "::error::Repository secret SUPABASE_DB_URL is not set."
+            exit 1
+          fi
+          case "$MIGRATION" in
+            supabase/migrations/*.sql) ;;
+            *) echo "::error::Migration must be a .sql file under supabase/migrations/"; exit 1 ;;
+          esac
+          if [ ! -f "$MIGRATION" ]; then
+            echo "::error::$MIGRATION not found at ref ${{ inputs.ref }}"
+            exit 1
+          fi
+          # The migration manages its own transaction; dry runs swap the final COMMIT.
+          if [ "$(grep -ciE '^[[:space:]]*commit;[[:space:]]*$' "$MIGRATION")" != "1" ]; then
+            echo "::error::Expected exactly one top-level 'commit;' line in $MIGRATION"
+            exit 1
+          fi
+          echo "Migration: $MIGRATION @ $(git rev-parse --short HEAD) — mode: $MODE"
+
+      - name: Install psql
+        run: |
+          command -v psql >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client; }
+          psql --version
+
+      - name: Run migration (${{ inputs.mode }})
+        run: |
+          if [ "$MODE" = "apply" ]; then
+            sql="$MIGRATION"
+          else
+            sql="$RUNNER_TEMP/dry-run.sql"
+            sed -E 's/^[[:space:]]*commit;[[:space:]]*$/rollback;/I' "$MIGRATION" > "$sql"
+          fi
+          psql "$DB_URL" -X -v ON_ERROR_STOP=1 -q -f "$sql"
+          echo "psql finished OK ($MODE)."
+
+      - name: Show resulting state
+        run: |
+          psql "$DB_URL" -X -v ON_ERROR_STOP=1 -At -F ' | ' <<'SQL'
+          select 'guard triggers', count(*) from pg_trigger where tgname like 'guard_%';
+          select 'claim functions', count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+            where n.nspname = 'public' and p.proname in ('claim_report_notification','release_report_notification','claim_welcome_email');
+          select 'new columns', count(*) from information_schema.columns
+            where table_schema = 'public' and column_name in ('welcome_sent_at','notified_at');
+          select 'old friendship update policy present', count(*) from pg_policies
+            where schemaname = 'public' and policyname = 'Users can update own friendships';
+          SQL
+          if [ "$MODE" = "apply" ]; then
+            n=$(psql "$DB_URL" -X -At -c "select count(*) from pg_trigger where tgname like 'guard_%'")
+            [ "$n" = "5" ] || { echo "::error::Expected 5 guard triggers after apply, found $n"; exit 1; }
+          fi
