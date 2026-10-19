@@ -324,10 +324,9 @@ begin
 end;
 $$;
 
-drop trigger if exists on_auth_user_created on auth.users;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+-- The existing on_auth_user_created trigger on auth.users already calls
+-- public.handle_new_user(), so replacing the function is enough; the trigger
+-- is not dropped/recreated (avoids touching the auth schema on the live DB).
 
 -- ── 8. reports.notified_at + rate limit; profiles.welcome_sent_at ──
 -- Server-controlled markers. Clients cannot write them directly; they go
