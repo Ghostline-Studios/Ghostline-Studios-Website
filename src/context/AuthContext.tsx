@@ -10,6 +10,7 @@ import {
 } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { pendingLinkCode } from "@/lib/link";
 
 type AuthTab = "signin" | "signup";
 
@@ -82,6 +83,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.history.replaceState(null, "", next);
     }
   }, []);
+
+  // A game link code was waiting through a sign-in (Google / Apple sign-in comes back to
+  // the home page): take the player back to /link to finish. New players set up their
+  // username on /welcome first, which sends them on to /link itself.
+  useEffect(() => {
+    if (typeof window === "undefined" || !user || !profile?.username) return;
+    const path = window.location.pathname;
+    if (path === "/link" || path === "/welcome") return;
+    if (pendingLinkCode()) window.location.assign("/link");
+  }, [user, profile]);
 
   const openAuth = useCallback((tab: AuthTab = "signin") => {
     setAuthTab(tab);

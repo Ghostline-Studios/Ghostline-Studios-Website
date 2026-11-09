@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 import { SiteChrome } from "@/components/SiteChrome";
+import { pendingLinkCode } from "@/lib/link";
 
 function WelcomeContent() {
   const { user, loading, refreshProfile } = useAuth();
@@ -141,6 +142,9 @@ function WelcomeContent() {
 
     if (destination === "scicrime") {
       window.location.href = "https://scicrime.com";
+    } else if (pendingLinkCode()) {
+      // they were signing a game in
+      router.push("/link");
     } else {
       router.push("/account");
     }

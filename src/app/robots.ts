@@ -17,6 +17,8 @@ export default function robots(): MetadataRoute.Robots {
           "/social/",
           "/welcome",
           "/welcome/",
+          "/link",
+          "/link/",
           "/auth/",
           "/api/",
           "/report",
